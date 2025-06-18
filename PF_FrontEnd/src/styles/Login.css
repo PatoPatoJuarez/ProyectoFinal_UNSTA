@@ -1,0 +1,52 @@
+/*  .login-page {
+  min-height: 100vh;
+  background-color: rgba(229, 74, 0, 0.8);
+  background-image:url('../assets/cute-puppies-saint-bernard-cute-dog-adorable-fluffy-dog-4000x2660-1796.jpg'); 
+  background-size: cover;
+  display: flex;
+  position: relative;
+} */
+
+.cardMenulog {
+  background-color: rgba(145, 79, 48, 0.801) !important;
+}
+
+a.recuperar-link {
+  color: black;
+  text-decoration: none;
+}
+a.recuperar-link:hover {
+  text-decoration: underline; 
+}
+
+label {
+  font-size: large;
+}
+
+.login-card {
+  background-color: #A44D28;
+  border: none;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 100%;
+  z-index: 10;
+}
+
+.login-logo {
+  width: 45%;
+  border-radius: 50% !important;
+}
+
+@media (max-width: 768px) {
+  .login-card {
+    margin: 20px;
+  }
+}
+
+.botonVoler {
+  background-color: black;
+}
+
+.botonVoler {
+  margin-bottom: 1vh;
+}
