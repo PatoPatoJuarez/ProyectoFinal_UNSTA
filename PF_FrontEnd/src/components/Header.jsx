@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PerfilRefugio from '../Pages/perfilRefugio';
+import PerfilAdoptante from '../Pages/perfilAdoptante';
 import {
   AppBar,
   Toolbar,
