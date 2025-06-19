@@ -11,6 +11,11 @@ const PerfilRefugio = () => {
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [publicaciones, setPublicaciones] = useState([]);
+
+  // Estado y carga de solicitudes
+  const [solicitudes, setSolicitudes] = useState([]);
+  const [loadingSolicitudes, setLoadingSolicitudes] = useState(true);
+
   const navigate = useNavigate();
 
   const token = localStorage.getItem('token');
@@ -36,6 +41,7 @@ const PerfilRefugio = () => {
       });
 
     cargarPublicaciones();
+    cargarSolicitudes();
   }, []);
 
   const cargarPublicaciones = () => {
@@ -45,6 +51,22 @@ const PerfilRefugio = () => {
     })
       .then(({ data }) => setPublicaciones(data))
       .catch(() => console.log('Error cargando publicaciones'));
+  };
+
+  const cargarSolicitudes = () => {
+    if (!token) return;
+    setLoadingSolicitudes(true);
+    axios.get('http://localhost:3000/api/solicitudes/refugio', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(({ data }) => {
+        setSolicitudes(data);
+        setLoadingSolicitudes(false);
+      })
+      .catch((err) => {
+        console.error('Error al obtener solicitudes:', err);
+        setLoadingSolicitudes(false);
+      });
   };
 
   const handleEliminar = async (idPub) => {
@@ -57,6 +79,20 @@ const PerfilRefugio = () => {
     } catch (error) {
       console.error('Error al eliminar publicación:', error);
       alert('No se pudo eliminar la publicación');
+    }
+  };
+
+  // Cambiar estado de la solicitud (aprobar o rechazar)
+  const cambiarEstado = async (idSolicitud, nuevoEstado) => {
+    try {
+      await axios.patch(`http://localhost:3000/api/solicitudes/${idSolicitud}`, 
+        { estado: nuevoEstado },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setSolicitudes(prev => prev.map(s => s._id === idSolicitud ? {...s, estado: nuevoEstado} : s));
+    } catch (error) {
+      console.error('Error al cambiar estado:', error);
+      alert('No se pudo actualizar el estado de la solicitud.');
     }
   };
 
@@ -128,7 +164,43 @@ const PerfilRefugio = () => {
             </div>
           ))}
         </div>
+
+        <div>
+          <h4>Solicitudes recibidas</h4>
+          {loadingSolicitudes && <p>Cargando solicitudes...</p>}
+          {!loadingSolicitudes && solicitudes.length === 0 && <p>No hay solicitudes aún.</p>}
+
+          {!loadingSolicitudes && solicitudes.length > 0 && (
+            <div className="list-group">
+              {solicitudes.map(solicitud => (
+                <div key={solicitud._id} className="list-group-item mb-3 shadow-sm">
+                  <p><strong>Adoptante:</strong> {solicitud.adoptante?.nombre || 'N/D'} ({solicitud.adoptante?.email || 'sin email'})</p>
+                  <p><strong>Publicación:</strong> {solicitud.publicacion?.titulo || 'N/D'}</p>
+                  <p><strong>Mensaje:</strong> {solicitud.mensaje || '(Sin mensaje)'}</p>
+                  <p><strong>Estado:</strong> <em>{solicitud.estado}</em></p>
+                  {solicitud.estado === 'pendiente' && (
+                    <div>
+                      <button 
+                        className="btn btn-success me-2" 
+                        onClick={() => cambiarEstado(solicitud._id, 'aprobada')}
+                      >
+                        Aprobar
+                      </button>
+                      <button 
+                        className="btn btn-danger" 
+                        onClick={() => cambiarEstado(solicitud._id, 'rechazada')}
+                      >
+                        Rechazar
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
+
       <Footer />
 
       <CrearPublicacionModal
