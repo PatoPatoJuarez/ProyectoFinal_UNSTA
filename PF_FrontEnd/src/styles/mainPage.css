@@ -1,0 +1,35 @@
+.mainpage-container {
+  min-height: 100vh;
+  background-color: rgba(216, 87, 27, 0.8) !important; /* fondo claro tipo Bootstrap */
+}
+
+/* Estética para las cards */
+.mainpage-card {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mainpage-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Imagen bien encuadrada */
+.mainpage-img {
+  object-fit: cover !important;
+  width: 100% !important;
+  height: 250px !important;
+  /* para que no se distorsione y quede centrada */
+  object-position: center center !important;
+}
+
+/* Tipografía clara */
+.card-title {
+  font-weight: 600;
+}
+
+.card-text {
+  font-size: 0.95rem;
+  color: #495057 !important;
+}

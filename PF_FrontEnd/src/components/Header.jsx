@@ -13,7 +13,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import SettingsIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
-import logo from '../../assets/LogoMYP2.png';
+import logo from '../assets/LogoMYP2.png';
 
 const Header = ({ onConfigClick }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -35,7 +35,7 @@ const Header = ({ onConfigClick }) => {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#E54A00' }}>
+    <AppBar position="static" sx={{ backgroundColor: 'rgba(60, 46, 40, 0.88)' }}>
       <Toolbar sx={{ px: 2 }}>
         <img
         src={logo}

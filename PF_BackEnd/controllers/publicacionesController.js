@@ -1,6 +1,6 @@
-// controllers/publicacionesController.js
 const Publicacion = require('../models/Publicacion');
 
+// Crear nueva publicación (solo refugio)
 const crearPublicacion = async (req, res) => {
   try {
     const { rol, id } = req.user;
@@ -26,4 +26,21 @@ const crearPublicacion = async (req, res) => {
   }
 };
 
-module.exports = { crearPublicacion };
+// Obtener todas las publicaciones (pública)
+const obtenerPublicaciones = async (req, res) => {
+  try {
+    const publicaciones = await Publicacion.find()
+      .populate('refugio', 'nombre email') // opcional: muestra info del refugio
+      .sort({ fecha: -1 }); // ordena por fecha descendente
+
+    res.status(200).json(publicaciones);
+  } catch (error) {
+    console.error('❌ Error al obtener publicaciones:', error);
+    res.status(500).json({ message: 'Error al obtener publicaciones' });
+  }
+};
+
+module.exports = {
+  crearPublicacion,
+  obtenerPublicaciones
+};
