@@ -1,12 +1,12 @@
-# 🐾 Proyecto Final - Manitos y Patitas
+🐾 Proyecto Final - Manitos y Patitas
 
 Este repositorio contiene el frontend y el backend del proyecto **Manitos y Patitas**, una aplicación para conectar refugios de animales con personas interesadas en adoptar.
 
----
+--------------------------
 
-## 🚀 Puesta en marcha del proyecto
+🚀 Puesta en marcha del proyecto
 
-### 🔧 Instalación de dependencias (frontend + backend)
+🔧 Instalación de dependencias (frontend + backend)
 
 Una vez clonado el repositorio, ejecutá este comando desde la **carpeta raíz** del proyecto, abriendo la consola en esa misma
 
