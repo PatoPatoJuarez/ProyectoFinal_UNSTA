@@ -25,11 +25,8 @@ ARCHIVO .ENV:
 🛠️ Configuración del archivo .env
 Para que el backend pueda conectarse a MongoDB Atlas, es necesario crear un archivo .env dentro de la carpeta pf_backend/.
 
-Creá un archivo llamado .env con el siguiente contenido:
+Creá un archivo llamado .env con el siguiente contenido (en la carpeta Back esta el contenido que deberian poner recuerden que tiene que solicitar acceso a la BDD):
 
-env
-Copiar
-Editar
 MONGO_URI=tu_uri_de_conexion_a_mongodb
 PORT=3000
 🔐 Este archivo no está incluido en el repositorio por seguridad. Pedíle a un integrante del equipo el contenido del .env, o configurá uno si ya tenés tu propia base de datos.
