@@ -17,7 +17,6 @@ const PerfilRefugio = () => {
   const [loadingSolicitudes, setLoadingSolicitudes] = useState(true);
 
   const navigate = useNavigate();
-
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -69,7 +68,7 @@ const PerfilRefugio = () => {
       });
   };
 
-  const handleEliminar = async (idPub) => {
+  const handleEliminarPublicacion = async (idPub) => {
     if (!window.confirm('¿Eliminar esta publicación?')) return;
     try {
       await axios.delete(`http://localhost:3000/api/publicaciones/${idPub}`, {
@@ -85,14 +84,28 @@ const PerfilRefugio = () => {
   // Cambiar estado de la solicitud (aprobar o rechazar)
   const cambiarEstado = async (idSolicitud, nuevoEstado) => {
     try {
-      await axios.patch(`http://localhost:3000/api/solicitudes/${idSolicitud}`, 
+      await axios.patch(`http://localhost:3000/api/solicitudes/${idSolicitud}`,
         { estado: nuevoEstado },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setSolicitudes(prev => prev.map(s => s._id === idSolicitud ? {...s, estado: nuevoEstado} : s));
+      setSolicitudes(prev => prev.map(s => s._id === idSolicitud ? { ...s, estado: nuevoEstado } : s));
     } catch (error) {
       console.error('Error al cambiar estado:', error);
       alert('No se pudo actualizar el estado de la solicitud.');
+    }
+  };
+
+  // Eliminar solicitud (solo si estado es 'rechazada')
+  const handleEliminarSolicitud = async (idSolicitud) => {
+    if (!window.confirm('¿Eliminar esta solicitud?')) return;
+    try {
+      await axios.delete(`http://localhost:3000/api/solicitudes/${idSolicitud}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setSolicitudes(prev => prev.filter(s => s._id !== idSolicitud));
+    } catch (error) {
+      console.error('Error al eliminar solicitud:', error);
+      alert('No se pudo eliminar la solicitud');
     }
   };
 
@@ -155,7 +168,7 @@ const PerfilRefugio = () => {
                   </ul>
                   <button
                     className="btn btn-outline-danger mt-2"
-                    onClick={() => handleEliminar(pub._id)}
+                    onClick={() => handleEliminarPublicacion(pub._id)}
                   >
                     🗑️ Eliminar
                   </button>
@@ -180,19 +193,27 @@ const PerfilRefugio = () => {
                   <p><strong>Estado:</strong> <em>{solicitud.estado}</em></p>
                   {solicitud.estado === 'pendiente' && (
                     <div>
-                      <button 
-                        className="btn btn-success me-2" 
+                      <button
+                        className="btn btn-success me-2"
                         onClick={() => cambiarEstado(solicitud._id, 'aprobada')}
                       >
                         Aprobar
                       </button>
-                      <button 
-                        className="btn btn-danger" 
+                      <button
+                        className="btn btn-danger"
                         onClick={() => cambiarEstado(solicitud._id, 'rechazada')}
                       >
                         Rechazar
                       </button>
                     </div>
+                  )}
+                  {solicitud.estado === 'rechazada' && (
+                    <button
+                      className="btn btn-outline-danger mt-2"
+                      onClick={() => handleEliminarSolicitud(solicitud._id)}
+                    >
+                      🗑️ Eliminar solicitud
+                    </button>
                   )}
                 </div>
               ))}

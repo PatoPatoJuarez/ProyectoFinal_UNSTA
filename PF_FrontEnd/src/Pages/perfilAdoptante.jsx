@@ -36,6 +36,19 @@ const PerfilAdoptante = () => {
       .finally(() => setLoading(false));
   }, []);
 
+  const handleEliminarSolicitud = async (idSolicitud) => {
+    if (!window.confirm('¿Eliminar esta solicitud?')) return;
+    try {
+      await axios.delete(`http://localhost:3000/api/solicitudes/${idSolicitud}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setSolicitudes(prev => prev.filter(s => s._id !== idSolicitud));
+    } catch (error) {
+      console.error('Error al eliminar solicitud:', error);
+      alert('No se pudo eliminar la solicitud');
+    }
+  };
+
   if (loading) return <p className="text-center mt-5">Cargando perfil...</p>;
   if (error) return <p className="text-center text-danger">{error}</p>;
   if (!adoptante) return null;
@@ -64,17 +77,27 @@ const PerfilAdoptante = () => {
 
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
           {solicitudes.map(solicitud => (
-            <div className="col" key={solicitud._id}>
-              <div className="card h-100 shadow-sm">
-                <div className="card-body">
-                  <h5 className="card-title">{solicitud.publicacion?.titulo || 'Sin título'}</h5>
-                  <p><strong>Mensaje:</strong> {solicitud.mensaje || 'Sin mensaje'}</p>
-                  <p><strong>Estado:</strong> {solicitud.estado}</p>
-                  <p><strong>Fecha:</strong> {new Date(solicitud.fecha).toLocaleDateString()}</p>
-                </div>
+          <div className="col" key={solicitud._id}>
+            <div className="card h-100 shadow-sm">
+              <div className="card-body">
+                <h5 className="card-title">{solicitud.publicacion?.titulo || 'Sin título'}</h5>
+                <p><strong>Mensaje:</strong> {solicitud.mensaje || 'Sin mensaje'}</p>
+                <p><strong>Estado:</strong> {solicitud.estado}</p>
+                <p><strong>Fecha:</strong> {new Date(solicitud.fecha).toLocaleDateString()}</p>
               </div>
+              {solicitud.estado === 'rechazada' && (
+                <div className="card-footer d-flex justify-content-end">
+                  <button
+                    className="btn btn-outline-danger"
+                    onClick={() => handleEliminarSolicitud(solicitud._id)}
+                  >
+                    🗑️ Eliminar solicitud
+                  </button>
+                </div>
+              )}
             </div>
-          ))}
+          </div>
+        ))}
         </div>
 
         <button className="btn btn-outline-secondary mt-4" onClick={() => navigate('/main')}>
