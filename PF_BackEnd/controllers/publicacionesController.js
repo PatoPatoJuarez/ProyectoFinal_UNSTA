@@ -30,8 +30,8 @@ const crearPublicacion = async (req, res) => {
 const obtenerPublicaciones = async (req, res) => {
   try {
     const publicaciones = await Publicacion.find()
-      .populate('refugio', 'nombre email') // opcional: muestra info del refugio
-      .sort({ fecha: -1 }); // ordena por fecha descendente
+      .populate('refugio', 'nombre email')
+      .sort({ fecha: -1 });
 
     res.status(200).json(publicaciones);
   } catch (error) {
@@ -40,7 +40,35 @@ const obtenerPublicaciones = async (req, res) => {
   }
 };
 
+// Eliminar publicación (solo el refugio dueño puede hacerlo)
+const eliminarPublicacion = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { id: refugioId, rol } = req.user;
+
+    if (rol !== 'refugio') {
+      return res.status(403).json({ message: 'No autorizado' });
+    }
+
+    const publicacion = await Publicacion.findById(id);
+    if (!publicacion) {
+      return res.status(404).json({ message: 'Publicación no encontrada' });
+    }
+
+    if (publicacion.refugio.toString() !== refugioId) {
+      return res.status(403).json({ message: 'No puedes eliminar esta publicación' });
+    }
+
+    await publicacion.deleteOne();
+    res.status(200).json({ message: '✅ Publicación eliminada' });
+  } catch (error) {
+    console.error('❌ Error al eliminar publicación:', error);
+    res.status(500).json({ message: 'Error al eliminar publicación' });
+  }
+};
+
 module.exports = {
   crearPublicacion,
-  obtenerPublicaciones
+  obtenerPublicaciones,
+  eliminarPublicacion
 };

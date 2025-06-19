@@ -3,15 +3,17 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LoginPage from './Pages/LoginPage';
 import MainPage from './Pages/mainPage';
+import PerfilRefugio from './Pages/perfilRefugio';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/main" element={<MainPage />} />
-      </Routes>
+    <Routes>
+      <Route path="/" element={<LoginPage />} />
+      <Route path="/main" element={<MainPage />} />
+      <Route path="/perfilRefugio" element={<PerfilRefugio />} />
+    </Routes>
     </BrowserRouter>
   </StrictMode>
 );

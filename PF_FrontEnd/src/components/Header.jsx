@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PerfilRefugio from '../Pages/perfilRefugio';
 import {
   AppBar,
   Toolbar,
@@ -73,7 +74,21 @@ const Header = ({ onConfigClick }) => {
           <MenuItem onClick={handleThemeToggle}>
             <Brightness4Icon sx={{ mr: 1 }} /> Cambiar tema
           </MenuItem>
-          <MenuItem onClick={() => { handleClose(); onConfigClick(); }}>
+          <MenuItem
+            onClick={() => {
+              handleClose();
+
+              const user = JSON.parse(localStorage.getItem('usuario'));
+
+              if (user?.rol === 'refugio') {
+                navigate('/perfilRefugio');
+              } else if (user?.rol === 'adoptante') {
+                navigate('/perfilAdoptante');
+              } else {
+                navigate('/');
+              }
+            }}
+          >
             <SettingsIcon sx={{ mr: 1 }} /> Usuario
           </MenuItem>
           <MenuItem onClick={handleLogout}>
