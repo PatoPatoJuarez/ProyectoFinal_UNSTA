@@ -3,6 +3,7 @@
 Este repositorio contiene el frontend y el backend del proyecto **Manitos y Patitas**, una aplicación para conectar refugios de animales con personas interesadas en adoptar.
 
 --------------------------
+Usar GitHub DKST
 
 🚀 Puesta en marcha del proyecto
 
