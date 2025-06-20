@@ -5,6 +5,11 @@ Este repositorio contiene el frontend y el backend del proyecto **Manitos y Pati
 --------------------------
 Usar GitHub DKST
 
+----------
+### Estrategia de Branching: 
+Trunk-Based Development: 
+Se decidió utilizar esta estrategia ya que hace foco en una rama main (trunk). Los desarrolladores interactúan solamente con esta rama, y los cambios son subidos a ramas de corta duración llamadas Features. De esta forma nos pareció más manipulable y menos complicada que otras estrategias.
+
 🚀 Puesta en marcha del proyecto
 
 🔧 Instalación de dependencias (frontend + backend)
