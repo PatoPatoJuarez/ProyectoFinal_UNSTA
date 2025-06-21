@@ -73,7 +73,7 @@ const MainPage = () => {
       <Header />
 
       <main className="container py-5 flex-grow-1">
-        <h1 className="text-center mb-5 display-5"><strong>🐾 Feed de Publicaciones de Refugios</strong></h1>
+        <h1 className="text-center mb-5 display-5" style={{ fontFamily: 'Quicksand, sans-serif', fontWeight: 700 }}><strong>🐾 Feed de Publicaciones de Refugios 🐾</strong></h1>
 
         {loading && <p className="text-center">Cargando publicaciones...</p>}
         {error && <p className="text-center text-danger">{error}</p>}
