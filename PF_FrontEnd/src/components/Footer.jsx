@@ -17,6 +17,7 @@ return (
         >
             <Box>
             <IconButton
+            sx={{ color: 'white' }}
             component="a"
             href="https://facebook.com"
             target="_blank"
@@ -25,6 +26,7 @@ return (
                 <FacebookIcon />
             </IconButton>
             <IconButton
+            sx={{ color: 'white' }}
             component="a"
             href="https://instagram.com"
             target="_blank"
@@ -33,6 +35,7 @@ return (
                 <InstagramIcon />
             </IconButton>
             <IconButton
+            sx={{ color: 'white' }}
             component="a"
             href="mailto:soporte@tupagina.com"
             >
@@ -40,7 +43,7 @@ return (
             </IconButton>
             </Box>
             <Typography variant="body2" sx={{ marginTop: '0.5rem' }}>
-                <Link href="/soporte" underline="hover" sx={{ color: 'inherit', cursor: 'pointer' }}>Soporte</Link> | <Link href="/contacto" underline="hover" sx={{ color: 'inherit', cursor: 'pointer' }}>Contacto</Link>
+                <Link href="/soporte" underline="hover" sx={{ color: 'white', cursor: 'pointer' }}>Soporte</Link> | <Link href="/contacto" underline="hover" sx={{ color: 'white', cursor: 'pointer' }}>Contacto</Link>
             </Typography>
             <Typography variant="caption" display="block" sx={{ marginTop: '0.5rem' }}>
                 &copy; {new Date().getFullYear()} Hands & Paws. Todos los derechos reservados.
