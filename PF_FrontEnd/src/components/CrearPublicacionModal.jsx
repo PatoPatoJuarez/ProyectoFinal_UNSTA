@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada }) => {
+const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publicacionEditar }) => {
   const [formData, setFormData] = useState({
     titulo: '',
     descripcion: '',
@@ -17,6 +17,26 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada }) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
+
+  useEffect(() => {
+    if (publicacionEditar) {
+      setFormData({
+        ...publicacionEditar,
+        fotos: Array.isArray(publicacionEditar.fotos)
+          ? publicacionEditar.fotos.join(', ')
+          : publicacionEditar.fotos || ''
+      });
+    } else {
+      setFormData({
+        titulo: '',
+        descripcion: '',
+        tipoMascota: 'perro',
+        edad: '',
+        tamaño: '',
+        fotos: ''
+      });
+    }
+  }, [publicacionEditar, show]);
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -35,11 +55,19 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada }) => {
         fotos: fotosArray
       };
 
+      if (publicacionEditar && publicacionEditar._id) {
+        // Modo edición
+        await axios.put(`http://localhost:3000/api/publicaciones/${publicacionEditar._id}`, publicacion, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      } else {
+
       await axios.post('http://localhost:3000/api/publicaciones', publicacion, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
+      }
 
       onPublicacionCreada();
       handleClose();

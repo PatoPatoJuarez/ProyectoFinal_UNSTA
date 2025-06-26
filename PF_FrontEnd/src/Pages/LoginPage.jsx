@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import '../styles/Login.css';
 import AuthModal from '../components/AuthModal';
-import logo from '../assets/logoMYP.png';
+import logo from '../assets/logoH&P.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import RegistroAdoptante from './RegistroAdoptante';
 import RegistroRefugio from './RegistroRefugio';
@@ -78,7 +78,6 @@ export default function LoginPage() {
     localStorage.setItem('token', data.token);
     localStorage.setItem('usuario', JSON.stringify(data.usuario)); // IMPORTANTE: data.usuario
 
-    alert(`Bienvenido/a, ${data.usuario.nombre}`);
     window.location.href = '/main'; // o la ruta que uses después de login
   } catch (error) {
     console.error('Error al iniciar sesión:', error);

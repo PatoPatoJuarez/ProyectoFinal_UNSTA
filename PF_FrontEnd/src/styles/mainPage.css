@@ -16,12 +16,20 @@
 }
 
 /* Imagen bien encuadrada */
+/*
 .mainpage-img {
   object-fit: cover !important;
   width: 100% !important;
   height: 250px !important;
-  /* para que no se distorsione y quede centrada */
+  /* para que no se distorsione y quede centrada 
   object-position: center center !important;
+}
+*/
+.mainpage-img {
+  height: 150px;
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
 }
 
 /* Tipografía clara */

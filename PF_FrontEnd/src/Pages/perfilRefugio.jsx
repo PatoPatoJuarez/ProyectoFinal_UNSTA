@@ -4,6 +4,7 @@ import CrearPublicacionModal from '../components/CrearPublicacionModal';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useNavigate } from 'react-router-dom';
+import '../styles/perfilUsuario.css';
 
 const PerfilRefugio = () => {
   const [refugio, setRefugio] = useState(null);
@@ -11,6 +12,7 @@ const PerfilRefugio = () => {
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [publicaciones, setPublicaciones] = useState([]);
+  const [publicacionEditar, setPublicacionEditar] = useState(null);
 
   // Estado y carga de solicitudes
   const [solicitudes, setSolicitudes] = useState([]);
@@ -114,12 +116,12 @@ const PerfilRefugio = () => {
   if (!refugio) return null;
 
   return (
-    <div className="d-flex flex-column min-vh-100">
+    <div className="perfil-container">
       <Header />
-      <div className="container my-5 flex-grow-1">
+      <div className="container my-5 flex-grow-2">
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h2>Perfil del Refugio</h2>
-          <button className="btn btn-outline-secondary" onClick={() => navigate('/main')}>
+          <button className="btn-1 mt-2 me-1" onClick={() => navigate('/main')}>
             ← Volver al Feed
           </button>
         </div>
@@ -141,7 +143,7 @@ const PerfilRefugio = () => {
 
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h4>Mis publicaciones</h4>
-          <button className="btn btn-success" onClick={() => setShowModal(true)}>
+          <button className="btn-2 mb-3 me-1" onClick={() => setShowModal(true)}>
             + Nueva Publicación
           </button>
         </div>
@@ -166,6 +168,15 @@ const PerfilRefugio = () => {
                     <li className="list-group-item"><strong>Edad:</strong> {pub.edad}</li>
                     <li className="list-group-item"><strong>Tamaño:</strong> {pub.tamaño}</li>
                   </ul>
+                  <button
+                    className="btn btn-outline-primary mt-2 me-2"
+                    onClick={() => {
+                      setPublicacionEditar(pub);
+                      setShowModal(true);
+                    }}
+                  >
+                    ✏️ Editar
+                  </button>
                   <button
                     className="btn btn-outline-danger mt-2"
                     onClick={() => handleEliminarPublicacion(pub._id)}
@@ -226,11 +237,16 @@ const PerfilRefugio = () => {
 
       <CrearPublicacionModal
         show={showModal}
-        handleClose={() => setShowModal(false)}
+        handleClose={() => {
+          setShowModal(false);
+          setPublicacionEditar(null);
+        }}
         onPublicacionCreada={() => {
           setShowModal(false);
+          setPublicacionEditar(null);
           cargarPublicaciones();
         }}
+        publicacionEditar={publicacionEditar}
       />
     </div>
   );

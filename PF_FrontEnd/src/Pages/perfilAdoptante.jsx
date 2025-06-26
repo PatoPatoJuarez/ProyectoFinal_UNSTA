@@ -3,6 +3,7 @@ import axios from 'axios';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useNavigate } from 'react-router-dom';
+import '../styles/perfilUsuario.css'; // Asegúrate de tener este archivo CSS
 
 const PerfilAdoptante = () => {
   const [adoptante, setAdoptante] = useState(null);
@@ -54,11 +55,17 @@ const PerfilAdoptante = () => {
   if (!adoptante) return null;
 
   return (
-    <div className="d-flex flex-column min-vh-100">
+    <div className="perfil-container">
       <Header />
 
-      <div className="container my-5">
-        <h2 className="mb-4">Mi perfil</h2>
+      <div className="container my-5 flex-grow-2">
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h2>Perfil Adoptante</h2>
+          <button className="btn-1 mt-2 me-1" onClick={() => navigate('/main')}>
+            ← Volver al Feed
+          </button>
+        </div>
+        
         <div className="card mb-4 shadow-sm">
           <div className="card-body">
             <h4 className="card-title">{adoptante.nombre} {adoptante.apellido}</h4>
@@ -99,10 +106,6 @@ const PerfilAdoptante = () => {
           </div>
         ))}
         </div>
-
-        <button className="btn btn-outline-secondary mt-4" onClick={() => navigate('/main')}>
-          ← Volver al feed
-        </button>
       </div>
 
       <Footer />
