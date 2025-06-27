@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
 import AuthModal from '../components/AuthModal';
 import logo from '../assets/logoH&P.png';
@@ -83,7 +84,9 @@ export default function LoginPage() {
     console.error('Error al iniciar sesión:', error);
     setError('Error de conexión con el servidor.');
   }
-};
+  };
+  
+  const navigate = useNavigate();
 
 
   return (
@@ -135,7 +138,14 @@ export default function LoginPage() {
             Crear Cuenta
           </button>
           <div className="text-center">
-            <a href="#" className="recuperar-link small">Recuperar contraseña</a>
+            <button
+              className="recuperar-link small btn btn-link p-0"
+              type="button"
+              onClick={() => navigate('/recuperar-contraseña')}
+              style={{ color: 'black', textDecoration: 'none' }}
+            >
+              Recuperar contraseña
+            </button>
           </div>
         </div>
       )}
