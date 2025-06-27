@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Modal, Button } from 'react-bootstrap';
-import logo from '../assets/logoH&P.png';
 import '../styles/Login.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
