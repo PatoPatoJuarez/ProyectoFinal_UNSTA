@@ -110,6 +110,7 @@ export default function LoginPage() {
               placeholder="example@email.com"
               value={email} 
               onChange={(e) => setEmail(e.target.value)}
+              data-cy="input-email"
             />
           </div>
           <div className="form-group mb-3">
@@ -120,18 +121,21 @@ export default function LoginPage() {
               id="password" 
               className="form-control"
               value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
+              onChange={(e) => setPassword(e.target.value)}
+              data-cy='input-password' 
             />
           </div>
           <button 
             className="btn btn-dark w-100 mb-2"
             onClick={handleLogin}
+            data-cy="btn-ingresar"
           >
             Ingresar
           </button>
           <button 
             className="btn btn-dark w-100 mb-2" 
             onClick={() => setFormType('modal')}
+            data-cy="btn-crear"
           >
             Crear Cuenta
           </button>
@@ -148,14 +152,14 @@ export default function LoginPage() {
       {formType === 'adoptante' && (
         <div className="formulario-container">
           <RegistroAdoptante />
-          <button className="btn btn-secondary mt-3 botonVoler" onClick={handleBackToLogin}>Volver</button>
+          <button className="btn btn-secondary mt-3 botonVoler" data-cy="boton-volver" onClick={handleBackToLogin}>Volver</button>
         </div>
       )}
 
       {formType === 'refugio' && (
         <div className="formulario-container">
           <RegistroRefugio />
-          <button className="btn btn-secondary mt-3 botonVoler" onClick={handleBackToLogin}>Volver</button>
+          <button className="btn btn-secondary mt-3 botonVoler" data-cy="boton-volver" onClick={handleBackToLogin}>Volver</button>
         </div>
       )}
     </div>
