@@ -8,6 +8,8 @@
   border-radius: 0.75rem;
   overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 2px solid #543e26;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
 .mainpage-card:hover {

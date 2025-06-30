@@ -87,10 +87,10 @@ const MainPage = () => {
                   src={pub.fotos?.[0] || 'https://via.placeholder.com/300x200?text=Sin+imagen'}
                   className="card-img-top mainpage-img"
                   alt={pub.titulo}
-                  style={{ objectFit: 'cover', height: '200px' }}
+                  style={{ objectFit: 'cover', height: '180px' }}
                 />
                 <div className="card-body d-flex flex-column">
-                  <h5 className="card-title">{pub.titulo}</h5>
+                  <h5 className="card-title">🐾 ¡Conoce a {pub.titulo}!</h5>
                   <p className="card-text flex-grow-1">{pub.descripcion || 'Sin descripción.'}</p>
                   <ul className="list-group list-group-flush mb-3">
                     <li className="list-group-item"><strong>Tipo:</strong> {pub.tipoMascota || 'N/A'}</li>
@@ -98,7 +98,7 @@ const MainPage = () => {
                     <li className="list-group-item"><strong>Sexo:</strong> {pub.sexo || 'N/A'}</li>
                   </ul>
                   <button
-                    className="btn btn-outline-secondary mt-auto"
+                    className="btn btn-outline-primary mt-auto"
                     type="button"
                     onClick={() => abrirModal(pub)}
                   >
