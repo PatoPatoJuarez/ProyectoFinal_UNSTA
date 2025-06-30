@@ -126,20 +126,22 @@ const PerfilRefugio = () => {
           </button>
         </div>
 
-        <div className="card shadow-sm mb-4">
+        <div className="card shadow-sm mb-4 rounded-4 card-hover">
           <div className="card-body">
             <h3 className="card-title">{refugio.nombre}</h3>
-            <p><strong>Email:</strong> {refugio.email}</p>
-            <p><strong>Teléfono:</strong> {refugio.telefono}</p>
-            <p><strong>Dirección:</strong> {refugio.direccion}</p>
-            <p><strong>Localidad:</strong> {refugio.localidad}</p>
-            <p><strong>Tipo de mascota que recibe:</strong> {refugio.tipoMascota}</p>
-            <p><strong>Proceso de adopción:</strong> {refugio.procesoAdopcion}</p>
-            <p><strong>Tarifa:</strong> {refugio.tarifa}</p>
-            <p><strong>Seguimiento posterior:</strong> {refugio.seguimientoPosterior ? 'Sí' : 'No'}</p>
-            <p><strong>Necesidades:</strong> {refugio.necesidades}</p>
+            <ul className="list-group list-group-flush perfil-lista-datos mb-0">
+              <li className="list-group-item"><strong>Email:</strong> {refugio.email}</li>
+              <li className="list-group-item"><strong>Teléfono:</strong> {refugio.telefono}</li>
+              <li className="list-group-item"><strong>Dirección:</strong> {refugio.direccion}</li>
+              <li className="list-group-item"><strong>Localidad:</strong> {refugio.localidad}</li>
+              <li className="list-group-item"><strong>Tipo de mascota que recibe:</strong> {refugio.tipoMascota}</li>
+              <li className="list-group-item"><strong>Proceso de adopción:</strong> {refugio.procesoAdopcion}</li>
+              <li className="list-group-item"><strong>Tarifa:</strong> {refugio.tarifaAdopcion}</li>
+              <li className="list-group-item"><strong>Seguimiento posterior:</strong> {refugio.seguimientoAdopcion === 'Sí' ? 'Sí' : 'No'}</li>
+              <li className="list-group-item"><strong>Necesidades:</strong> {refugio.necesidadesRefugio}</li>
+            </ul>
           </div>
-        </div>
+        </div> 
 
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h4>Mis publicaciones</h4>
@@ -153,10 +155,10 @@ const PerfilRefugio = () => {
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 mb-5">
           {publicaciones.map(pub => (
             <div className="col" key={pub._id}>
-              <div className="card h-100 shadow-sm">
+              <div className="card h-100 shadow-sm rounded-4 card-hover">
                 <img
                   src={pub.fotos?.[0] || 'https://via.placeholder.com/300x200?text=Sin+imagen'}
-                  className="card-img-top"
+                  className="card-img-top rounded-top-4"
                   alt={pub.titulo}
                   style={{ objectFit: 'cover', height: '200px' }}
                 />
@@ -190,14 +192,18 @@ const PerfilRefugio = () => {
         </div>
 
         <div>
-          <h4>Solicitudes recibidas</h4>
+          <h4 className='mb-5'>Solicitudes recibidas</h4>
           {loadingSolicitudes && <p>Cargando solicitudes...</p>}
           {!loadingSolicitudes && solicitudes.length === 0 && <p>No hay solicitudes aún.</p>}
 
           {!loadingSolicitudes && solicitudes.length > 0 && (
             <div className="list-group">
               {solicitudes.map(solicitud => (
-                <div key={solicitud._id} className="list-group-item mb-3 shadow-sm">
+                <div
+                  key={solicitud._id}
+                  className="list-group-item mb-3 shadow-sm rounded-4 card-hover"
+                  style={{ border: 'none' }}
+                >
                   <p><strong>Adoptante:</strong> {solicitud.adoptante?.nombre || 'N/D'} ({solicitud.adoptante?.email || 'sin email'})</p>
                   <p><strong>Publicación:</strong> {solicitud.publicacion?.titulo || 'N/D'}</p>
                   <p><strong>Mensaje:</strong> {solicitud.mensaje || '(Sin mensaje)'}</p>

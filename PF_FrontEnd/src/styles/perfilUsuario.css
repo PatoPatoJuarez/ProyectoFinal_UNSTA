@@ -6,7 +6,7 @@
 }
 
 .btn-1 {
-  background-color: rgba(60, 46, 40, 0.88) !important;
+  background-color: rgb(94, 59, 45) !important;
   color: white !important;
   border: 2px solid #d8571b !important;
   padding: 0.500rem 0.500rem !important; /* menos padding horizontal */
@@ -19,7 +19,7 @@
 }
 
 .btn-1:hover {
-  background-color: rgb(94, 59, 45) !important; /* color naranja del fondo */
+  background-color: rgba(60, 46, 40, 0.88) !important; /* color naranja del fondo */
   color: #fff !important;
   box-shadow: 0 2px 8px rgba(60,46,40,0.18);
   transition: background 0.2s, box-shadow 0.2s;
@@ -44,4 +44,29 @@
   background-color: #31662a !important;
   color: #fff !important;
   box-shadow: 0 2px 8px rgba(60,46,40,0.18);
+}
+
+/* --- Mejoras visuales para cards y listas --- */
+.card-hover {
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+.card-hover:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 10px 24px rgba(60,46,40,0.13);
+}
+.rounded-4 {
+  border-radius: 1.2rem !important;
+}
+.rounded-top-4 {
+  border-top-left-radius: 1.2rem !important;
+  border-top-right-radius: 1.2rem !important;
+}
+.perfil-lista-datos .list-group-item {
+  border: none;
+  border-bottom: 1px solid #f0f0f0;
+  background: transparent;
+  transition: background 0.18s;
+}
+.perfil-lista-datos .list-group-item:hover {
+  background: #f8f9fa;
 }

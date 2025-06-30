@@ -66,13 +66,21 @@ const PerfilAdoptante = () => {
           </button>
         </div>
         
-        <div className="card mb-4 shadow-sm">
+        <div className="card mb-4 shadow-sm rounded-4 card-hover">
           <div className="card-body">
             <h4 className="card-title">{adoptante.nombre} {adoptante.apellido}</h4>
-            <p><strong>Email:</strong> {adoptante.email}</p>
-            <p><strong>Teléfono:</strong> {adoptante.telefono}</p>
-            <p><strong>Localidad:</strong> {adoptante.localidad}</p>
-            <p><strong>Experiencia con mascotas:</strong> {adoptante.experiencia || 'No especificado'}</p>
+            <ul className="list-group list-group-flush perfil-lista-datos mb-0">
+              <li className="list-group-item"><strong>Email:</strong> {adoptante.email}</li>
+              <li className="list-group-item"><strong>Teléfono:</strong> {adoptante.telefono}</li>
+              <li className="list-group-item"><strong>Localidad:</strong> {adoptante.localidad}</li>
+              <li className="list-group-item"><strong>¿Tiene mascota en su hogar?:</strong> {adoptante.tieneMascota === true ? 'Sí' : adoptante.tieneMascota === false ? 'No' : 'No especificado'}</li>
+              <li className="list-group-item"><strong>¿Dónde vive?:</strong> {adoptante.viveEn || 'No especificado'}</li>
+              <li className="list-group-item"><strong>¿Tiene disponibilidad horaria?:</strong> {adoptante.disponeDeHorarios === true ? 'Sí' : adoptante.disponeDeHorarios === false ? 'No' : 'No especificado'}</li>
+              <li className="list-group-item"><strong>¿Tuvo mascotas anteriormente?:</strong> {adoptante.tuvoMascota === true ? 'Sí' : adoptante.tuvoMascota === false ? 'No' : 'No especificado'}</li>
+              <li className="list-group-item"><strong>Motivo para adoptar:</strong> {adoptante.motivoAdopcion || 'No especificado'}</li>
+              <li className="list-group-item"><strong>Cuidados veterinarios:</strong> {adoptante.cuidadosVeterinarios || 'No especificado'}</li>
+              <li className="list-group-item"><strong>Cuidado alternativo:</strong> {adoptante.cuidadoAlternativo || 'No especificado'}</li>
+            </ul>
           </div>
         </div>
 
@@ -85,7 +93,7 @@ const PerfilAdoptante = () => {
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
           {solicitudes.map(solicitud => (
           <div className="col" key={solicitud._id}>
-            <div className="card h-100 shadow-sm">
+            <div className="card h-100 shadow-sm rounded-4 card-hover">
               <div className="card-body">
                 <h5 className="card-title">{solicitud.publicacion?.titulo || 'Sin título'}</h5>
                 <p><strong>Mensaje:</strong> {solicitud.mensaje || 'Sin mensaje'}</p>
