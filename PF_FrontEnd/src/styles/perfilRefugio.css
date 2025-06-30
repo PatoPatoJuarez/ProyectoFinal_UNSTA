@@ -1,10 +1,29 @@
+/* ====== Paleta moderna ====== */
+:root {
+  --bs-primary: #4a90e2;
+  --bs-success: #28a745;
+  --bs-danger: #dc3545;
+  --bs-light: #f8f9fa;
+  --bs-dark: #343a40;
+  --bs-font-sans-serif: 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* ====== Estilo base ====== */
+body {
+  font-family: var(--bs-font-sans-serif);
+  background-color: var(--bs-light);
+  color: #333;
+}
+
+/* ====== Contenedor general ====== */
 .perfil-refugio-container {
   display: flex;
   min-height: 100vh;
   background-color: #ecf0f1;
-  font-family: Arial, sans-serif;
+  font-family: var(--bs-font-sans-serif);
 }
 
+/* ====== Menú lateral (si lo usás en otro componente) ====== */
 .perfil-refugio-menu {
   width: 220px;
   background-color: #2c3e50;
@@ -38,6 +57,7 @@
   color: #e74c3c;
 }
 
+/* ====== Contenido ====== */
 .perfil-refugio-contenido {
   flex: 1;
   padding: 40px;
@@ -61,4 +81,45 @@
 
 .perfil-refugio-info p {
   margin: 8px 0;
+}
+
+/* ====== NUEVO: Animación de entrada ====== */
+.fade-in {
+  animation: fadeInUp 0.6s ease-out both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ====== NUEVO: Tarjetas elevadas al hacer hover ====== */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* ====== NUEVO: Responsividad mínima ====== */
+@media (max-width: 576px) {
+  .perfil-refugio-contenido {
+    padding: 20px;
+  }
+
+  h2, h3, h4 {
+    font-size: 1.25rem;
+  }
+
+  .btn {
+    font-size: 0.9rem;
+  }
 }

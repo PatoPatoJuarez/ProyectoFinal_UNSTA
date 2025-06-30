@@ -4,6 +4,7 @@ import CrearPublicacionModal from '../components/CrearPublicacionModal';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useNavigate } from 'react-router-dom';
+import "../styles/perfilRefugio.css";
 
 const PerfilRefugio = () => {
   const [refugio, setRefugio] = useState(null);
@@ -113,127 +114,262 @@ const PerfilRefugio = () => {
   if (error) return <p className="text-center mt-5 text-danger">{error}</p>;
   if (!refugio) return null;
 
+  // return (
+  //   <div className="d-flex flex-column min-vh-100">
+  //     <Header />
+  //     <div className="container my-5 flex-grow-1">
+  //       <div className="d-flex justify-content-between align-items-center mb-4">
+  //         <h2>Perfil del Refugio</h2>
+  //         <button className="btn btn-outline-secondary" onClick={() => navigate('/main')}>
+  //           ← Volver al Feed
+  //         </button>
+  //       </div>
+
+  //       <div className="card shadow-sm mb-4">
+  //         <div className="card-body">
+  //           <h3 className="card-title">{refugio.nombre}</h3>
+  //           <p><strong>Email:</strong> {refugio.email}</p>
+  //           <p><strong>Teléfono:</strong> {refugio.telefono}</p>
+  //           <p><strong>Dirección:</strong> {refugio.direccion}</p>
+  //           <p><strong>Localidad:</strong> {refugio.localidad}</p>
+  //           <p><strong>Tipo de mascota que recibe:</strong> {refugio.tipoMascota}</p>
+  //           <p><strong>Proceso de adopción:</strong> {refugio.procesoAdopcion}</p>
+  //           <p><strong>Tarifa:</strong> {refugio.tarifa}</p>
+  //           <p><strong>Seguimiento posterior:</strong> {refugio.seguimientoPosterior ? 'Sí' : 'No'}</p>
+  //           <p><strong>Necesidades:</strong> {refugio.necesidades}</p>
+  //         </div>
+  //       </div>
+
+  //       <div className="d-flex justify-content-between align-items-center mb-3">
+  //         <h4>Mis publicaciones</h4>
+  //         <button className="btn btn-success" onClick={() => setShowModal(true)}>
+  //           + Nueva Publicación
+  //         </button>
+  //       </div>
+
+  //       {publicaciones.length === 0 && <p>No hay publicaciones todavía.</p>}
+
+  //       <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 mb-5">
+  //         {publicaciones.map(pub => (
+  //           <div className="col" key={pub._id}>
+  //             <div className="card h-100 shadow-sm">
+  //               <img
+  //                 src={pub.fotos?.[0] || 'https://via.placeholder.com/300x200?text=Sin+imagen'}
+  //                 className="card-img-top"
+  //                 alt={pub.titulo}
+  //                 style={{ objectFit: 'cover', height: '200px' }}
+  //               />
+  //               <div className="card-body d-flex flex-column">
+  //                 <h5 className="card-title">{pub.titulo}</h5>
+  //                 <p className="card-text flex-grow-1">{pub.descripcion || 'Sin descripción.'}</p>
+  //                 <ul className="list-group list-group-flush mb-3">
+  //                   <li className="list-group-item"><strong>Tipo:</strong> {pub.tipoMascota}</li>
+  //                   <li className="list-group-item"><strong>Edad:</strong> {pub.edad}</li>
+  //                   <li className="list-group-item"><strong>Tamaño:</strong> {pub.tamaño}</li>
+  //                 </ul>
+  //                 <button
+  //                   className="btn btn-outline-danger mt-2"
+  //                   onClick={() => handleEliminarPublicacion(pub._id)}
+  //                 >
+  //                   🗑️ Eliminar
+  //                 </button>
+  //               </div>
+  //             </div>
+  //           </div>
+  //         ))}
+  //       </div>
+
+  //       <div>
+  //         <h4>Solicitudes recibidas</h4>
+  //         {loadingSolicitudes && <p>Cargando solicitudes...</p>}
+  //         {!loadingSolicitudes && solicitudes.length === 0 && <p>No hay solicitudes aún.</p>}
+
+  //         {!loadingSolicitudes && solicitudes.length > 0 && (
+  //           <div className="list-group">
+  //             {solicitudes.map(solicitud => (
+  //               <div key={solicitud._id} className="list-group-item mb-3 shadow-sm">
+  //                 <p><strong>Adoptante:</strong> {solicitud.adoptante?.nombre || 'N/D'} ({solicitud.adoptante?.email || 'sin email'})</p>
+  //                 <p><strong>Publicación:</strong> {solicitud.publicacion?.titulo || 'N/D'}</p>
+  //                 <p><strong>Mensaje:</strong> {solicitud.mensaje || '(Sin mensaje)'}</p>
+  //                 <p><strong>Estado:</strong> <em>{solicitud.estado}</em></p>
+  //                 {solicitud.estado === 'pendiente' && (
+  //                   <div>
+  //                     <button
+  //                       className="btn btn-success me-2"
+  //                       onClick={() => cambiarEstado(solicitud._id, 'aprobada')}
+  //                     >
+  //                       Aprobar
+  //                     </button>
+  //                     <button
+  //                       className="btn btn-danger"
+  //                       onClick={() => cambiarEstado(solicitud._id, 'rechazada')}
+  //                     >
+  //                       Rechazar
+  //                     </button>
+  //                   </div>
+  //                 )}
+  //                 {solicitud.estado === 'rechazada' && (
+  //                   <button
+  //                     className="btn btn-outline-danger mt-2"
+  //                     onClick={() => handleEliminarSolicitud(solicitud._id)}
+  //                   >
+  //                     🗑️ Eliminar solicitud
+  //                   </button>
+  //                 )}
+  //               </div>
+  //             ))}
+  //           </div>
+  //         )}
+  //       </div>
+  //     </div>
+
+  //     <Footer />
+
+  //     <CrearPublicacionModal
+  //       show={showModal}
+  //       handleClose={() => setShowModal(false)}
+  //       onPublicacionCreada={() => {
+  //         setShowModal(false);
+  //         cargarPublicaciones();
+  //       }}
+  //     />
+  //   </div>
+  // );
+
   return (
-    <div className="d-flex flex-column min-vh-100">
-      <Header />
-      <div className="container my-5 flex-grow-1">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2>Perfil del Refugio</h2>
-          <button className="btn btn-outline-secondary" onClick={() => navigate('/main')}>
-            ← Volver al Feed
-          </button>
-        </div>
+  <div className="d-flex flex-column min-vh-100 bg-light">
+    <Header />
 
-        <div className="card shadow-sm mb-4">
-          <div className="card-body">
-            <h3 className="card-title">{refugio.nombre}</h3>
-            <p><strong>Email:</strong> {refugio.email}</p>
-            <p><strong>Teléfono:</strong> {refugio.telefono}</p>
-            <p><strong>Dirección:</strong> {refugio.direccion}</p>
-            <p><strong>Localidad:</strong> {refugio.localidad}</p>
-            <p><strong>Tipo de mascota que recibe:</strong> {refugio.tipoMascota}</p>
-            <p><strong>Proceso de adopción:</strong> {refugio.procesoAdopcion}</p>
-            <p><strong>Tarifa:</strong> {refugio.tarifa}</p>
-            <p><strong>Seguimiento posterior:</strong> {refugio.seguimientoPosterior ? 'Sí' : 'No'}</p>
-            <p><strong>Necesidades:</strong> {refugio.necesidades}</p>
+    <div className="container my-5 flex-grow-1 fade-in">
+
+      {/* ENCABEZADO */}
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 className="text-primary fw-bold">
+          <i className="bi bi-house-heart-fill me-2" /> Perfil del Refugio
+        </h2>
+        <button className="btn btn-outline-primary" onClick={() => navigate('/main')}>
+          <i className="bi bi-arrow-left me-1" /> Volver al Feed
+        </button>
+      </div>
+
+      {/* PERFIL DEL REFUGIO */}
+      <div className="card shadow-sm mb-5 rounded-4 card-hover p-4 bg-white">
+        <h3 className="card-title mb-3">
+          <i className="bi bi-person-fill me-2" /> {refugio.nombre}
+        </h3>
+        <p><i className="bi bi-envelope-fill me-2" /><strong>Email:</strong> {refugio.email}</p>
+        <p><i className="bi bi-telephone-fill me-2" /><strong>Teléfono:</strong> {refugio.telefono}</p>
+        <p><i className="bi bi-geo-alt-fill me-2" /><strong>Dirección:</strong> {refugio.direccion}</p>
+        <p><strong>Localidad:</strong> {refugio.localidad}</p>
+        <p><strong>Tipo de mascota que recibe:</strong> {refugio.tipoMascota}</p>
+        <p><strong>Proceso de adopción:</strong> {refugio.procesoAdopcion}</p>
+        <p><strong>Tarifa:</strong> {refugio.tarifa}</p>
+        <p><strong>Seguimiento posterior:</strong> {refugio.seguimientoPosterior ? 'Sí' : 'No'}</p>
+        <p><strong>Necesidades:</strong> {refugio.necesidades}</p>
+      </div>
+
+      {/* PUBLICACIONES */}
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h4 className="text-secondary">
+          <i className="bi bi-megaphone-fill me-2" /> Mis publicaciones
+        </h4>
+        <button className="btn btn-success" onClick={() => setShowModal(true)}>
+          <i className="bi bi-plus-lg me-1" /> Nueva Publicación
+        </button>
+      </div>
+
+      {publicaciones.length === 0 && <p className="text-muted">No hay publicaciones todavía.</p>}
+
+      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 mb-5">
+        {publicaciones.map(pub => (
+          <div className="col fade-in" key={pub._id}>
+            <div className="card h-100 shadow-sm card-hover rounded-4">
+              <img
+                src={pub.fotos?.[0] || 'https://via.placeholder.com/300x200?text=Sin+imagen'}
+                className="card-img-top rounded-top-4"
+                alt={pub.titulo}
+                style={{ objectFit: 'cover', height: '200px' }}
+              />
+              <div className="card-body d-flex flex-column">
+                <h5 className="card-title">{pub.titulo}</h5>
+                <p className="card-text flex-grow-1">{pub.descripcion || 'Sin descripción.'}</p>
+                <ul className="list-group list-group-flush mb-3">
+                  <li className="list-group-item"><strong>Tipo:</strong> {pub.tipoMascota}</li>
+                  <li className="list-group-item"><strong>Edad:</strong> {pub.edad}</li>
+                  <li className="list-group-item"><strong>Tamaño:</strong> {pub.tamaño}</li>
+                </ul>
+                <button
+                  className="btn btn-outline-danger mt-2"
+                  onClick={() => handleEliminarPublicacion(pub._id)}
+                >
+                  <i className="bi bi-trash-fill me-1" /> Eliminar
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
+        ))}
+      </div>
 
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <h4>Mis publicaciones</h4>
-          <button className="btn btn-success" onClick={() => setShowModal(true)}>
-            + Nueva Publicación
-          </button>
-        </div>
+      {/* SOLICITUDES */}
+      <h4 className="mb-3 text-secondary">
+        <i className="bi bi-inbox-fill me-2" /> Solicitudes recibidas
+      </h4>
 
-        {publicaciones.length === 0 && <p>No hay publicaciones todavía.</p>}
+      {loadingSolicitudes && <p>Cargando solicitudes...</p>}
+      {!loadingSolicitudes && solicitudes.length === 0 && <p className="text-muted">No hay solicitudes aún.</p>}
 
-        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 mb-5">
-          {publicaciones.map(pub => (
-            <div className="col" key={pub._id}>
-              <div className="card h-100 shadow-sm">
-                <img
-                  src={pub.fotos?.[0] || 'https://via.placeholder.com/300x200?text=Sin+imagen'}
-                  className="card-img-top"
-                  alt={pub.titulo}
-                  style={{ objectFit: 'cover', height: '200px' }}
-                />
-                <div className="card-body d-flex flex-column">
-                  <h5 className="card-title">{pub.titulo}</h5>
-                  <p className="card-text flex-grow-1">{pub.descripcion || 'Sin descripción.'}</p>
-                  <ul className="list-group list-group-flush mb-3">
-                    <li className="list-group-item"><strong>Tipo:</strong> {pub.tipoMascota}</li>
-                    <li className="list-group-item"><strong>Edad:</strong> {pub.edad}</li>
-                    <li className="list-group-item"><strong>Tamaño:</strong> {pub.tamaño}</li>
-                  </ul>
-                  <button
-                    className="btn btn-outline-danger mt-2"
-                    onClick={() => handleEliminarPublicacion(pub._id)}
-                  >
-                    🗑️ Eliminar
+      {!loadingSolicitudes && solicitudes.length > 0 && (
+        <div className="list-group">
+          {solicitudes.map(solicitud => (
+            <div key={solicitud._id} className="list-group-item mb-3 shadow-sm rounded-3 fade-in">
+              <p><strong>Adoptante:</strong> {solicitud.adoptante?.nombre || 'N/D'} ({solicitud.adoptante?.email || 'sin email'})</p>
+              <p><strong>Publicación:</strong> {solicitud.publicacion?.titulo || 'N/D'}</p>
+              <p><strong>Mensaje:</strong> {solicitud.mensaje || '(Sin mensaje)'}</p>
+              <p><strong>Estado:</strong> 
+                <span className={`ms-2 badge ${
+                  solicitud.estado === 'aprobada' ? 'bg-success' :
+                  solicitud.estado === 'rechazada' ? 'bg-danger' : 'bg-secondary'
+                }`}>
+                  {solicitud.estado}
+                </span>
+              </p>
+              {solicitud.estado === 'pendiente' && (
+                <div className="mt-2">
+                  <button className="btn btn-success me-2" onClick={() => cambiarEstado(solicitud._id, 'aprobada')}>
+                    <i className="bi bi-check-circle-fill me-1" /> Aprobar
+                  </button>
+                  <button className="btn btn-danger" onClick={() => cambiarEstado(solicitud._id, 'rechazada')}>
+                    <i className="bi bi-x-circle-fill me-1" /> Rechazar
                   </button>
                 </div>
-              </div>
+              )}
+              {solicitud.estado === 'rechazada' && (
+                <button
+                  className="btn btn-outline-danger mt-2"
+                  onClick={() => handleEliminarSolicitud(solicitud._id)}
+                >
+                  <i className="bi bi-trash-fill me-1" /> Eliminar solicitud
+                </button>
+              )}
             </div>
           ))}
         </div>
-
-        <div>
-          <h4>Solicitudes recibidas</h4>
-          {loadingSolicitudes && <p>Cargando solicitudes...</p>}
-          {!loadingSolicitudes && solicitudes.length === 0 && <p>No hay solicitudes aún.</p>}
-
-          {!loadingSolicitudes && solicitudes.length > 0 && (
-            <div className="list-group">
-              {solicitudes.map(solicitud => (
-                <div key={solicitud._id} className="list-group-item mb-3 shadow-sm">
-                  <p><strong>Adoptante:</strong> {solicitud.adoptante?.nombre || 'N/D'} ({solicitud.adoptante?.email || 'sin email'})</p>
-                  <p><strong>Publicación:</strong> {solicitud.publicacion?.titulo || 'N/D'}</p>
-                  <p><strong>Mensaje:</strong> {solicitud.mensaje || '(Sin mensaje)'}</p>
-                  <p><strong>Estado:</strong> <em>{solicitud.estado}</em></p>
-                  {solicitud.estado === 'pendiente' && (
-                    <div>
-                      <button
-                        className="btn btn-success me-2"
-                        onClick={() => cambiarEstado(solicitud._id, 'aprobada')}
-                      >
-                        Aprobar
-                      </button>
-                      <button
-                        className="btn btn-danger"
-                        onClick={() => cambiarEstado(solicitud._id, 'rechazada')}
-                      >
-                        Rechazar
-                      </button>
-                    </div>
-                  )}
-                  {solicitud.estado === 'rechazada' && (
-                    <button
-                      className="btn btn-outline-danger mt-2"
-                      onClick={() => handleEliminarSolicitud(solicitud._id)}
-                    >
-                      🗑️ Eliminar solicitud
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      <Footer />
-
-      <CrearPublicacionModal
-        show={showModal}
-        handleClose={() => setShowModal(false)}
-        onPublicacionCreada={() => {
-          setShowModal(false);
-          cargarPublicaciones();
-        }}
-      />
+      )}
     </div>
-  );
+
+    <Footer />
+
+    <CrearPublicacionModal
+      show={showModal}
+      handleClose={() => setShowModal(false)}
+      onPublicacionCreada={() => {
+        setShowModal(false);
+        cargarPublicaciones();
+      }}
+    />
+  </div>
+);
+
 };
 
 export default PerfilRefugio;
