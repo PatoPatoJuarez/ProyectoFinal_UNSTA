@@ -41,3 +41,30 @@
   font-size: 0.95rem;
   color: #495057 !important;
 }
+
+.mainpage-container {
+  min-height: 100vh;
+  position: relative;
+  background: linear-gradient(135deg, #ffe5d0 0%, #ffd6a5 100%);
+  z-index: 1;
+  overflow-x: hidden;
+}
+
+.mainpage-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.10;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg width='60' height='60' viewBox='0 0 60 60' fill='none' xmlns='http://www.w3.org/2000/svg'><ellipse cx='30' cy='50' rx='8' ry='12' fill='%23603e26'/><ellipse cx='15' cy='35' rx='4' ry='6' fill='%23603e26'/><ellipse cx='45' cy='35' rx='4' ry='6' fill='%23603e26'/><ellipse cx='22' cy='25' rx='3' ry='4' fill='%23603e26'/><ellipse cx='38' cy='25' rx='3' ry='4' fill='%23603e26'/></svg>");
+  background-repeat: repeat;
+  background-size: 100px 100px;
+  pointer-events: none;
+}
+
+header, footer, .bg-dark {
+  background-color: #3c2e28 !important;
+  position: relative;
+  z-index: 2;
+}
