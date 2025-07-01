@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useNavigate } from 'react-router-dom';
 import '../styles/perfilUsuario.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const PerfilRefugio = () => {
   const [refugio, setRefugio] = useState(null);
@@ -119,34 +120,61 @@ const PerfilRefugio = () => {
     <div className="perfil-container">
       <Header />
       <div className="container my-5 flex-grow-2">
+        {/* Título con ícono */}
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2>Perfil del Refugio</h2>
+          <h2 className="text-primary fw-bold">
+            <i className="bi bi-house-heart-fill me-2" /> Perfil del Refugio
+          </h2>
           <button className="btn-1 mt-2 me-1" onClick={() => navigate('/main')}>
-            ← Volver al Feed
+            <i className="bi bi-arrow-left me-1" /> Volver al Feed
           </button>
         </div>
 
+        {/* Card de perfil con íconos */}
         <div className="card shadow-sm mb-4 rounded-4 card-hover">
           <div className="card-body">
-            <h3 className="card-title">{refugio.nombre}</h3>
+            <h3 className="card-title mb-3">
+              <i className="bi bi-person-fill me-2" /> {refugio.nombre}
+            </h3>
             <ul className="list-group list-group-flush perfil-lista-datos mb-0">
-              <li className="list-group-item"><strong>Email:</strong> {refugio.email}</li>
-              <li className="list-group-item"><strong>Teléfono:</strong> {refugio.telefono}</li>
-              <li className="list-group-item"><strong>Dirección:</strong> {refugio.direccion}</li>
-              <li className="list-group-item"><strong>Localidad:</strong> {refugio.localidad}</li>
-              <li className="list-group-item"><strong>Tipo de mascota que recibe:</strong> {refugio.tipoMascota}</li>
-              <li className="list-group-item"><strong>Proceso de adopción:</strong> {refugio.procesoAdopcion}</li>
-              <li className="list-group-item"><strong>Tarifa:</strong> {refugio.tarifaAdopcion}</li>
-              <li className="list-group-item"><strong>Seguimiento posterior:</strong> {refugio.seguimientoAdopcion === 'Sí' ? 'Sí' : 'No'}</li>
-              <li className="list-group-item"><strong>Necesidades:</strong> {refugio.necesidadesRefugio}</li>
+              <li className="list-group-item">
+                <i className="bi bi-envelope-fill me-2" /><strong>Email:</strong> {refugio.email}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-telephone-fill me-2" /><strong>Teléfono:</strong> {refugio.telefono}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-geo-alt-fill me-2" /><strong>Dirección:</strong> {refugio.direccion}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-geo-fill me-2" /><strong>Localidad:</strong> {refugio.localidad}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-paw-fill me-2" /><strong>Tipo de mascota que recibe:</strong> {refugio.tipoMascota}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-journal-check me-2" /><strong>Proceso de adopción:</strong> {refugio.procesoAdopcion}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-cash-coin me-2" /><strong>Tarifa:</strong> {refugio.tarifaAdopcion}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-clipboard-check me-2" /><strong>Seguimiento posterior:</strong> {refugio.seguimientoAdopcion === 'Sí' ? 'Sí' : 'No'}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-exclamation-circle-fill me-2" /><strong>Necesidades:</strong> {refugio.necesidadesRefugio}
+              </li>
             </ul>
           </div>
         </div> 
 
+        {/* Título publicaciones con ícono */}
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h4>Mis publicaciones</h4>
+          <h4 className="text-secondary">
+            <i className="bi bi-megaphone-fill me-2" /> Mis publicaciones
+          </h4>
           <button className="btn-2 mb-3 me-1" onClick={() => setShowModal(true)}>
-            + Nueva Publicación
+            <i className="bi bi-plus-lg me-1" /> Nueva Publicación
           </button>
         </div>
 
@@ -192,7 +220,9 @@ const PerfilRefugio = () => {
         </div>
 
         <div>
-          <h4 className='mb-5'>Solicitudes recibidas</h4>
+          <h4 className="mb-5 text-secondary">
+            <i className="bi bi-inbox-fill me-2" /> Solicitudes recibidas
+          </h4>
           {loadingSolicitudes && <p>Cargando solicitudes...</p>}
           {!loadingSolicitudes && solicitudes.length === 0 && <p>No hay solicitudes aún.</p>}
 
@@ -204,23 +234,44 @@ const PerfilRefugio = () => {
                   className="list-group-item mb-3 shadow-sm rounded-4 card-hover"
                   style={{ border: 'none' }}
                 >
-                  <p><strong>Adoptante:</strong> {solicitud.adoptante?.nombre || 'N/D'} ({solicitud.adoptante?.email || 'sin email'})</p>
-                  <p><strong>Publicación:</strong> {solicitud.publicacion?.titulo || 'N/D'}</p>
-                  <p><strong>Mensaje:</strong> {solicitud.mensaje || '(Sin mensaje)'}</p>
-                  <p><strong>Estado:</strong> <em>{solicitud.estado}</em></p>
+                  <p>
+                    <i className="bi bi-person-circle me-2" />
+                    <strong>Adoptante:</strong> {solicitud.adoptante?.nombre || 'N/D'} ({solicitud.adoptante?.email || 'sin email'})
+                  </p>
+                  <p>
+                    <i className="bi bi-megaphone-fill me-2" />
+                    <strong>Publicación:</strong> {solicitud.publicacion?.titulo || 'N/D'}
+                  </p>
+                  <p>
+                    <i className="bi bi-chat-left-text me-2" />
+                    <strong>Mensaje:</strong> {solicitud.mensaje || '(Sin mensaje)'}
+                  </p>
+                  <p>
+                    <i className="bi bi-info-circle-fill me-2" />
+                    <strong>Estado:</strong>
+                    <span className={`ms-2 badge ${
+                      solicitud.estado === 'aprobada'
+                        ? 'bg-success'
+                        : solicitud.estado === 'rechazada'
+                        ? 'bg-danger'
+                        : 'bg-secondary'
+                    }`}>
+                      {solicitud.estado}
+                    </span>
+                  </p>
                   {solicitud.estado === 'pendiente' && (
                     <div>
                       <button
                         className="btn btn-success me-2"
                         onClick={() => cambiarEstado(solicitud._id, 'aprobada')}
                       >
-                        Aprobar
+                        <i className="bi bi-check-circle me-1" /> Aprobar
                       </button>
                       <button
                         className="btn btn-danger"
                         onClick={() => cambiarEstado(solicitud._id, 'rechazada')}
                       >
-                        Rechazar
+                        <i className="bi bi-x-circle me-1" /> Rechazar
                       </button>
                     </div>
                   )}
@@ -229,7 +280,7 @@ const PerfilRefugio = () => {
                       className="btn btn-outline-danger mt-2"
                       onClick={() => handleEliminarSolicitud(solicitud._id)}
                     >
-                      🗑️ Eliminar solicitud
+                      <i className="bi bi-trash-fill me-1" /> Eliminar solicitud
                     </button>
                   )}
                 </div>
