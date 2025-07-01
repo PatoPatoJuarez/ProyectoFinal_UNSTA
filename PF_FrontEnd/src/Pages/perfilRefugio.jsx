@@ -6,6 +6,8 @@ import Footer from '../components/Footer';
 import { useNavigate } from 'react-router-dom';
 import '../styles/perfilUsuario.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPaw } from '@fortawesome/free-solid-svg-icons';
 
 const PerfilRefugio = () => {
   const [refugio, setRefugio] = useState(null);
@@ -150,7 +152,8 @@ const PerfilRefugio = () => {
                 <i className="bi bi-geo-fill me-2" /><strong>Localidad:</strong> {refugio.localidad}
               </li>
               <li className="list-group-item">
-                <i className="bi bi-paw-fill me-2" /><strong>Tipo de mascota que recibe:</strong> {refugio.tipoMascota}
+                <FontAwesomeIcon icon={faPaw} className="me-2" />
+                <strong>Tipo de mascota que recibe:</strong> {refugio.tipoMascota}
               </li>
               <li className="list-group-item">
                 <i className="bi bi-journal-check me-2" /><strong>Proceso de adopción:</strong> {refugio.procesoAdopcion}
