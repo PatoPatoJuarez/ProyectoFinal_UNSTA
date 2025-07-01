@@ -3,7 +3,8 @@ const router = express.Router();
 const {
   crearPublicacion,
   obtenerPublicaciones,
-  eliminarPublicacion
+  eliminarPublicacion,
+  actualizarPublicacion
 } = require('../controllers/publicacionesController');
 const authMiddleware = require('../middlewares/authMiddleware');
 const Publicacion = require('../models/Publicacion');
@@ -27,5 +28,7 @@ router.post('/', authMiddleware, crearPublicacion);
 
 // Eliminar publicación por ID (refugio dueño)
 router.delete('/:id', authMiddleware, eliminarPublicacion);
+
+router.patch('/:id', authMiddleware, actualizarPublicacion);
 
 module.exports = router;

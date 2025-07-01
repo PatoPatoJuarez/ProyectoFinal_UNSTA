@@ -18,6 +18,7 @@ const RegistroAdop = () => {
     const [cuidadosVeterinarios, setCuidadosVeterinarios] = useState('');
     const [cuidadoAlternativo, setCuidadoAlternativo] = useState('');
     const [errores, setErrores] = useState({});
+    const [mensajeExito, setMensajeExito] = useState('');
 
     const localidades = [
         'San Miguel de Tucuman',
@@ -53,8 +54,8 @@ const RegistroAdop = () => {
         if (!telefono.trim()) {
             nuevosErrores.telefono = 'El teléfono es obligatorio';
             valid = false;
-        } else if (!/^[+]?[\d\s-]{8,20}$/.test(telefono)) {
-            nuevosErrores.telefono = 'El teléfono debe tener entre 8 y 15 dígitos';
+        } else if (!/^(\+54|54)?\d{8,15}$/.test(telefono.replace(/[\s-]/g, ""))) {
+            nuevosErrores.telefono = 'El teléfono debe tener entre 8 y 15 dígitos, con o sin +54';
             valid = false;
         }
         if (!contrasena.trim()) {
@@ -126,14 +127,15 @@ const RegistroAdop = () => {
         };
 
         axios.post('http://localhost:3000/api/adoptantes', datos)
-            .then(response => {
-                alert('Registro exitoso');
-                console.log('Respuesta:', response.data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Hubo un error al registrar');
-            });
+        .then(response => {
+            setMensajeExito('Registro exitoso. Redirigiendo...');
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 3000);
+        })
+        .catch(error => {
+            setErrores({ general: 'Hubo un error al registrar' });
+        });
     };
 
     const mostrarError = (campo) => {
@@ -145,6 +147,8 @@ const RegistroAdop = () => {
         <div className='fondo-registro'>
             <div className="registro-form" style={{ maxWidth: '800px', width: '100%' }}>
                 <h2>Registro de Adoptante</h2>
+                {mensajeExito && <div className="alert alert-success">{mensajeExito}</div>}
+                {errores.general && <div className="alert alert-danger">{errores.general}</div>}
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <label htmlFor="nombre" className="form-label">Nombre</label>
@@ -158,7 +162,7 @@ const RegistroAdop = () => {
                     </div>
                     <div className="mb-3">
                         <label htmlFor="email" className="form-label">Email</label>
-                        <input type="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <input type="text" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                         {mostrarError("email")}
                     </div>
                     <div className="mb-3">

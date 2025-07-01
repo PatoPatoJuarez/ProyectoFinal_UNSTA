@@ -29,7 +29,7 @@ router.post('/', validacionRefugio, async (req, res) => {
 router.get('/me', authMiddleware, async (req, res) => {
   try {
     const { id } = req.user; // req.user viene del authMiddleware tras validar JWT
-    const refugio = await Refugio.findById(id).select('-password'); // Excluir password
+    const refugio = await Refugio.findById(id).select('-contrasena'); // Excluir password
 
     if (!refugio) {
       return res.status(404).json({ message: 'Refugio no encontrado' });
