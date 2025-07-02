@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/PatoPatoJuarez/ProyectoFinal_UNSTA#readme",
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "cypress": "^14.5.0"
   }
 }
