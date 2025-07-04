@@ -1,0 +1,123 @@
+.chat-modal-overlay {
+  position: fixed;
+  bottom: 60px; /* Por encima del botón flotante */
+  right: 20px;
+  width: 350px;
+  height: 450px;
+  background: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  border-radius: 8px;
+  display: flex;
+  z-index: 1050;
+  font-family: Arial, sans-serif;
+}
+
+.chat-modal-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.chat-close-btn {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  font-size: 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.chat-sidebar {
+  width: 30%;
+  border-right: 1px solid #ddd;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.chat-conv-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.chat-conv-list li {
+  padding: 8px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  background: #f9f9f9;
+}
+
+.chat-conv-list li.selected {
+  background: #007bff;
+  color: white;
+}
+
+.chat-content {
+  width: 70%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.chat-messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  border: 1px solid #eee;
+  padding: 5px;
+  border-radius: 5px;
+  background: #fafafa;
+}
+
+.chat-message {
+  margin-bottom: 10px;
+  max-width: 80%;
+  padding: 6px 10px;
+  border-radius: 12px;
+}
+
+.chat-message.sent {
+  background-color: #d1e7dd;
+  align-self: flex-end;
+}
+
+.chat-message.received {
+  background-color: #f8d7da;
+  align-self: flex-start;
+}
+
+.chat-message small {
+  display: block;
+  font-size: 0.7rem;
+  color: #666;
+  margin-top: 2px;
+}
+
+.chat-input-container {
+  display: flex;
+  gap: 5px;
+}
+
+.chat-input-container input {
+  flex-grow: 1;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.chat-input-container button {
+  padding: 6px 15px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.chat-input-container button:hover {
+  background-color: #0056b3;
+}

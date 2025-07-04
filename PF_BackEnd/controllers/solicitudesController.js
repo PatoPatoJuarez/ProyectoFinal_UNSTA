@@ -1,6 +1,9 @@
 const Solicitud = require('../models/Solicitud');
-const Publicacion = require('../models/Publicacion'); // Importamos para validar refugio
+const Publicacion = require('../models/Publicacion');
+const Conversation = require('../models/Conversation');
+const Message = require('../models/Message');
 
+// Crear solicitud + conversación + primer mensaje
 const crearSolicitud = async (req, res) => {
   try {
     const { rol, id } = req.user;
@@ -10,6 +13,11 @@ const crearSolicitud = async (req, res) => {
 
     const { publicacion, mensaje } = req.body;
 
+    const pub = await Publicacion.findById(publicacion);
+    if (!pub) {
+      return res.status(404).json({ message: 'Publicación no encontrada' });
+    }
+
     const nuevaSolicitud = new Solicitud({
       adoptante: id,
       publicacion,
@@ -17,18 +25,47 @@ const crearSolicitud = async (req, res) => {
       estado: 'pendiente',
       fecha: new Date(),
     });
-
     await nuevaSolicitud.save();
 
+    let conversation = await Conversation.findOne({
+      adoptanteId: id,
+      refugioId: pub.refugio
+    });
+
+    if (!conversation) {
+      conversation = new Conversation({
+        adoptanteId: id,
+        refugioId: pub.refugio
+      });
+      await conversation.save();
+    }
+
+    const textoMensaje = mensaje || `Hola, estoy interesado/a en adoptar a ${pub.titulo}.`;
+    const newMessage = new Message({
+      conversationId: conversation._id,
+      senderId: id,
+      text: textoMensaje
+    });
+    await newMessage.save();
+
+    conversation.lastMessage = textoMensaje;
+    conversation.updatedAt = new Date();
+    await conversation.save();
+
     res.status(201).json({
-      message: 'Solicitud enviada con éxito',
+      message: 'Solicitud y mensaje enviados con éxito',
       solicitud: nuevaSolicitud,
+      conversationId: conversation._id
     });
   } catch (error) {
     console.error('Error al crear solicitud:', error);
     res.status(500).json({ message: 'Error al crear solicitud' });
   }
 };
+
+// =======================
+// REPEGAMOS las funciones anteriores
+// =======================
 
 const obtenerSolicitudesRefugio = async (req, res) => {
   try {

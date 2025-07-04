@@ -3,6 +3,8 @@ import axios from 'axios';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import DetalleModal from '../components/DetalleModal'; // Modal separado
+import FloatingChatButton from '../components/FloatingChatButton';
+import ChatModal from '../components/ChatModal'; // Importamos el nuevo modal
 import '../styles/mainPage.css';
 
 const MainPage = () => {
@@ -13,6 +15,7 @@ const MainPage = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [publicacionSeleccionada, setPublicacionSeleccionada] = useState(null);
   const [userRole, setUserRole] = useState(null);
+  const [showChat, setShowChat] = useState(false);
 
   const token = localStorage.getItem('token');
 
@@ -73,7 +76,19 @@ const MainPage = () => {
       <Header />
 
       <main className="container py-5 flex-grow-1">
-        <h1 className="text-center mb-5 display-5" style={{fontFamily: 'Fredoka, sans-serif',fontSize: '3rem', fontWeight: 700, color: '#3c2e28', textShadow: '2px 2px 4px rgba(60, 46, 40, 0.88)', letterSpacing: '1px'}}><strong>🐶 Feed de Publicaciones de Refugios 🐱</strong></h1>
+        <h1
+          className="text-center mb-5 display-5"
+          style={{
+            fontFamily: 'Fredoka, sans-serif',
+            fontSize: '3rem',
+            fontWeight: 700,
+            color: '#3c2e28',
+            textShadow: '2px 2px 4px rgba(60, 46, 40, 0.88)',
+            letterSpacing: '1px'
+          }}
+        >
+          <strong>🐶 Feed de Publicaciones de Refugios 🐱</strong>
+        </h1>
 
         {loading && <p className="text-center">Cargando publicaciones...</p>}
         {error && <p className="text-center text-danger">{error}</p>}
@@ -119,6 +134,12 @@ const MainPage = () => {
           onSolicitar={() => solicitarAdopcion(publicacionSeleccionada._id)}
         />
       )}
+
+      {/* Botón flotante para abrir el chat */}
+      <FloatingChatButton onClick={() => setShowChat(true)} />
+
+      {/* Modal de chat */}
+      {showChat && <ChatModal token={token} onClose={() => setShowChat(false)} />}
 
       <Footer />
     </div>

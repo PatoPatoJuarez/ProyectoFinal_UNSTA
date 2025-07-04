@@ -3,6 +3,7 @@ const { body, validationResult } = require('express-validator');
 const refugioValidation = [
   body('nombre').notEmpty().withMessage('El nombre es obligatorio'),
   body('apellido').notEmpty().withMessage('El apellido es obligatorio'),
+  body('nombreCompania').notEmpty().withMessage('El nombre de refugio es obligatorio'),
   body('email').isEmail().withMessage('El correo electrónico no es válido'),
   body('telefono').matches(/^(\+54|54)?\d{8,15}$/).withMessage('El teléfono debe tener entre 8 y 15 dígitos, con o sin +54'),
   body('contrasena').isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres'),

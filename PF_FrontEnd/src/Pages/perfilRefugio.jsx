@@ -135,9 +135,13 @@ const PerfilRefugio = () => {
         {/* Card de perfil con íconos */}
         <div className="card shadow-sm mb-4 rounded-4 card-hover">
           <div className="card-body">
+            {/* Nuevo campo nombreCompañia */}
             <h3 className="card-title mb-3">
-              <i className="bi bi-person-fill me-2" /> {refugio.nombre}
+              <i className="bi bi-building me-2" /> {refugio.nombreCompania || 'Sin nombre de refugio'}
             </h3>
+            <h4 className="mb-3">
+              <i className="bi bi-person-fill me-2" /> {refugio.nombre} {refugio.apellido}
+            </h4>
             <ul className="list-group list-group-flush perfil-lista-datos mb-0">
               <li className="list-group-item">
                 <i className="bi bi-envelope-fill me-2" /><strong>Email:</strong> {refugio.email}
@@ -169,7 +173,7 @@ const PerfilRefugio = () => {
               </li>
             </ul>
           </div>
-        </div> 
+        </div>
 
         {/* Título publicaciones con ícono */}
         <div className="d-flex justify-content-between align-items-center mb-3">
@@ -196,118 +200,107 @@ const PerfilRefugio = () => {
                 <div className="card-body d-flex flex-column">
                   <h5 className="card-title">{pub.titulo}</h5>
                   <p className="card-text flex-grow-1">{pub.descripcion || 'Sin descripción.'}</p>
-                  <ul className="list-group list-group-flush mb-3">
-                    <li className="list-group-item"><strong>Tipo:</strong> {pub.tipoMascota}</li>
-                    <li className="list-group-item"><strong>Edad:</strong> {pub.edad}</li>
-                    <li className="list-group-item"><strong>Tamaño:</strong> {pub.tamaño}</li>
-                  </ul>
-                  <button
-                    className="btn btn-outline-primary mt-2 me-2"
-                    onClick={() => {
-                      setPublicacionEditar(pub);
-                      setShowModal(true);
-                    }}
-                  >
-                    ✏️ Editar
-                  </button>
-                  <button
-                    className="btn btn-outline-danger mt-2"
-                    onClick={() => handleEliminarPublicacion(pub._id)}
-                  >
-                    🗑️ Eliminar
-                  </button>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <button
+                      className="btn btn-sm btn-primary"
+                      onClick={() => {
+                        setPublicacionEditar(pub);
+                        setShowModal(true);
+                      }}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className="btn btn-sm btn-danger"
+                      onClick={() => handleEliminarPublicacion(pub._id)}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        <div>
-          <h4 className="mb-5 text-secondary">
-            <i className="bi bi-inbox-fill me-2" /> Solicitudes recibidas
-          </h4>
-          {loadingSolicitudes && <p>Cargando solicitudes...</p>}
-          {!loadingSolicitudes && solicitudes.length === 0 && <p>No hay solicitudes aún.</p>}
+        {/* Modal para crear o editar publicación */}
+        {showModal && (
+          <CrearPublicacionModal
+            show={showModal}
+            handleClose={() => {
+              setShowModal(false);
+              setPublicacionEditar(null);
+            }}
+            onPublicacionCreada={() => {
+              cargarPublicaciones();
+              setShowModal(false);
+              setPublicacionEditar(null);
+            }}
+            publicacionEditar={publicacionEditar}
+          />
+        )}
 
-          {!loadingSolicitudes && solicitudes.length > 0 && (
-            <div className="list-group">
-              {solicitudes.map(solicitud => (
-                <div
-                  key={solicitud._id}
-                  className="list-group-item mb-3 shadow-sm rounded-4 card-hover"
-                  style={{ border: 'none' }}
-                >
-                  <p>
-                    <i className="bi bi-person-circle me-2" />
-                    <strong>Adoptante:</strong> {solicitud.adoptante?.nombre || 'N/D'} ({solicitud.adoptante?.email || 'sin email'})
-                  </p>
-                  <p>
-                    <i className="bi bi-megaphone-fill me-2" />
-                    <strong>Publicación:</strong> {solicitud.publicacion?.titulo || 'N/D'}
-                  </p>
-                  <p>
-                    <i className="bi bi-chat-left-text me-2" />
-                    <strong>Mensaje:</strong> {solicitud.mensaje || '(Sin mensaje)'}
-                  </p>
-                  <p>
-                    <i className="bi bi-info-circle-fill me-2" />
-                    <strong>Estado:</strong>
-                    <span className={`ms-2 badge ${
-                      solicitud.estado === 'aprobada'
-                        ? 'bg-success'
-                        : solicitud.estado === 'rechazada'
-                        ? 'bg-danger'
-                        : 'bg-secondary'
-                    }`}>
-                      {solicitud.estado}
-                    </span>
-                  </p>
-                  {solicitud.estado === 'pendiente' && (
-                    <div>
-                      <button
-                        className="btn btn-success me-2"
-                        onClick={() => cambiarEstado(solicitud._id, 'aprobada')}
-                      >
-                        <i className="bi bi-check-circle me-1" /> Aprobar
-                      </button>
-                      <button
-                        className="btn btn-danger"
-                        onClick={() => cambiarEstado(solicitud._id, 'rechazada')}
-                      >
-                        <i className="bi bi-x-circle me-1" /> Rechazar
-                      </button>
-                    </div>
-                  )}
-                  {solicitud.estado === 'rechazada' && (
-                    <button
-                      className="btn btn-outline-danger mt-2"
-                      onClick={() => handleEliminarSolicitud(solicitud._id)}
-                    >
-                      <i className="bi bi-trash-fill me-1" /> Eliminar solicitud
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        {/* Sección solicitudes */}
+        <h4 className="mb-3 mt-5 text-secondary">
+          <i className="bi bi-envelope-fill me-2" /> Solicitudes de Adopción
+        </h4>
+        {loadingSolicitudes ? (
+          <p>Cargando solicitudes...</p>
+        ) : solicitudes.length === 0 ? (
+          <p>No hay solicitudes para mostrar.</p>
+        ) : (
+          <div className="table-responsive">
+            <table className="table table-striped align-middle">
+              <thead>
+                <tr>
+                  <th>Adoptante</th>
+                  <th>Animal</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {solicitudes.map((solicitud) => (
+                  <tr key={solicitud._id}>
+                    <td>{solicitud.adoptante?.nombre || solicitud.adoptanteNombre} {solicitud.adoptante?.apellido || solicitud.adoptanteApellido}</td>
+                    <td>{solicitud.publicacion?.titulo || solicitud.animalNombre}</td>
+                    <td>
+                      <span className={`badge ${
+                        solicitud.estado === 'aprobada' ? 'bg-success' :
+                        solicitud.estado === 'rechazada' ? 'bg-danger' : 'bg-secondary'
+                      }`}>
+                        {solicitud.estado}
+                      </span>
+                    </td>
+                    <td>
+                      {solicitud.estado === 'pendiente' && (
+                        <>
+                          <button className="btn btn-success btn-sm me-2" onClick={() => cambiarEstado(solicitud._id, 'aprobada')}>
+                            Aprobar
+                          </button>
+                          <button className="btn btn-warning btn-sm me-2" onClick={() => cambiarEstado(solicitud._id, 'rechazada')}>
+                            Rechazar
+                          </button>
+                        </>
+                      )}
+                      {solicitud.estado === 'rechazada' && (
+                        <button className="btn btn-danger btn-sm" onClick={() => handleEliminarSolicitud(solicitud._id)}>
+                          Eliminar
+                        </button>
+                      )}
+                      {solicitud.estado === 'aprobada' && (
+                        <span className="badge bg-success">Aprobada</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
       </div>
-
       <Footer />
-
-      <CrearPublicacionModal
-        show={showModal}
-        handleClose={() => {
-          setShowModal(false);
-          setPublicacionEditar(null);
-        }}
-        onPublicacionCreada={() => {
-          setShowModal(false);
-          setPublicacionEditar(null);
-          cargarPublicaciones();
-        }}
-        publicacionEditar={publicacionEditar}
-      />
     </div>
   );
 };

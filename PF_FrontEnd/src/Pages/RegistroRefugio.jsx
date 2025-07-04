@@ -6,6 +6,7 @@ import axios from 'axios';
 const RegistroRef = () => {
     const [nombre, setNombre] = useState('');
     const [apellido, setApellido] = useState('');
+    const [nombreCompania, setNombreCompania] = useState('');  // <-- NUEVO ESTADO
     const [email, setEmail] = useState('');
     const [telefono, setTelefono] = useState('');
     const [contrasena, setContrasena] = useState('');
@@ -49,6 +50,10 @@ const RegistroRef = () => {
         }
         if (!apellido.trim()) {
             nuevosErrores.apellido = 'El apellido es obligatorio';
+            valid = false;
+        }
+        if (!nombreCompania.trim()) {     // <-- NUEVA VALIDACION
+            nuevosErrores.nombreCompania = 'El nombre del refugio es obligatorio';
             valid = false;
         }
         if (!email.trim() || !validarEmail(email)) {
@@ -112,6 +117,7 @@ const RegistroRef = () => {
         const datos = {
         nombre,
         apellido,
+        nombreCompania,   // <-- NUEVO CAMPO ENVIADO
         email,
         telefono,
         contrasena,
@@ -165,6 +171,14 @@ const RegistroRef = () => {
                         <input type="text" className="form-control" id="apellido" value={apellido} onChange={(e) => setApellido(e.target.value)} />
                         {mostrarError("apellido")}
                     </div>
+
+                    {/* NUEVO INPUT PARA NOMBRE DEL REFUGIO */}
+                    <div className="mb-3">
+                        <label htmlFor="nombreCompania" className="form-label">Nombre del Refugio</label>
+                        <input type="text" className="form-control" id="nombreCompania" value={nombreCompania} onChange={(e) => setNombreCompania(e.target.value)} />
+                        {mostrarError("nombreCompania")}
+                    </div>
+
                     <div className="mb-3">
                         <label htmlFor="email" className="form-label">Email</label>
                         <input type="text" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -219,7 +233,7 @@ const RegistroRef = () => {
                         <textarea className="form-control" id="procesoAdopcion" value={procesoAdopcion} onChange={(e) => setProcesoAdopcion(e.target.value)} />
                         {mostrarError("procesoAdopcion")}
                     </div>
-                    <div className="mb-3">
+                                        <div className="mb-3">
                         <label htmlFor="tarifaAdopcion" className="form-label">Tarifa de Adopción</label>
                         <input type="text" className="form-control" id="tarifaAdopcion" value={tarifaAdopcion} onChange={(e) => setTarifaAdopcion(e.target.value)} />
                         {mostrarError("tarifaAdopcion")}
