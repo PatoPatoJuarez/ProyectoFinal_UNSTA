@@ -17,11 +17,10 @@ const MainPage = () => {
   const [userRole, setUserRole] = useState(null);
   const [showChat, setShowChat] = useState(false);
 
-  const [filtro, setFiltro] = useState('todos');
-
-  const publicacionesFiltradas = publicaciones.filter(pub =>
-    filtro === 'todos' || pub.tipoMascota === filtro
-  );
+  // Filtros
+  const [filtroTipo, setFiltroTipo] = useState('todos');
+  const [filtroEdad, setFiltroEdad] = useState('todos');
+  const [filtroLocalidad, setFiltroLocalidad] = useState('todos');
 
 
   const token = localStorage.getItem('token');
@@ -78,6 +77,20 @@ const MainPage = () => {
     setPublicacionSeleccionada(null);
   };
 
+  // Extraer filtros únicos
+  const tiposMascota = [...new Set(publicaciones.map(p => p.tipoMascota).filter(Boolean))];
+  const edades = [...new Set(publicaciones.map(p => p.edad).filter(Boolean))];
+  const localidades = [...new Set(publicaciones.map(p => p.localidad).filter(Boolean))];
+
+  // Aplicar filtros
+  const publicacionesFiltradas = publicaciones.filter(pub => {
+    const tipoCoincide = filtroTipo === 'todos' || pub.tipoMascota === filtroTipo;
+    const edadCoincide = filtroEdad === 'todos' || pub.edad === filtroEdad;
+    const localidadCoincide = filtroLocalidad === 'todos' || pub.localidad === filtroLocalidad;
+    return tipoCoincide && edadCoincide && localidadCoincide;
+  });
+
+
   return (
     <div className="d-flex flex-column min-vh-100 mainpage-container">
       <Header />
@@ -96,23 +109,39 @@ const MainPage = () => {
         >
           <strong>🐶 Feed de Publicaciones de Refugios 🐱</strong>
         </h1>
+        {/* Filtros */}
+        <div className="mb-4 d-flex gap-3 flex-wrap justify-content-center">
+          {/* Tipo */}
+          <select value={filtroTipo} onChange={e => setFiltroTipo(e.target.value)} className="form-select w-auto">
+            <option value="todos">Todos los tipos</option>
+            {tiposMascota.map(tipo => (
+              <option key={tipo} value={tipo}>
+                {tipo.charAt(0).toUpperCase() + tipo.slice(1)}
+              </option>
+            ))}
+          </select>
+
+          {/* Edad */}
+          <select value={filtroEdad} onChange={e => setFiltroEdad(e.target.value)} className="form-select w-auto">
+            <option value="todos">Todas las edades</option>
+            {edades.map(edad => (
+              <option key={edad} value={edad}>{edad}</option>
+            ))}
+          </select>
+
+          {/* Localidad */}
+          <select value={filtroLocalidad} onChange={e => setFiltroLocalidad(e.target.value)} className="form-select w-auto">
+            <option value="todos">Todas las localidades</option>
+            {localidades.map(loc => (
+              <option key={loc} value={loc}>{loc}</option>
+            ))}
+          </select>
+        </div>
+        
 
         {loading && <p className="text-center">Cargando publicaciones...</p>}
         {error && <p className="text-center text-danger">{error}</p>}
         {mensaje && <p className="text-center text-success">{mensaje}</p>}
-
-        <div className="mb-4 d-flex gap-2 justify-content-center">
-          {['todos', 'perro', 'gato'].map(tipo => (
-            <button
-              key={tipo}
-              className={`btn ${filtro === tipo ? 'btn-primary' : 'btn-outline-secondary'}`}
-              onClick={() => setFiltro(tipo)}
-            >
-              {tipo === 'todos' ? 'Todos' : tipo.charAt(0).toUpperCase() + tipo.slice(1)}
-            </button>
-          ))}
-        </div>
-
 
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
           {publicacionesFiltradas.map(pub => (
