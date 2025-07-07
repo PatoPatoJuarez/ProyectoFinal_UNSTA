@@ -17,6 +17,13 @@ const MainPage = () => {
   const [userRole, setUserRole] = useState(null);
   const [showChat, setShowChat] = useState(false);
 
+  const [filtro, setFiltro] = useState('todos');
+
+  const publicacionesFiltradas = publicaciones.filter(pub =>
+    filtro === 'todos' || pub.tipoMascota === filtro
+  );
+
+
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -94,8 +101,21 @@ const MainPage = () => {
         {error && <p className="text-center text-danger">{error}</p>}
         {mensaje && <p className="text-center text-success">{mensaje}</p>}
 
+        <div className="mb-4 d-flex gap-2 justify-content-center">
+          {['todos', 'perro', 'gato'].map(tipo => (
+            <button
+              key={tipo}
+              className={`btn ${filtro === tipo ? 'btn-primary' : 'btn-outline-secondary'}`}
+              onClick={() => setFiltro(tipo)}
+            >
+              {tipo === 'todos' ? 'Todos' : tipo.charAt(0).toUpperCase() + tipo.slice(1)}
+            </button>
+          ))}
+        </div>
+
+
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-          {publicaciones.map(pub => (
+          {publicacionesFiltradas.map(pub => (
             <div className="col" key={pub._id}>
               <div className="card h-100 mainpage-card shadow-sm">
                 <img
