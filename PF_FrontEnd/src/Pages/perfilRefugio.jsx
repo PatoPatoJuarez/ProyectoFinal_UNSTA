@@ -4,6 +4,10 @@ import CrearPublicacionModal from '../components/CrearPublicacionModal';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useNavigate } from 'react-router-dom';
+import '../styles/perfilUsuario.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPaw } from '@fortawesome/free-solid-svg-icons';
 
 const PerfilRefugio = () => {
   const [refugio, setRefugio] = useState(null);
@@ -11,6 +15,7 @@ const PerfilRefugio = () => {
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [publicaciones, setPublicaciones] = useState([]);
+  const [publicacionEditar, setPublicacionEditar] = useState(null);
 
   // Estado y carga de solicitudes
   const [solicitudes, setSolicitudes] = useState([]);
@@ -114,35 +119,69 @@ const PerfilRefugio = () => {
   if (!refugio) return null;
 
   return (
-    <div className="d-flex flex-column min-vh-100">
+    <div className="perfil-container">
       <Header />
-      <div className="container my-5 flex-grow-1">
+      <div className="container my-5 flex-grow-2">
+        {/* Título con ícono */}
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2>Perfil del Refugio</h2>
-          <button className="btn btn-outline-secondary" onClick={() => navigate('/main')}>
-            ← Volver al Feed
+          <h2 className="text-primary fw-bold">
+            <i className="bi bi-house-heart-fill me-2" /> Perfil del Refugio
+          </h2>
+          <button className="btn-1 mt-2 me-1" onClick={() => navigate('/main')}>
+            <i className="bi bi-arrow-left me-1" /> Volver al Feed
           </button>
         </div>
 
-        <div className="card shadow-sm mb-4">
+        {/* Card de perfil con íconos */}
+        <div className="card shadow-sm mb-4 rounded-4 card-hover">
           <div className="card-body">
-            <h3 className="card-title">{refugio.nombre}</h3>
-            <p><strong>Email:</strong> {refugio.email}</p>
-            <p><strong>Teléfono:</strong> {refugio.telefono}</p>
-            <p><strong>Dirección:</strong> {refugio.direccion}</p>
-            <p><strong>Localidad:</strong> {refugio.localidad}</p>
-            <p><strong>Tipo de mascota que recibe:</strong> {refugio.tipoMascota}</p>
-            <p><strong>Proceso de adopción:</strong> {refugio.procesoAdopcion}</p>
-            <p><strong>Tarifa:</strong> {refugio.tarifa}</p>
-            <p><strong>Seguimiento posterior:</strong> {refugio.seguimientoPosterior ? 'Sí' : 'No'}</p>
-            <p><strong>Necesidades:</strong> {refugio.necesidades}</p>
+            {/* Nuevo campo nombreCompañia */}
+            <h3 className="card-title mb-3">
+              <i className="bi bi-building me-2" /> {refugio.nombreCompania || 'Sin nombre de refugio'}
+            </h3>
+            <h4 className="mb-3">
+              <i className="bi bi-person-fill me-2" /> {refugio.nombre} {refugio.apellido}
+            </h4>
+            <ul className="list-group list-group-flush perfil-lista-datos mb-0">
+              <li className="list-group-item">
+                <i className="bi bi-envelope-fill me-2" /><strong>Email:</strong> {refugio.email}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-telephone-fill me-2" /><strong>Teléfono:</strong> {refugio.telefono}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-geo-alt-fill me-2" /><strong>Dirección:</strong> {refugio.direccion}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-geo-fill me-2" /><strong>Localidad:</strong> {refugio.localidad}
+              </li>
+              <li className="list-group-item">
+                <FontAwesomeIcon icon={faPaw} className="me-2" />
+                <strong>Tipo de mascota que recibe:</strong> {refugio.tipoMascota}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-journal-check me-2" /><strong>Proceso de adopción:</strong> {refugio.procesoAdopcion}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-cash-coin me-2" /><strong>Tarifa:</strong> {refugio.tarifaAdopcion}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-clipboard-check me-2" /><strong>Seguimiento posterior:</strong> {refugio.seguimientoAdopcion === 'Sí' ? 'Sí' : 'No'}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-exclamation-circle-fill me-2" /><strong>Necesidades:</strong> {refugio.necesidadesRefugio}
+              </li>
+            </ul>
           </div>
         </div>
 
+        {/* Título publicaciones con ícono */}
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h4>Mis publicaciones</h4>
-          <button className="btn btn-success" onClick={() => setShowModal(true)}>
-            + Nueva Publicación
+          <h4 className="text-secondary">
+            <i className="bi bi-megaphone-fill me-2" /> Mis publicaciones
+          </h4>
+          <button className="btn-2 mb-3 me-1" onClick={() => setShowModal(true)}>
+            <i className="bi bi-plus-lg me-1" /> Nueva Publicación
           </button>
         </div>
 
@@ -151,87 +190,117 @@ const PerfilRefugio = () => {
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 mb-5">
           {publicaciones.map(pub => (
             <div className="col" key={pub._id}>
-              <div className="card h-100 shadow-sm">
+              <div className="card h-100 shadow-sm rounded-4 card-hover">
                 <img
                   src={pub.fotos?.[0] || 'https://via.placeholder.com/300x200?text=Sin+imagen'}
-                  className="card-img-top"
+                  className="card-img-top rounded-top-4"
                   alt={pub.titulo}
                   style={{ objectFit: 'cover', height: '200px' }}
                 />
                 <div className="card-body d-flex flex-column">
                   <h5 className="card-title">{pub.titulo}</h5>
                   <p className="card-text flex-grow-1">{pub.descripcion || 'Sin descripción.'}</p>
-                  <ul className="list-group list-group-flush mb-3">
-                    <li className="list-group-item"><strong>Tipo:</strong> {pub.tipoMascota}</li>
-                    <li className="list-group-item"><strong>Edad:</strong> {pub.edad}</li>
-                    <li className="list-group-item"><strong>Tamaño:</strong> {pub.tamaño}</li>
-                  </ul>
-                  <button
-                    className="btn btn-outline-danger mt-2"
-                    onClick={() => handleEliminarPublicacion(pub._id)}
-                  >
-                    🗑️ Eliminar
-                  </button>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <button
+                      className="btn btn-sm btn-primary"
+                      onClick={() => {
+                        setPublicacionEditar(pub);
+                        setShowModal(true);
+                      }}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className="btn btn-sm btn-danger"
+                      onClick={() => handleEliminarPublicacion(pub._id)}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        <div>
-          <h4>Solicitudes recibidas</h4>
-          {loadingSolicitudes && <p>Cargando solicitudes...</p>}
-          {!loadingSolicitudes && solicitudes.length === 0 && <p>No hay solicitudes aún.</p>}
+        {/* Modal para crear o editar publicación */}
+        {showModal && (
+          <CrearPublicacionModal
+            show={showModal}
+            handleClose={() => {
+              setShowModal(false);
+              setPublicacionEditar(null);
+            }}
+            onPublicacionCreada={() => {
+              cargarPublicaciones();
+              setShowModal(false);
+              setPublicacionEditar(null);
+            }}
+            publicacionEditar={publicacionEditar}
+          />
+        )}
 
-          {!loadingSolicitudes && solicitudes.length > 0 && (
-            <div className="list-group">
-              {solicitudes.map(solicitud => (
-                <div key={solicitud._id} className="list-group-item mb-3 shadow-sm">
-                  <p><strong>Adoptante:</strong> {solicitud.adoptante?.nombre || 'N/D'} ({solicitud.adoptante?.email || 'sin email'})</p>
-                  <p><strong>Publicación:</strong> {solicitud.publicacion?.titulo || 'N/D'}</p>
-                  <p><strong>Mensaje:</strong> {solicitud.mensaje || '(Sin mensaje)'}</p>
-                  <p><strong>Estado:</strong> <em>{solicitud.estado}</em></p>
-                  {solicitud.estado === 'pendiente' && (
-                    <div>
-                      <button
-                        className="btn btn-success me-2"
-                        onClick={() => cambiarEstado(solicitud._id, 'aprobada')}
-                      >
-                        Aprobar
-                      </button>
-                      <button
-                        className="btn btn-danger"
-                        onClick={() => cambiarEstado(solicitud._id, 'rechazada')}
-                      >
-                        Rechazar
-                      </button>
-                    </div>
-                  )}
-                  {solicitud.estado === 'rechazada' && (
-                    <button
-                      className="btn btn-outline-danger mt-2"
-                      onClick={() => handleEliminarSolicitud(solicitud._id)}
-                    >
-                      🗑️ Eliminar solicitud
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        {/* Sección solicitudes */}
+        <h4 className="mb-3 mt-5 text-secondary">
+          <i className="bi bi-envelope-fill me-2" /> Solicitudes de Adopción
+        </h4>
+        {loadingSolicitudes ? (
+          <p>Cargando solicitudes...</p>
+        ) : solicitudes.length === 0 ? (
+          <p>No hay solicitudes para mostrar.</p>
+        ) : (
+          <div className="table-responsive">
+            <table className="table table-striped align-middle">
+              <thead>
+                <tr>
+                  <th>Adoptante</th>
+                  <th>Animal</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {solicitudes.map((solicitud) => (
+                  <tr key={solicitud._id}>
+                    <td>{solicitud.adoptante?.nombre || solicitud.adoptanteNombre} {solicitud.adoptante?.apellido || solicitud.adoptanteApellido}</td>
+                    <td>{solicitud.publicacion?.titulo || solicitud.animalNombre}</td>
+                    <td>
+                      <span className={`badge ${
+                        solicitud.estado === 'aprobada' ? 'bg-success' :
+                        solicitud.estado === 'rechazada' ? 'bg-danger' : 'bg-secondary'
+                      }`}>
+                        {solicitud.estado}
+                      </span>
+                    </td>
+                    <td>
+                      {solicitud.estado === 'pendiente' && (
+                        <>
+                          <button className="btn btn-success btn-sm me-2" onClick={() => cambiarEstado(solicitud._id, 'aprobada')}>
+                            Aprobar
+                          </button>
+                          <button className="btn btn-warning btn-sm me-2" onClick={() => cambiarEstado(solicitud._id, 'rechazada')}>
+                            Rechazar
+                          </button>
+                        </>
+                      )}
+                      {solicitud.estado === 'rechazada' && (
+                        <button className="btn btn-danger btn-sm" onClick={() => handleEliminarSolicitud(solicitud._id)}>
+                          Eliminar
+                        </button>
+                      )}
+                      {solicitud.estado === 'aprobada' && (
+                        <span className="badge bg-success">Aprobada</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
       </div>
-
       <Footer />
-
-      <CrearPublicacionModal
-        show={showModal}
-        handleClose={() => setShowModal(false)}
-        onPublicacionCreada={() => {
-          setShowModal(false);
-          cargarPublicaciones();
-        }}
-      />
     </div>
   );
 };

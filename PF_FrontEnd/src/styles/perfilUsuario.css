@@ -1,0 +1,107 @@
+.perfil-container {
+  min-height: 100vh;
+  background-color: rgba(216, 87, 27, 0.8) !important;
+  display: flex;
+  flex-direction: column;
+}
+
+.btn-1 {
+  background-color: rgb(94, 59, 45) !important;
+  color: white !important;
+  border: 2px solid #d8571b !important;
+  padding: 0.500rem 0.500rem !important; /* menos padding horizontal */
+  width: auto !important;            /* ancho automático */
+  min-width: unset !important;       /* sin mínimo forzado */
+  max-width: 180px;                  /* opcional: máximo ancho */
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  white-space: nowrap;
+}
+
+.btn-1:hover {
+  background-color: rgba(60, 46, 40, 0.88) !important; /* color naranja del fondo */
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(60,46,40,0.18);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.btn-2 {
+  background-color: #309124 !important;
+  color: white !important;
+  border: 2px solid #d8571b !important;
+  padding: 0.500rem 0.500rem !important;
+  width: auto !important;
+  min-width: unset !important;
+  max-width: 180px;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  white-space: nowrap;
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.btn-2:hover {
+  background-color: #31662a !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(60,46,40,0.18);
+}
+
+/* --- Mejoras visuales para cards y listas --- */
+.card-hover {
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+.card-hover:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 10px 24px rgba(60,46,40,0.13);
+}
+.rounded-4 {
+  border-radius: 1.2rem !important;
+}
+.rounded-top-4 {
+  border-top-left-radius: 1.2rem !important;
+  border-top-right-radius: 1.2rem !important;
+}
+.perfil-lista-datos .list-group-item {
+  border: none;
+  border-bottom: 1px solid #f0f0f0;
+  background: transparent;
+  transition: background 0.18s;
+}
+.perfil-lista-datos .list-group-item:hover {
+  background: #f8f9fa;
+}
+
+.perfil-container {
+  min-height: 100vh;
+  position: relative;
+  background: linear-gradient(135deg, #ffc7c7 0%, rgba(255, 169, 130, 0.8) 100%);
+  z-index: 1;
+  overflow-x: hidden;
+}
+
+.perfil-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.10;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg width='60' height='60' viewBox='0 0 60 60' fill='none' xmlns='http://www.w3.org/2000/svg'><ellipse cx='30' cy='50' rx='8' ry='12' fill='%23d8571b'/><ellipse cx='15' cy='35' rx='4' ry='6' fill='%23d8571b'/><ellipse cx='45' cy='35' rx='4' ry='6' fill='%23d8571b'/><ellipse cx='22' cy='25' rx='3' ry='4' fill='%23d8571b'/><ellipse cx='38' cy='25' rx='3' ry='4' fill='%23d8571b'/></svg>");
+  background-repeat: repeat;
+  background-size: 120px 120px;
+  /* Solo debajo del header y encima del footer */
+  pointer-events: none;
+}
+
+header, footer, .bg-dark {
+  background-color: #3c2e28 !important;
+  position: relative;
+  z-index: 2;
+}
+
+.btn,
+.btn-1,
+.btn-2 {
+  position: relative;
+  z-index: 2;
+}

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada }) => {
+const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publicacionEditar }) => {
   const [formData, setFormData] = useState({
     titulo: '',
     descripcion: '',
@@ -12,6 +12,29 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada }) => {
   });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  // Cargar datos si es edición
+  useEffect(() => {
+    if (publicacionEditar) {
+      setFormData({
+        titulo: publicacionEditar.titulo || '',
+        descripcion: publicacionEditar.descripcion || '',
+        tipoMascota: publicacionEditar.tipoMascota || 'perro',
+        edad: publicacionEditar.edad || '',
+        tamaño: publicacionEditar.tamaño || '',
+        fotos: (publicacionEditar.fotos || []).join(', ')
+      });
+    } else {
+      setFormData({
+        titulo: '',
+        descripcion: '',
+        tipoMascota: 'perro',
+        edad: '',
+        tamaño: '',
+        fotos: ''
+      });
+    }
+  }, [publicacionEditar, show]);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -27,7 +50,6 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada }) => {
       const token = localStorage.getItem('token');
       if (!token) throw new Error('No autenticado');
 
-      // Preparar fotos como array (separar por coma)
       const fotosArray = formData.fotos.split(',').map(url => url.trim()).filter(url => url);
 
       const publicacion = {
@@ -35,16 +57,26 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada }) => {
         fotos: fotosArray
       };
 
-      await axios.post('http://localhost:3000/api/publicaciones', publicacion, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      if (publicacionEditar) {
+        // EDITAR
+        await axios.patch(
+          `http://localhost:3000/api/publicaciones/${publicacionEditar._id}`,
+          publicacion,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      } else {
+        // CREAR
+        await axios.post(
+          'http://localhost:3000/api/publicaciones',
+          publicacion,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      }
 
       onPublicacionCreada();
       handleClose();
     } catch (err) {
-      setError(err.message || 'Error al crear publicación');
+      setError(err.response?.data?.message || err.message || 'Error al guardar publicación');
     } finally {
       setLoading(false);
     }

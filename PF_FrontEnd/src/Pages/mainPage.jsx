@@ -3,6 +3,8 @@ import axios from 'axios';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import DetalleModal from '../components/DetalleModal'; // Modal separado
+import FloatingChatButton from '../components/FloatingChatButton';
+import ChatModal from '../components/ChatModal'; // Importamos el nuevo modal
 import '../styles/mainPage.css';
 
 const MainPage = () => {
@@ -13,6 +15,13 @@ const MainPage = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [publicacionSeleccionada, setPublicacionSeleccionada] = useState(null);
   const [userRole, setUserRole] = useState(null);
+  const [showChat, setShowChat] = useState(false);
+
+  // Filtros
+  const [filtroTipo, setFiltroTipo] = useState('todos');
+  const [filtroEdad, setFiltroEdad] = useState('todos');
+  const [filtroSexo, setFiltroSexo] = useState('todos');
+
 
   const token = localStorage.getItem('token');
 
@@ -68,19 +77,74 @@ const MainPage = () => {
     setPublicacionSeleccionada(null);
   };
 
+  // Extraer filtros únicos
+  const tiposMascota = [...new Set(publicaciones.map(p => p.tipoMascota).filter(Boolean))];
+  const edades = [...new Set(publicaciones.map(p => p.edad).filter(Boolean))];
+  const sexos = [...new Set(publicaciones.map(p => p.sexo).filter(Boolean))];
+
+  // Aplicar filtros
+  const publicacionesFiltradas = publicaciones.filter(pub => {
+    const tipoCoincide = filtroTipo === 'todos' || pub.tipoMascota === filtroTipo;
+    const edadCoincide = filtroEdad === 'todos' || pub.edad === filtroEdad;
+    const sexoCoincide = filtroSexo === 'todos' || pub.sexo === filtroSexo;
+    return tipoCoincide && edadCoincide && sexoCoincide;
+  });
+
+
   return (
     <div className="d-flex flex-column min-vh-100 mainpage-container">
       <Header />
 
       <main className="container py-5 flex-grow-1">
-        <h1 className="text-center mb-5 display-5" style={{fontFamily: 'Fredoka, sans-serif',fontSize: '3rem', fontWeight: 700, color: '#3c2e28', textShadow: '2px 2px 4px rgba(60, 46, 40, 0.88)', letterSpacing: '1px'}}><strong>🐶 Feed de Publicaciones de Refugios 🐱</strong></h1>
+        <h1
+          className="text-center mb-5 display-5"
+          style={{
+            fontFamily: 'Fredoka, sans-serif',
+            fontSize: '3rem',
+            fontWeight: 700,
+            color: '#3c2e28',
+            textShadow: '2px 2px 4px rgba(60, 46, 40, 0.88)',
+            letterSpacing: '1px'
+          }}
+        >
+          <strong>🐶 Feed de Publicaciones de Refugios 🐱</strong>
+        </h1>
+        {/* Filtros */}
+        <div className="mb-4 d-flex gap-3 flex-wrap justify-content-center">
+          {/* Tipo */}
+          <select value={filtroTipo} onChange={e => setFiltroTipo(e.target.value)} className="form-select w-auto">
+            <option value="todos">Todos los tipos</option>
+            {tiposMascota.map(tipo => (
+              <option key={tipo} value={tipo}>
+                {tipo.charAt(0).toUpperCase() + tipo.slice(1)}
+              </option>
+            ))}
+          </select>
+
+          {/* Edad */}
+          <select value={filtroEdad} onChange={e => setFiltroEdad(e.target.value)} className="form-select w-auto">
+            <option value="todos">Todas las edades</option>
+            {edades.map(edad => (
+              <option key={edad} value={edad}>{edad}</option>
+            ))}
+          </select>
+
+          {/* genero */}
+          <select value={filtroSexo} onChange={e => setFiltroSexo(e.target.value)} className="form-select w-auto">
+            <option value="todos">Todos los sexos</option>
+            {sexos.map(gen => (
+              <option key={gen} value={gen}>{gen}</option>
+            ))}
+          </select>
+        </div>
+        
 
         {loading && <p className="text-center">Cargando publicaciones...</p>}
         {error && <p className="text-center text-danger">{error}</p>}
         {mensaje && <p className="text-center text-success">{mensaje}</p>}
 
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-          {publicaciones.map(pub => (
+          {publicacionesFiltradas.map(pub => (
             <div className="col" key={pub._id}>
               <div className="card h-100 mainpage-card shadow-sm">
                 <img
@@ -119,6 +183,12 @@ const MainPage = () => {
           onSolicitar={() => solicitarAdopcion(publicacionSeleccionada._id)}
         />
       )}
+
+      {/* Botón flotante para abrir el chat */}
+      <FloatingChatButton onClick={() => setShowChat(true)} />
+
+      {/* Modal de chat */}
+      {showChat && <ChatModal token={token} onClose={() => setShowChat(false)} />}
 
       <Footer />
     </div>

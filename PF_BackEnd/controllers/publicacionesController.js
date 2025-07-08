@@ -67,8 +67,37 @@ const eliminarPublicacion = async (req, res) => {
   }
 };
 
+const actualizarPublicacion = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { id: refugioId, rol } = req.user;
+
+    if (rol !== 'refugio') {
+      return res.status(403).json({ message: 'No autorizado' });
+    }
+
+    const publicacion = await Publicacion.findById(id);
+    if (!publicacion) {
+      return res.status(404).json({ message: 'Publicación no encontrada' });
+    }
+
+    if (publicacion.refugio.toString() !== refugioId) {
+      return res.status(403).json({ message: 'No puedes editar esta publicación' });
+    }
+
+    Object.assign(publicacion, req.body);
+    await publicacion.save();
+
+    res.status(200).json({ message: '✅ Publicación actualizada', publicacion });
+  } catch (error) {
+    console.error('❌ Error al actualizar publicación:', error);
+    res.status(500).json({ message: 'Error al actualizar publicación' });
+  }
+};
+
 module.exports = {
   crearPublicacion,
   obtenerPublicaciones,
-  eliminarPublicacion
+  eliminarPublicacion,
+  actualizarPublicacion
 };

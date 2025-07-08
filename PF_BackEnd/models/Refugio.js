@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 
 const refugioSchema = new mongoose.Schema({
-  nombre: String,
+  nombre: String,            // Nombre del dueño o responsable
   apellido: String,
+  nombreCompania: String,    // NUEVO: Nombre del refugio o compañía
   email: String,
   telefono: String,
   contrasena: String,
@@ -14,9 +15,9 @@ const refugioSchema = new mongoose.Schema({
   seguimientoAdopcion: String,
   necesidadesRefugio: String,
   rol: {
-  type: String,
-  default: 'refugio',
-  enum: ['refugio']
+    type: String,
+    default: 'refugio',
+    enum: ['refugio']
   },
 });
 

@@ -42,7 +42,7 @@ return (
                 <EmailIcon />
             </IconButton>
             </Box>
-            <Typography variant="body2" sx={{ marginTop: '0.5rem' }}>
+            <Typography variant="body2" sx={{ marginTop: '0.5rem', color: 'white' }}>
                 <Link href="/soporte" underline="hover" sx={{ color: 'white', cursor: 'pointer' }}>Soporte</Link> | <Link href="/contacto" underline="hover" sx={{ color: 'white', cursor: 'pointer' }}>Contacto</Link>
             </Typography>
             <Typography variant="caption" display="block" sx={{ marginTop: '0.5rem', color: 'white' }}>

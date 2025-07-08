@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import "../styles/Registro.css";
 import axios from 'axios';
 
 const RegistroRef = () => {
     const [nombre, setNombre] = useState('');
     const [apellido, setApellido] = useState('');
+    const [nombreCompania, setNombreCompania] = useState('');  // <-- NUEVO ESTADO
     const [email, setEmail] = useState('');
     const [telefono, setTelefono] = useState('');
     const [contrasena, setContrasena] = useState('');
@@ -17,6 +19,7 @@ const RegistroRef = () => {
     const [seguimientoAdopcion, setSeguimientoAdopcion] = useState('');
     const [necesidadesRefugio, setNecesidadesRefugio] = useState('');
     const [errores, setErrores] = useState({});
+    const [mensajeExito, setMensajeExito] = useState('');
 
     const localidades = [
         'San Miguel de Tucuman',
@@ -32,6 +35,10 @@ const RegistroRef = () => {
         return regex.test(email);
     };
 
+    useEffect(() => {
+            console.log(errores);
+        }, [errores]);
+
     const handleSubmit = (event) => {
         event.preventDefault();
         let valid = true;
@@ -45,15 +52,19 @@ const RegistroRef = () => {
             nuevosErrores.apellido = 'El apellido es obligatorio';
             valid = false;
         }
+        if (!nombreCompania.trim()) {     // <-- NUEVA VALIDACION
+            nuevosErrores.nombreCompania = 'El nombre del refugio es obligatorio';
+            valid = false;
+        }
         if (!email.trim() || !validarEmail(email)) {
-            nuevosErrores.email = 'Ingrese un email válido';
+            nuevosErrores.email = 'Ingrese un email válido (debe contener @ y .)';
             valid = false;
         }
         if (!telefono.trim()) {
             nuevosErrores.telefono = 'El teléfono es obligatorio';
             valid = false;
-        } else if (!/^[+]?[\d\s-]{8,20}$/.test(telefono)) {
-            nuevosErrores.telefono = 'El teléfono debe contener solo números y tener entre 8 y 15 dígitos';
+        } else if (!/^(\+54|54)?\d{8,15}$/.test(telefono.replace(/[\s-]/g, ""))) {
+            nuevosErrores.telefono = 'El teléfono debe tener entre 8 y 15 dígitos, con o sin +54';
             valid = false;
         }
         if (!contrasena.trim()) {
@@ -100,13 +111,13 @@ const RegistroRef = () => {
         }
 
         setErrores(nuevosErrores);
-        console.log(errores);
 
         if (!valid) return;
 
         const datos = {
         nombre,
         apellido,
+        nombreCompania,   // <-- NUEVO CAMPO ENVIADO
         email,
         telefono,
         contrasena,
@@ -120,14 +131,15 @@ const RegistroRef = () => {
         };
 
         axios.post('http://localhost:3000/api/refugios', datos)
-            .then(response => {
-                alert('Registro exitoso');
-                console.log('Respuesta:', response.data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Hubo un error al registrar');
-            });
+        .then(response => {
+            setMensajeExito('Registro exitoso. Redirigiendo...');
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 3000);
+        })
+        .catch(error => {
+            setErrores({ general: 'Hubo un error al registrar' });
+        });
     };
 
     const handleTipoMascotaChange = (e) => {
@@ -159,9 +171,17 @@ const RegistroRef = () => {
                         <input type="text" className="form-control" id="apellido" value={apellido} onChange={(e) => setApellido(e.target.value)} />
                         {mostrarError("apellido")}
                     </div>
+
+                    {/* NUEVO INPUT PARA NOMBRE DEL REFUGIO */}
+                    <div className="mb-3">
+                        <label htmlFor="nombreCompania" className="form-label">Nombre del Refugio</label>
+                        <input type="text" className="form-control" id="nombreCompania" value={nombreCompania} onChange={(e) => setNombreCompania(e.target.value)} />
+                        {mostrarError("nombreCompania")}
+                    </div>
+
                     <div className="mb-3">
                         <label htmlFor="email" className="form-label">Email</label>
-                        <input type="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <input type="text" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                         {mostrarError("email")}
                     </div>
                     <div className="mb-3">
@@ -213,7 +233,7 @@ const RegistroRef = () => {
                         <textarea className="form-control" id="procesoAdopcion" value={procesoAdopcion} onChange={(e) => setProcesoAdopcion(e.target.value)} />
                         {mostrarError("procesoAdopcion")}
                     </div>
-                    <div className="mb-3">
+                                        <div className="mb-3">
                         <label htmlFor="tarifaAdopcion" className="form-label">Tarifa de Adopción</label>
                         <input type="text" className="form-control" id="tarifaAdopcion" value={tarifaAdopcion} onChange={(e) => setTarifaAdopcion(e.target.value)} />
                         {mostrarError("tarifaAdopcion")}
@@ -232,6 +252,8 @@ const RegistroRef = () => {
                         <textarea className="form-control" id="necesidadesRefugio" value={necesidadesRefugio} onChange={(e) => setNecesidadesRefugio(e.target.value)} />
                         {mostrarError("necesidadesRefugio")}
                     </div>
+                    {mensajeExito && <div className="alert alert-success">{mensajeExito}</div>}
+                    {errores.general && <div className="alert alert-danger">{errores.general}</div>}
                     <button type="submit" className="btn btn-primary">Registrarse</button>
                 </form>
             </div>

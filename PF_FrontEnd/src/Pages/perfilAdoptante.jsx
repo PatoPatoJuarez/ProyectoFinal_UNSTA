@@ -3,6 +3,8 @@ import axios from 'axios';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useNavigate } from 'react-router-dom';
+import '../styles/perfilUsuario.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const PerfilAdoptante = () => {
   const [adoptante, setAdoptante] = useState(null);
@@ -54,36 +56,89 @@ const PerfilAdoptante = () => {
   if (!adoptante) return null;
 
   return (
-    <div className="d-flex flex-column min-vh-100">
+    <div className="perfil-container">
       <Header />
 
-      <div className="container my-5">
-        <h2 className="mb-4">Mi perfil</h2>
-        <div className="card mb-4 shadow-sm">
+      <div className="container my-5 flex-grow-2">
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h2 className="text-primary fw-bold">
+            <i className="bi bi-person-heart me-2" /> Perfil Adoptante
+          </h2>
+          <button className="btn-1 mt-2 me-1" onClick={() => navigate('/main')}>
+            <i className="bi bi-arrow-left me-1" /> Volver al Feed
+          </button>
+        </div>
+        
+        <div className="card mb-4 shadow-sm rounded-4 card-hover">
           <div className="card-body">
-            <h4 className="card-title">{adoptante.nombre} {adoptante.apellido}</h4>
-            <p><strong>Email:</strong> {adoptante.email}</p>
-            <p><strong>Teléfono:</strong> {adoptante.telefono}</p>
-            <p><strong>Localidad:</strong> {adoptante.localidad}</p>
-            <p><strong>Experiencia con mascotas:</strong> {adoptante.experiencia || 'No especificado'}</p>
+            <h4 className="card-title mb-3">
+              <i className="bi bi-person-fill me-2" /> {adoptante.nombre} {adoptante.apellido}
+            </h4>
+            <ul className="list-group list-group-flush perfil-lista-datos mb-0">
+              <li className="list-group-item">
+                <i className="bi bi-envelope-fill me-2" /><strong>Email:</strong> {adoptante.email}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-telephone-fill me-2" /><strong>Teléfono:</strong> {adoptante.telefono}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-geo-alt-fill me-2" /><strong>Localidad:</strong> {adoptante.localidad}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-house-door-fill me-2" /><strong>¿Tiene mascota en su hogar?:</strong> {adoptante.tieneMascota === true ? 'Sí' : adoptante.tieneMascota === false ? 'No' : 'No especificado'}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-building me-2" /><strong>¿Dónde vive?:</strong> {adoptante.viveEn || 'No especificado'}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-clock-history me-2" /><strong>¿Tiene disponibilidad horaria?:</strong> {adoptante.disponeDeHorarios === true ? 'Sí' : adoptante.disponeDeHorarios === false ? 'No' : 'No especificado'}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-heart-pulse-fill me-2" /><strong>¿Tuvo mascotas anteriormente?:</strong> {adoptante.tuvoMascota === true ? 'Sí' : adoptante.tuvoMascota === false ? 'No' : 'No especificado'}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-question-circle-fill me-2" /><strong>Motivo para adoptar:</strong> {adoptante.motivoAdopcion || 'No especificado'}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-capsule-pill me-2" /><strong>Cuidados veterinarios:</strong> {adoptante.cuidadosVeterinarios || 'No especificado'}
+              </li>
+              <li className="list-group-item">
+                <i className="bi bi-people-fill me-2" /><strong>Cuidado alternativo:</strong> {adoptante.cuidadoAlternativo || 'No especificado'}
+              </li>
+            </ul>
           </div>
         </div>
 
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h4>Mis solicitudes</h4>
+          <h4 className="text-secondary">
+            <i className="bi bi-inbox-fill me-2" /> Mis solicitudes
+          </h4>
         </div>
 
         {solicitudes.length === 0 && <p>No has enviado solicitudes aún.</p>}
 
+        
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
           {solicitudes.map(solicitud => (
           <div className="col" key={solicitud._id}>
-            <div className="card h-100 shadow-sm">
+            <div className="card h-100 shadow-sm rounded-4 card-hover">
               <div className="card-body">
-                <h5 className="card-title">{solicitud.publicacion?.titulo || 'Sin título'}</h5>
-                <p><strong>Mensaje:</strong> {solicitud.mensaje || 'Sin mensaje'}</p>
-                <p><strong>Estado:</strong> {solicitud.estado}</p>
-                <p><strong>Fecha:</strong> {new Date(solicitud.fecha).toLocaleDateString()}</p>
+                <h5 className="card-title">
+                  <i className="bi bi-megaphone-fill me-2" />
+                  {solicitud.publicacion?.titulo || 'Sin título'}
+                </h5>
+                <p><i className="bi bi-chat-left-text me-2" /><strong>Mensaje:</strong> {solicitud.mensaje || 'Sin mensaje'}</p>
+                <p>
+                  <i className="bi bi-info-circle-fill me-2" />
+                  <strong>Estado:</strong> 
+                  <span className={`ms-2 badge ${
+                    solicitud.estado === 'aprobada' ? 'bg-success' :
+                    solicitud.estado === 'rechazada' ? 'bg-danger' : 'bg-secondary'
+                  }`}>
+                    {solicitud.estado}
+                  </span>
+                </p>
+                <p><i className="bi bi-calendar-event me-2" /><strong>Fecha:</strong> {new Date(solicitud.fecha).toLocaleDateString()}</p>
               </div>
               {solicitud.estado === 'rechazada' && (
                 <div className="card-footer d-flex justify-content-end">
@@ -91,7 +146,7 @@ const PerfilAdoptante = () => {
                     className="btn btn-outline-danger"
                     onClick={() => handleEliminarSolicitud(solicitud._id)}
                   >
-                    🗑️ Eliminar solicitud
+                    <i className="bi bi-trash-fill me-1" /> Eliminar solicitud
                   </button>
                 </div>
               )}
@@ -99,11 +154,8 @@ const PerfilAdoptante = () => {
           </div>
         ))}
         </div>
-
-        <button className="btn btn-outline-secondary mt-4" onClick={() => navigate('/main')}>
-          ← Volver al feed
-        </button>
       </div>
+
 
       <Footer />
     </div>

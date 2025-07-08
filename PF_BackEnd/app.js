@@ -4,6 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
+
 // -------------------- CONFIGURACIONES --------------------
 dotenv.config();
 
@@ -31,13 +32,16 @@ const refugioRoutes = require('./routers/refugioRoutes');
 const authRoutes = require('./routers/authRoutes');
 const publicacionesRoutes = require('./routers/publicacionRoutes');
 const solicitudesRoutes = require('./routers/solicitudesRoutes');
+const chatRoutes = require('./routers/chatRoutes');
+
 
 // -------------------- RUTAS DE API --------------------
 app.use('/api/auth', authRoutes);
 app.use('/api/adoptantes', adoptanteRoutes);
 app.use('/api/refugios', refugioRoutes);
 app.use('/api/publicaciones', publicacionesRoutes);
-app.use('/api/solicitudes', solicitudesRoutes); // NUEVO
+app.use('/api/solicitudes', solicitudesRoutes);
+app.use('/api/chat', chatRoutes);
 
 // -------------------- RUTA DE PRUEBA --------------------
 app.get('/', (req, res) => {
