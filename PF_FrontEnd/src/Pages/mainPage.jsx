@@ -20,7 +20,7 @@ const MainPage = () => {
   // Filtros
   const [filtroTipo, setFiltroTipo] = useState('todos');
   const [filtroEdad, setFiltroEdad] = useState('todos');
-  const [filtroLocalidad, setFiltroLocalidad] = useState('todos');
+  const [filtroSexo, setFiltroSexo] = useState('todos');
 
 
   const token = localStorage.getItem('token');
@@ -80,14 +80,14 @@ const MainPage = () => {
   // Extraer filtros únicos
   const tiposMascota = [...new Set(publicaciones.map(p => p.tipoMascota).filter(Boolean))];
   const edades = [...new Set(publicaciones.map(p => p.edad).filter(Boolean))];
-  const localidades = [...new Set(publicaciones.map(p => p.localidad).filter(Boolean))];
+  const sexos = [...new Set(publicaciones.map(p => p.sexo).filter(Boolean))];
 
   // Aplicar filtros
   const publicacionesFiltradas = publicaciones.filter(pub => {
     const tipoCoincide = filtroTipo === 'todos' || pub.tipoMascota === filtroTipo;
     const edadCoincide = filtroEdad === 'todos' || pub.edad === filtroEdad;
-    const localidadCoincide = filtroLocalidad === 'todos' || pub.localidad === filtroLocalidad;
-    return tipoCoincide && edadCoincide && localidadCoincide;
+    const sexoCoincide = filtroSexo === 'todos' || pub.sexo === filtroSexo;
+    return tipoCoincide && edadCoincide && sexoCoincide;
   });
 
 
@@ -129,11 +129,11 @@ const MainPage = () => {
             ))}
           </select>
 
-          {/* Localidad */}
-          <select value={filtroLocalidad} onChange={e => setFiltroLocalidad(e.target.value)} className="form-select w-auto">
-            <option value="todos">Todas las localidades</option>
-            {localidades.map(loc => (
-              <option key={loc} value={loc}>{loc}</option>
+          {/* genero */}
+          <select value={filtroSexo} onChange={e => setFiltroSexo(e.target.value)} className="form-select w-auto">
+            <option value="todos">Todos los sexos</option>
+            {sexos.map(gen => (
+              <option key={gen} value={gen}>{gen}</option>
             ))}
           </select>
         </div>
