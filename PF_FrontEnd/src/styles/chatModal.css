@@ -21,16 +21,27 @@
 
 .chat-close-btn {
   position: absolute;
-  top: 5px;
-  right: 10px;
-  font-size: 20px;
+  top: -16px;
+  width: 30px;
+  height: 30px;
+  right: 3px;
+  font-size: 22px;
   border: none;
-  background: none;
+  background: transparent;
+  color: #333; /* o #fff si es sobre fondo oscuro */
   cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  transition: color 0.2s ease;
 }
 
+.chat-close-btn:hover {
+  color: rgb(229, 165, 165); /* Color de hover atractivo */
+}
+
+
 .chat-sidebar {
-  width: 30%;
+  width: 56%;
   border-right: 1px solid #ddd;
   padding: 10px;
   overflow-y: auto;
