@@ -105,3 +105,11 @@ header, footer, .bg-dark {
   position: relative;
   z-index: 2;
 }
+
+.table-responsive {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1rem;
+  position: relative;
+  z-index: 2;
+}

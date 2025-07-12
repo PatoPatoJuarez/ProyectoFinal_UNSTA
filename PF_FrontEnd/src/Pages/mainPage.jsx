@@ -96,82 +96,91 @@ const MainPage = () => {
       <Header />
 
       <main className="container py-5 flex-grow-1">
-        <h1
-          className="text-center mb-5 display-5"
-          style={{
-            fontFamily: 'Fredoka, sans-serif',
-            fontSize: '3rem',
-            fontWeight: 700,
-            color: '#3c2e28',
-            textShadow: '2px 2px 4px rgba(60, 46, 40, 0.88)',
-            letterSpacing: '1px'
-          }}
-        >
-          <strong>🐶 Feed de Publicaciones de Refugios 🐱</strong>
-        </h1>
-        {/* Filtros */}
-        <div className="mb-4 d-flex gap-3 flex-wrap justify-content-center">
-          {/* Tipo */}
-          <select value={filtroTipo} onChange={e => setFiltroTipo(e.target.value)} className="form-select w-auto">
-            <option value="todos">Todos los tipos</option>
-            {tiposMascota.map(tipo => (
-              <option key={tipo} value={tipo}>
-                {tipo.charAt(0).toUpperCase() + tipo.slice(1)}
-              </option>
-            ))}
-          </select>
-
-          {/* Edad */}
-          <select value={filtroEdad} onChange={e => setFiltroEdad(e.target.value)} className="form-select w-auto">
-            <option value="todos">Todas las edades</option>
-            {edades.map(edad => (
-              <option key={edad} value={edad}>{edad}</option>
-            ))}
-          </select>
-
-          {/* genero */}
-          <select value={filtroSexo} onChange={e => setFiltroSexo(e.target.value)} className="form-select w-auto">
-            <option value="todos">Todos los sexos</option>
-            {sexos.map(gen => (
-              <option key={gen} value={gen}>{gen}</option>
-            ))}
-          </select>
+        <div className="mainpage-title-bg">
+          <h1
+            className="text-center mb-0 display-5"
+            style={{
+              fontFamily: 'Fredoka, sans-serif',
+              fontSize: '3rem',
+              fontWeight: 700,
+              color: '#3c2e28',
+              textShadow: '2px 2px 4px rgba(60, 46, 40, 0.88)',
+              letterSpacing: '1px'
+            }}
+          >
+            <strong>🐶 Feed de Publicaciones de Refugios 🐱</strong>
+          </h1>
         </div>
-        
-
-        {loading && <p className="text-center">Cargando publicaciones...</p>}
-        {error && <p className="text-center text-danger">{error}</p>}
-        {mensaje && <p className="text-center text-success">{mensaje}</p>}
-
-        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-          {publicacionesFiltradas.map(pub => (
-            <div className="col" key={pub._id}>
-              <div className="card h-100 mainpage-card shadow-sm">
-                <img
-                  src={pub.fotos?.[0] || 'https://via.placeholder.com/300x200?text=Sin+imagen'}
-                  className="card-img-top mainpage-img"
-                  alt={pub.titulo}
-                  style={{ objectFit: 'cover', height: '200px' }}
-                />
-                <div className="card-body d-flex flex-column">
-                  <h5 className="card-title">{pub.titulo}</h5>
-                  <p className="card-text flex-grow-1">{pub.descripcion || 'Sin descripción.'}</p>
-                  <ul className="list-group list-group-flush mb-3">
-                    <li className="list-group-item"><strong>Tipo:</strong> {pub.tipoMascota || 'N/A'}</li>
-                    <li className="list-group-item"><strong>Edad:</strong> {pub.edad || 'N/A'}</li>
-                    <li className="list-group-item"><strong>Sexo:</strong> {pub.sexo || 'N/A'}</li>
-                  </ul>
-                  <button
-                    className="btn btn-outline-secondary mt-auto"
-                    type="button"
-                    onClick={() => abrirModal(pub)}
-                  >
-                    Mostrar Más Información
-                  </button>
-                </div>
-              </div>
+        <div className="mainpage-flex">
+          {/* Filtros */}
+          <aside className="mainpage-filtros">
+            <h5 className="mb-3">Filtros</h5>
+            <div className="mb-3">
+              <label className="form-label">Tipo</label>
+              <select value={filtroTipo} onChange={e => setFiltroTipo(e.target.value)} className="form-select">
+                <option value="todos">Todos los tipos</option>
+                {tiposMascota.map(tipo => (
+                  <option key={tipo} value={tipo}>
+                    {tipo.charAt(0).toUpperCase() + tipo.slice(1)}
+                  </option>
+                ))}
+              </select>
             </div>
-          ))}
+            <div className="mb-3">
+              <label className="form-label">Edad</label>
+              <select value={filtroEdad} onChange={e => setFiltroEdad(e.target.value)} className="form-select">
+                <option value="todos">Todas las edades</option>
+                {edades.map(edad => (
+                  <option key={edad} value={edad}>{edad}</option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Sexo</label>
+              <select value={filtroSexo} onChange={e => setFiltroSexo(e.target.value)} className="form-select">
+                <option value="todos">Todos los sexos</option>
+                {sexos.map(gen => (
+                  <option key={gen} value={gen}>{gen}</option>
+                ))}
+              </select>
+            </div>
+          </aside>
+          {/* Publicaciones */}
+          <section className="mainpage-publicaciones flex-grow-1">
+            {loading && <p className="text-center">Cargando publicaciones...</p>}
+            {error && <p className="text-center text-danger">{error}</p>}
+            {mensaje && <p className="text-center text-success">{mensaje}</p>}
+            <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+              {publicacionesFiltradas.map(pub => (
+                <div className="col" key={pub._id}>
+                  <div className="card h-100 mainpage-card shadow-sm">
+                    <img
+                      src={pub.fotos?.[0] || 'https://via.placeholder.com/300x200?text=Sin+imagen'}
+                      className="card-img-top mainpage-img"
+                      alt={pub.titulo}
+                      style={{ objectFit: 'cover', height: '200px' }}
+                    />
+                    <div className="card-body d-flex flex-column">
+                      <h5 className="card-title">{pub.titulo}</h5>
+                      <p className="card-text flex-grow-1">{pub.descripcion || 'Sin descripción.'}</p>
+                      <ul className="list-group list-group-flush mb-3">
+                        <li className="list-group-item"><strong>Tipo:</strong> {pub.tipoMascota || 'N/A'}</li>
+                        <li className="list-group-item"><strong>Edad:</strong> {pub.edad || 'N/A'}</li>
+                        <li className="list-group-item"><strong>Sexo:</strong> {pub.sexo || 'N/A'}</li>
+                      </ul>
+                      <button
+                        className="btn btn-outline-secondary mt-auto"
+                        type="button"
+                        onClick={() => abrirModal(pub)}
+                      >
+                        Mostrar Más Información
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
         </div>
       </main>
 
