@@ -2,6 +2,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import '../styles/chatModal.css';
+import EmojiPicker from 'emoji-picker-react';
+import { FaPaperPlane } from 'react-icons/fa';
 
 const ChatModal = ({ token, onClose }) => {
   const [conversations, setConversations] = useState([]);
@@ -12,6 +14,7 @@ const ChatModal = ({ token, onClose }) => {
   const [loadingMsgs, setLoadingMsgs] = useState(false);
   const [error, setError] = useState(null);
   const [userRole, setUserRole] = useState(null);
+  const [showEmoji, setShowEmoji] = useState(false);
   const textareaRef = useRef(null);
 
   // Decodificar rol del token
@@ -153,6 +156,27 @@ const getConversationTitle = (conv) => {
                 }}
                 style={{marginTop: 0}}
               >
+                <div style={{ position: 'relative' }}>
+                  <button
+                    type="button"
+                    onClick={() => setShowEmoji(v => !v)}
+                    className="emoji-btn"
+                    style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}
+                    tabIndex={-1}
+                  >😊</button>
+                  {showEmoji && (
+                    <div style={{ position: 'absolute', bottom: '40px', left: 0, zIndex: 10 }}>
+                      <EmojiPicker
+                        onEmojiClick={emoji => {
+                          setNewMessage(prev => prev + emoji.emoji);
+                          setShowEmoji(false);
+                        }}
+                        height={300}
+                        width={500}
+                      />
+                    </div>
+                  )}
+                </div>
                 <textarea
                   ref={textareaRef}
                   rows={1}
@@ -167,7 +191,9 @@ const getConversationTitle = (conv) => {
                   }}
                   className="chat-textarea"
                 />
-                <button type="submit">Enviar</button>
+                <button type="submit" style={{ background: 'none', border: 'none', color: '#007bff', fontSize: '1.5rem', padding: '0 10px' }}>
+                  <FaPaperPlane />
+                </button>
               </form>
             </>
           )}

@@ -19,7 +19,7 @@ const MainPage = () => {
 
   // Filtros
   const [filtroTipo, setFiltroTipo] = useState('todos');
-  const [filtroEdad, setFiltroEdad] = useState('todos');
+  const [filtroEdad, setFiltroEdad] = useState('');
   const [filtroSexo, setFiltroSexo] = useState('todos');
 
 
@@ -85,8 +85,20 @@ const MainPage = () => {
   // Aplicar filtros
   const publicacionesFiltradas = publicaciones.filter(pub => {
     const tipoCoincide = filtroTipo === 'todos' || pub.tipoMascota === filtroTipo;
-    const edadCoincide = filtroEdad === 'todos' || pub.edad === filtroEdad;
     const sexoCoincide = filtroSexo === 'todos' || pub.sexo === filtroSexo;
+
+    let edadCoincide = true;
+    if (filtroEdad.trim() !== '' && filtroEdad !== 'todos') {
+      const edadPub = parseInt(pub.edad, 10);
+      if (filtroEdad.includes('-')) {
+        const [min, max] = filtroEdad.split('-').map(e => parseInt(e.trim(), 10));
+        edadCoincide = !isNaN(min) && !isNaN(max) && edadPub >= min && edadPub <= max;
+      } else {
+        const edadFiltro = parseInt(filtroEdad, 10);
+        edadCoincide = !isNaN(edadFiltro) && edadPub === edadFiltro;
+      }
+    }
+
     return tipoCoincide && edadCoincide && sexoCoincide;
   });
 
@@ -128,12 +140,7 @@ const MainPage = () => {
             </div>
             <div className="mb-3">
               <label className="form-label">Edad</label>
-              <select value={filtroEdad} onChange={e => setFiltroEdad(e.target.value)} className="form-select">
-                <option value="todos">Todas las edades</option>
-                {edades.map(edad => (
-                  <option key={edad} value={edad}>{edad}</option>
-                ))}
-              </select>
+              <input type="text" className="form-control" placeholder="Ej: 3 o 2-5" value={filtroEdad} onChange={e => setFiltroEdad(e.target.value)}/>
             </div>
             <div className="mb-3">
               <label className="form-label">Sexo</label>

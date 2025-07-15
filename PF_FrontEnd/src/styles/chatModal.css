@@ -2,8 +2,8 @@
   position: fixed;
   bottom: 60px; /* Por encima del botón flotante */
   right: 20px;
-  width: 600px;
-  height: 500px;
+  width: 800px;
+  height: 600px;
   background: white;
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
   border-radius: 8px;
@@ -41,7 +41,7 @@
 
 
 .chat-sidebar {
-  width: 40%;
+  width: 30%;
   border-right: 1px solid #ddd;
   padding: 10px;
   overflow-y: auto;
@@ -129,7 +129,7 @@
 }
 
 .chat-input-container button {
-  padding: 6px 10px;        /* Menos ancho */
+  padding: 1px 10px;        /* Menos ancho */
   border: none;
   background-color: #007bff;
   color: white;
@@ -159,4 +159,19 @@
   font-family: inherit;
   font-size: 1rem;
   overflow-y: auto;
+}
+
+.EmojiPickerReact .epr-header {
+  display: none !important;
+}
+
+.EmojiPickerReact > div:last-child {
+  display: none !important;
+}
+
+.EmojiPickerReact [class*="epr-emoji"] {
+  margin: 6px !important;      /* Espacio alrededor de cada emoji */
+  padding: 4px !important;     /* Espacio interno de cada emoji */
+  border-radius: 8px !important; /* Opcional: bordes más suaves */
+  gap: 15px !important;
 }
