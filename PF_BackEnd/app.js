@@ -62,14 +62,14 @@ io.on('connection', (socket) => {
 
   socket.on('mensaje_nuevo', (data) => {
     console.log('📨 Mensaje recibido:', data);
-    io.emit('mensaje_recibido', data);  // <-- enviar a todos, incluido el emisor
+    // reenviar a todos los demás
+    socket.broadcast.emit('mensaje_recibido', data);
   });
 
   socket.on('disconnect', () => {
     console.log('❌ Cliente desconectado:', socket.id);
   });
 });
-
 
 // -------------------- INICIAR SERVIDOR --------------------
 const PORT = process.env.PORT || 3000;
