@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { io } from "socket.io-client"; // SOCKET.IO
 import '../styles/chatModal.css';
+import { useSocket } from '../contexts/SocketContext';  // Importar el hook del contexto
 
 const ChatModal = ({ token, onClose }) => {
+  const socket = useSocket(); // Usamos el socket global
   const [conversations, setConversations] = useState([]);
   const [selectedConv, setSelectedConv] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -13,7 +14,12 @@ const ChatModal = ({ token, onClose }) => {
   const [error, setError] = useState(null);
   const [userRole, setUserRole] = useState(null);
   const textareaRef = useRef(null);
-  const socketRef = useRef(null); // SOCKET.IO
+  const selectedConvRef = useRef(null);
+
+  // Mantener selectedConv actualizado en el ref para acceder dentro del socket
+  useEffect(() => {
+    selectedConvRef.current = selectedConv;
+  }, [selectedConv]);
 
   // Decodificar rol del token
   useEffect(() => {
@@ -27,29 +33,25 @@ const ChatModal = ({ token, onClose }) => {
     }
   }, [token]);
 
-  // Conectar socket al montar
+  // Escuchar mensajes recibidos vía socket (solo se agrega listener 1 vez)
   useEffect(() => {
-  socketRef.current = io("http://localhost:3000");
-  console.log("🔌 Conectado a Socket.IO");
+    if (!socket) return;
 
-  socketRef.current.on("mensaje_recibido", (data) => {
-    console.log("📨 Nuevo mensaje recibido via socket:", data);
+    const handleMensajeRecibido = (data) => {
+      console.log("📨 Nuevo mensaje recibido via socket:", data);
 
-    // Usamos callback con estado actual
-    setMessages(prev => {
-      if (selectedConv && data.conversationId === selectedConv._id) {
-        return [...prev, data];
+      // Solo agregar mensajes que correspondan a la conversación actual
+      if (selectedConvRef.current && data.conversationId === selectedConvRef.current._id) {
+        setMessages(prev => [...prev, data]);
       }
-      return prev;
-    });
-  });
+    };
 
-  return () => {
-    socketRef.current.disconnect();
-    console.log("❌ Socket desconectado");
-  };
-}, []); // <- solo una vez
+    socket.on("mensaje_recibido", handleMensajeRecibido);
 
+    return () => {
+      socket.off("mensaje_recibido", handleMensajeRecibido);
+    };
+  }, [socket]);
 
   // Cargar conversaciones al montar
   useEffect(() => {
@@ -112,8 +114,8 @@ const ChatModal = ({ token, onClose }) => {
       setMessages(prev => [...prev, res.data]);
       setNewMessage('');
 
-      // Emitir por socket
-      socketRef.current.emit("mensaje_nuevo", {
+      // Emitir por socket el mensaje nuevo para otros usuarios
+      socket.emit("mensaje_nuevo", {
         ...res.data,
         conversationId: selectedConv._id
       });
@@ -137,6 +139,7 @@ const ChatModal = ({ token, onClose }) => {
   return (
     <div className="chat-modal-overlay">
       <div className="chat-modal-container">
+
         <button className="chat-close-btn" onClick={onClose}>×</button>
 
         <div className="chat-sidebar">
@@ -201,6 +204,7 @@ const ChatModal = ({ token, onClose }) => {
             </>
           )}
         </div>
+
       </div>
     </div>
   );

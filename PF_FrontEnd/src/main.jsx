@@ -7,15 +7,17 @@ import PerfilRefugio from './Pages/perfilRefugio';
 import PerfilAdoptante from './Pages/perfilAdoptante';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { SocketProvider } from './contexts/SocketContext';  // Importá el provider
+
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<LoginPage />} />
-      <Route path="/main" element={<MainPage />} />
-      <Route path="/perfilRefugio" element={<PerfilRefugio />} />
-      <Route path="/perfilAdoptante" element={<PerfilAdoptante />} />
-    </Routes>
-    </BrowserRouter>
-  </StrictMode>
+    <SocketProvider>  {/* Aquí envolvés toda la app */}
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/main" element={<MainPage />} />
+          <Route path="/perfilRefugio" element={<PerfilRefugio />} />
+          <Route path="/perfilAdoptante" element={<PerfilAdoptante />} />
+        </Routes>
+      </BrowserRouter>
+    </SocketProvider>
 );
