@@ -1,5 +1,7 @@
 const Conversation = require('../models/Conversation');
 const Message = require('../models/Message');
+const Notification = require('../models/Notification');
+
 
 // Crear conversación si no existe
 exports.createConversation = async (req, res) => {
@@ -79,6 +81,14 @@ exports.sendMessage = async (req, res) => {
     conversation.lastMessage = text;
     conversation.updatedAt = new Date();
     await conversation.save();
+
+    // Determinar quién es el receptor
+    const receptorId = (senderId === adoptanteId) ? refugioId : adoptanteId;
+    await new Notification({ // Crear la notificación
+      userId: receptorId,
+      type: 'message',
+      message: `Tienes un nuevo mensaje en una conversación sobre ${conversation.lastMessage}`
+    }).save();
 
     res.status(200).json(message);
   } catch (err) {
