@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import '../styles/chatModal.css';
-import { useSocket } from '../contexts/SocketContext';  // Importar el hook del contexto
+import { useSocket } from '../contexts/SocketContext';
 
 const ChatModal = ({ token, onClose }) => {
-  const socket = useSocket(); // Usamos el socket global
+  const socket = useSocket();
   const [conversations, setConversations] = useState([]);
   const [selectedConv, setSelectedConv] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -15,13 +15,13 @@ const ChatModal = ({ token, onClose }) => {
   const [userRole, setUserRole] = useState(null);
   const textareaRef = useRef(null);
   const selectedConvRef = useRef(null);
+  const lastMessageRef = useRef(null);
 
-  // Mantener selectedConv actualizado en el ref para acceder dentro del socket
+
   useEffect(() => {
     selectedConvRef.current = selectedConv;
   }, [selectedConv]);
 
-  // Decodificar rol del token
   useEffect(() => {
     if (token) {
       try {
@@ -33,14 +33,11 @@ const ChatModal = ({ token, onClose }) => {
     }
   }, [token]);
 
-  // Escuchar mensajes recibidos vía socket (solo se agrega listener 1 vez)
   useEffect(() => {
     if (!socket) return;
 
     const handleMensajeRecibido = (data) => {
       console.log("📨 Nuevo mensaje recibido via socket:", data);
-
-      // Solo agregar mensajes que correspondan a la conversación actual
       if (selectedConvRef.current && data.conversationId === selectedConvRef.current._id) {
         setMessages(prev => [...prev, data]);
       }
@@ -53,7 +50,6 @@ const ChatModal = ({ token, onClose }) => {
     };
   }, [socket]);
 
-  // Cargar conversaciones al montar
   useEffect(() => {
     const fetchConversations = async () => {
       try {
@@ -70,7 +66,6 @@ const ChatModal = ({ token, onClose }) => {
     fetchConversations();
   }, [token]);
 
-  // Cargar mensajes cuando cambie conversación seleccionada
   useEffect(() => {
     if (!selectedConv) return;
 
@@ -97,8 +92,14 @@ const ChatModal = ({ token, onClose }) => {
       textareaRef.current.style.height = textareaRef.current.scrollHeight + "px";
     }
   }, [newMessage]);
+  
+  useEffect(() => {
+  if (lastMessageRef.current) {
+    lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
 
-  // Enviar mensaje nuevo
+
   const handleSendMessage = async () => {
     if (newMessage.trim() === '' || !selectedConv) return;
 
@@ -110,15 +111,17 @@ const ChatModal = ({ token, onClose }) => {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      // Actualizar mensajes locales
       setMessages(prev => [...prev, res.data]);
       setNewMessage('');
 
-      // Emitir por socket el mensaje nuevo para otros usuarios
-      socket.emit("mensaje_nuevo", {
-        ...res.data,
-        conversationId: selectedConv._id
-      });
+      if (socket) {
+        socket.emit("mensaje_nuevo", {
+          ...res.data,
+          conversationId: selectedConv._id
+        });
+      } else {
+        console.warn("⚠️ Socket aún no disponible para emitir.");
+      }
 
     } catch (err) {
       setError('Error enviando mensaje');
@@ -139,7 +142,6 @@ const ChatModal = ({ token, onClose }) => {
   return (
     <div className="chat-modal-overlay">
       <div className="chat-modal-container">
-
         <button className="chat-close-btn" onClick={onClose}>×</button>
 
         <div className="chat-sidebar">
@@ -169,8 +171,12 @@ const ChatModal = ({ token, onClose }) => {
               <div className="chat-messages">
                 {loadingMsgs && <p>Cargando mensajes...</p>}
                 {messages.length === 0 && !loadingMsgs && <p>No hay mensajes aún.</p>}
-                {messages.map(msg => (
-                  <div key={msg._id} className={`chat-message ${msg.senderId === selectedConv.adoptanteId?._id ? 'sent' : 'received'}`}>
+                {messages.map((msg, index) => (
+                  <div  
+                    key={msg._id}
+                    ref={index === messages.length - 1 ? lastMessageRef : null}
+                    className={`chat-message ${msg.senderId === selectedConv.adoptanteId?._id ? 'sent' : 'received'}`}
+                  >
                     <p>{msg.text}</p>
                     <small>{new Date(msg.createdAt).toLocaleString()}</small>
                   </div>
@@ -183,7 +189,7 @@ const ChatModal = ({ token, onClose }) => {
                   e.preventDefault();
                   handleSendMessage();
                 }}
-                style={{marginTop: 0}}
+                style={{ marginTop: 0 }}
               >
                 <textarea
                   ref={textareaRef}

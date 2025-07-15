@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
     };
 
     const token = jwt.sign(payload, process.env.JWT_SECRET || 'claveSecreta', {
-      expiresIn: '1h'
+      expiresIn: '4h'
     });
 
     res.json({ token, usuario: payload });
