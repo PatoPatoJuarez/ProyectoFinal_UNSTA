@@ -1,5 +1,5 @@
 // src/components/ChatModal.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import '../styles/chatModal.css';
 
@@ -12,6 +12,7 @@ const ChatModal = ({ token, onClose }) => {
   const [loadingMsgs, setLoadingMsgs] = useState(false);
   const [error, setError] = useState(null);
   const [userRole, setUserRole] = useState(null);
+  const textareaRef = useRef(null);
 
   // Decodificar rol del token
   useEffect(() => {
@@ -62,6 +63,13 @@ const ChatModal = ({ token, onClose }) => {
 
     fetchMessages();
   }, [selectedConv, token]);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = textareaRef.current.scrollHeight + "px";
+    }
+  }, [newMessage]);
 
   // Enviar mensaje nuevo
   const handleSendMessage = async () => {
@@ -137,16 +145,30 @@ const getConversationTitle = (conv) => {
                 ))}
               </div>
 
-              <div className="chat-input-container">
-                <input
-                  type="text"
+              <form
+                className="chat-input-container"
+                onSubmit={e => {
+                  e.preventDefault();
+                  handleSendMessage();
+                }}
+                style={{marginTop: 0}}
+              >
+                <textarea
+                  ref={textareaRef}
+                  rows={1}
                   placeholder="Escribe tu mensaje..."
                   value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === 'Enter') handleSendMessage(); }}
+                  onChange={e => setNewMessage(e.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSendMessage();
+                    }
+                  }}
+                  className="chat-textarea"
                 />
-                <button onClick={handleSendMessage}>Enviar</button>
-              </div>
+                <button type="submit">Enviar</button>
+              </form>
             </>
           )}
         </div>

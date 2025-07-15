@@ -2,8 +2,8 @@
   position: fixed;
   bottom: 60px; /* Por encima del botón flotante */
   right: 20px;
-  width: 350px;
-  height: 450px;
+  width: 600px;
+  height: 500px;
   background: white;
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
   border-radius: 8px;
@@ -41,7 +41,7 @@
 
 
 .chat-sidebar {
-  width: 56%;
+  width: 40%;
   border-right: 1px solid #ddd;
   padding: 10px;
   overflow-y: auto;
@@ -67,21 +67,25 @@
 }
 
 .chat-content {
-  width: 70%;
+  width: 100%;
   padding: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  height: 100%;           /* <-- Añade esto */
+  justify-content: flex-end;
+  flex: 1 1 0%;
 }
 
 .chat-messages {
   flex-grow: 1;
   overflow-y: auto;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   border: 1px solid #eee;
   padding: 5px;
   border-radius: 5px;
   background: #fafafa;
+  min-height: 0;          /* <-- Cambia esto */
+  max-height: unset;      /* <-- Cambia esto */
 }
 
 .chat-message {
@@ -111,6 +115,10 @@
 .chat-input-container {
   display: flex;
   gap: 5px;
+  align-items: flex-end;
+  background: #fff;
+  padding: 0;
+  border-radius: 6px;
 }
 
 .chat-input-container input {
@@ -121,14 +129,34 @@
 }
 
 .chat-input-container button {
-  padding: 6px 15px;
+  padding: 6px 10px;        /* Menos ancho */
   border: none;
   background-color: #007bff;
   color: white;
   border-radius: 6px;
   cursor: pointer;
+  margin: 0 0 0 8px;
+  height: 36px;
+  align-self: flex-end;
+  flex-shrink: 0;           /* No se achique más */
+  min-width: 60px;          /* Opcional: ancho mínimo */
+  width: auto;              /* No forzar ancho fijo */
 }
 
 .chat-input-container button:hover {
   background-color: #0056b3;
+}
+
+.chat-textarea {
+  flex-grow: 1;
+  min-width: 0;
+  min-height: 36px;
+  max-height: 90px;
+  resize: none;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  padding: 6px 10px;
+  font-family: inherit;
+  font-size: 1rem;
+  overflow-y: auto;
 }
