@@ -20,6 +20,8 @@ const DetalleModal = ({ publicacion, onClose, userRole, onSolicitar }) => {
             <p><strong>Tipo:</strong> {publicacion.tipoMascota}</p>
             <p><strong>Edad:</strong> {publicacion.edad}</p>
             <p><strong>Sexo:</strong> {publicacion.sexo}</p>
+            <p><strong>Vacunado:</strong> {publicacion.vacunado}</p>
+            <p><strong>Tamaño:</strong> {publicacion.tamano}</p>
             {/* Podés agregar más campos si lo necesitás */}
           </div>
           <div className="modal-footer">
