@@ -29,22 +29,27 @@ const ChatModal = ({ token, onClose }) => {
 
   // Conectar socket al montar
   useEffect(() => {
-    socketRef.current = io("http://localhost:3000");
-    console.log("🔌 Conectado a Socket.IO");
+  socketRef.current = io("http://localhost:3000");
+  console.log("🔌 Conectado a Socket.IO");
 
-    socketRef.current.on("mensaje_recibido", (data) => {
-      console.log("📨 Nuevo mensaje recibido via socket:", data);
-      // Si corresponde a la conversación actual, lo añadimos
+  socketRef.current.on("mensaje_recibido", (data) => {
+    console.log("📨 Nuevo mensaje recibido via socket:", data);
+
+    // Usamos callback con estado actual
+    setMessages(prev => {
       if (selectedConv && data.conversationId === selectedConv._id) {
-        setMessages(prev => [...prev, data]);
+        return [...prev, data];
       }
+      return prev;
     });
+  });
 
-    return () => {
-      socketRef.current.disconnect();
-      console.log("❌ Socket desconectado");
-    };
-  }, [selectedConv]);
+  return () => {
+    socketRef.current.disconnect();
+    console.log("❌ Socket desconectado");
+  };
+}, []); // <- solo una vez
+
 
   // Cargar conversaciones al montar
   useEffect(() => {
