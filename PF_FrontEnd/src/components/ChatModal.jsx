@@ -4,8 +4,11 @@ import axios from 'axios';
 import '../styles/chatModal.css';
 import EmojiPicker from 'emoji-picker-react';
 import { FaPaperPlane } from 'react-icons/fa';
+import { useSocket } from '../contexts/SocketContext';
 
 const ChatModal = ({ token, onClose }) => {
+  const socket = useSocket();
+
   const [conversations, setConversations] = useState([]);
   const [selectedConv, setSelectedConv] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -15,9 +18,11 @@ const ChatModal = ({ token, onClose }) => {
   const [error, setError] = useState(null);
   const [userRole, setUserRole] = useState(null);
   const [showEmoji, setShowEmoji] = useState(false);
-  const textareaRef = useRef(null);
 
-  // Decodificar rol del token
+  const textareaRef = useRef(null);
+  const lastMessageRef = useRef(null);
+
+  // Decodificar rol del token localmente
   useEffect(() => {
     if (token) {
       try {
@@ -29,7 +34,7 @@ const ChatModal = ({ token, onClose }) => {
     }
   }, [token]);
 
-  // Cargar conversaciones al montar
+  // Cargar conversaciones desde backend local
   useEffect(() => {
     const fetchConversations = async () => {
       try {
@@ -46,7 +51,7 @@ const ChatModal = ({ token, onClose }) => {
     fetchConversations();
   }, [token]);
 
-  // Cargar mensajes cuando cambie conversación seleccionada
+  // Cargar mensajes según conversación seleccionada
   useEffect(() => {
     if (!selectedConv) return;
 
@@ -67,6 +72,7 @@ const ChatModal = ({ token, onClose }) => {
     fetchMessages();
   }, [selectedConv, token]);
 
+  // Auto ajustar textarea altura
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
@@ -74,7 +80,31 @@ const ChatModal = ({ token, onClose }) => {
     }
   }, [newMessage]);
 
-  // Enviar mensaje nuevo
+  // Scroll automático al último mensaje
+  useEffect(() => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
+
+  // Escuchar mensajes entrantes por socket
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleMensajeRecibido = (msg) => {
+      if (msg.conversationId === selectedConv?._id) {
+        setMessages(prev => [...prev, msg]);
+      }
+    };
+
+    socket.on('mensaje_recibido', handleMensajeRecibido);
+
+    return () => {
+      socket.off('mensaje_recibido', handleMensajeRecibido);
+    };
+  }, [socket, selectedConv]);
+
+  // Enviar mensaje al backend y emitir socket
   const handleSendMessage = async () => {
     if (newMessage.trim() === '' || !selectedConv) return;
 
@@ -86,26 +116,29 @@ const ChatModal = ({ token, onClose }) => {
         headers: { Authorization: `Bearer ${token}` }
       });
 
+      // Actualizar mensajes localmente con respuesta del backend
       setMessages(prev => [...prev, res.data]);
       setNewMessage('');
+
+      // Emitir mensaje por socket para que otros clientes se actualicen
+      if (socket) {
+        socket.emit('mensaje_nuevo', res.data);
+      }
     } catch (err) {
       setError('Error enviando mensaje');
     }
   };
 
-  // Obtener texto dinámico para el título de cada conversación
-const getConversationTitle = (conv) => {
-  if (userRole === 'adoptante') {
-    // Mostrar nombreCompania del refugio para adoptante
-    return `Con Refugio: ${conv.refugioId?.nombreCompania || 'Sin nombre'}`;
-  } else if (userRole === 'refugio') {
-    // Mostrar nombre y apellido del adoptante para refugio
-    const nombreAdoptante = conv.adoptanteId?.nombre || '';
-    const apellidoAdoptante = conv.adoptanteId?.apellido || '';
-    return `Con Adoptante: ${nombreAdoptante} ${apellidoAdoptante}`.trim() || 'Sin nombre';
-  }
-  return 'Conversación';
-};
+  const getConversationTitle = (conv) => {
+    if (userRole === 'adoptante') {
+      return `Con Refugio: ${conv.refugioId?.nombreCompania || 'Sin nombre'}`;
+    } else if (userRole === 'refugio') {
+      const nombreAdoptante = conv.adoptanteId?.nombre || '';
+      const apellidoAdoptante = conv.adoptanteId?.apellido || '';
+      return `Con Adoptante: ${nombreAdoptante} ${apellidoAdoptante}`.trim() || 'Sin nombre';
+    }
+    return 'Conversación';
+  };
 
   return (
     <div className="chat-modal-overlay">
@@ -140,8 +173,12 @@ const getConversationTitle = (conv) => {
               <div className="chat-messages">
                 {loadingMsgs && <p>Cargando mensajes...</p>}
                 {messages.length === 0 && !loadingMsgs && <p>No hay mensajes aún.</p>}
-                {messages.map(msg => (
-                  <div key={msg._id} className={`chat-message ${msg.senderId === selectedConv.adoptanteId?._id ? 'sent' : 'received'}`}>
+                {messages.map((msg, idx) => (
+                  <div
+                    key={msg._id}
+                    ref={idx === messages.length - 1 ? lastMessageRef : null}
+                    className={`chat-message ${msg.senderId === selectedConv.adoptanteId?._id ? 'sent' : 'received'}`}
+                  >
                     <p>{msg.text}</p>
                     <small>{new Date(msg.createdAt).toLocaleString()}</small>
                   </div>
@@ -154,7 +191,7 @@ const getConversationTitle = (conv) => {
                   e.preventDefault();
                   handleSendMessage();
                 }}
-                style={{marginTop: 0}}
+                style={{ marginTop: 0 }}
               >
                 <div style={{ position: 'relative' }}>
                   <button
@@ -163,7 +200,9 @@ const getConversationTitle = (conv) => {
                     className="emoji-btn"
                     style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}
                     tabIndex={-1}
-                  >😊</button>
+                  >
+                    😊
+                  </button>
                   {showEmoji && (
                     <div style={{ position: 'absolute', bottom: '40px', left: 0, zIndex: 10 }}>
                       <EmojiPicker
@@ -191,7 +230,10 @@ const getConversationTitle = (conv) => {
                   }}
                   className="chat-textarea"
                 />
-                <button type="submit" style={{ background: 'none', border: 'none', color: '#007bff', fontSize: '1.5rem', padding: '0 10px' }}>
+                <button
+                  type="submit"
+                  style={{ background: 'none', border: 'none', color: '#007bff', fontSize: '1.5rem', padding: '0 10px' }}
+                >
                   <FaPaperPlane />
                 </button>
               </form>

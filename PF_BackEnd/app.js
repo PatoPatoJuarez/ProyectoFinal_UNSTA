@@ -62,7 +62,6 @@ io.on('connection', (socket) => {
 
   socket.on('mensaje_nuevo', (data) => {
     console.log('📨 Mensaje recibido:', data);
-    // reenviar a todos los demás
     socket.broadcast.emit('mensaje_recibido', data);
   });
 
