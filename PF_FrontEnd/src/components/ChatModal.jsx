@@ -1,10 +1,11 @@
+// src/components/ChatModal.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import '../styles/chatModal.css';
-import { useSocket } from '../contexts/SocketContext';
+import EmojiPicker from 'emoji-picker-react';
+import { FaPaperPlane } from 'react-icons/fa';
 
 const ChatModal = ({ token, onClose }) => {
-  const socket = useSocket();
   const [conversations, setConversations] = useState([]);
   const [selectedConv, setSelectedConv] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -13,15 +14,10 @@ const ChatModal = ({ token, onClose }) => {
   const [loadingMsgs, setLoadingMsgs] = useState(false);
   const [error, setError] = useState(null);
   const [userRole, setUserRole] = useState(null);
+  const [showEmoji, setShowEmoji] = useState(false);
   const textareaRef = useRef(null);
-  const selectedConvRef = useRef(null);
-  const lastMessageRef = useRef(null);
 
-
-  useEffect(() => {
-    selectedConvRef.current = selectedConv;
-  }, [selectedConv]);
-
+  // Decodificar rol del token
   useEffect(() => {
     if (token) {
       try {
@@ -33,23 +29,7 @@ const ChatModal = ({ token, onClose }) => {
     }
   }, [token]);
 
-  useEffect(() => {
-    if (!socket) return;
-
-    const handleMensajeRecibido = (data) => {
-      console.log("📨 Nuevo mensaje recibido via socket:", data);
-      if (selectedConvRef.current && data.conversationId === selectedConvRef.current._id) {
-        setMessages(prev => [...prev, data]);
-      }
-    };
-
-    socket.on("mensaje_recibido", handleMensajeRecibido);
-
-    return () => {
-      socket.off("mensaje_recibido", handleMensajeRecibido);
-    };
-  }, [socket]);
-
+  // Cargar conversaciones al montar
   useEffect(() => {
     const fetchConversations = async () => {
       try {
@@ -66,6 +46,7 @@ const ChatModal = ({ token, onClose }) => {
     fetchConversations();
   }, [token]);
 
+  // Cargar mensajes cuando cambie conversación seleccionada
   useEffect(() => {
     if (!selectedConv) return;
 
@@ -92,14 +73,8 @@ const ChatModal = ({ token, onClose }) => {
       textareaRef.current.style.height = textareaRef.current.scrollHeight + "px";
     }
   }, [newMessage]);
-  
-  useEffect(() => {
-  if (lastMessageRef.current) {
-    lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages]);
 
-
+  // Enviar mensaje nuevo
   const handleSendMessage = async () => {
     if (newMessage.trim() === '' || !selectedConv) return;
 
@@ -113,35 +88,29 @@ const ChatModal = ({ token, onClose }) => {
 
       setMessages(prev => [...prev, res.data]);
       setNewMessage('');
-
-      if (socket) {
-        socket.emit("mensaje_nuevo", {
-          ...res.data,
-          conversationId: selectedConv._id
-        });
-      } else {
-        console.warn("⚠️ Socket aún no disponible para emitir.");
-      }
-
     } catch (err) {
       setError('Error enviando mensaje');
     }
   };
 
-  const getConversationTitle = (conv) => {
-    if (userRole === 'adoptante') {
-      return `Con Refugio: ${conv.refugioId?.nombreCompania || 'Sin nombre'}`;
-    } else if (userRole === 'refugio') {
-      const nombreAdoptante = conv.adoptanteId?.nombre || '';
-      const apellidoAdoptante = conv.adoptanteId?.apellido || '';
-      return `Con Adoptante: ${nombreAdoptante} ${apellidoAdoptante}`.trim() || 'Sin nombre';
-    }
-    return 'Conversación';
-  };
+  // Obtener texto dinámico para el título de cada conversación
+const getConversationTitle = (conv) => {
+  if (userRole === 'adoptante') {
+    // Mostrar nombreCompania del refugio para adoptante
+    return `Con Refugio: ${conv.refugioId?.nombreCompania || 'Sin nombre'}`;
+  } else if (userRole === 'refugio') {
+    // Mostrar nombre y apellido del adoptante para refugio
+    const nombreAdoptante = conv.adoptanteId?.nombre || '';
+    const apellidoAdoptante = conv.adoptanteId?.apellido || '';
+    return `Con Adoptante: ${nombreAdoptante} ${apellidoAdoptante}`.trim() || 'Sin nombre';
+  }
+  return 'Conversación';
+};
 
   return (
     <div className="chat-modal-overlay">
       <div className="chat-modal-container">
+
         <button className="chat-close-btn" onClick={onClose}>×</button>
 
         <div className="chat-sidebar">
@@ -171,12 +140,8 @@ const ChatModal = ({ token, onClose }) => {
               <div className="chat-messages">
                 {loadingMsgs && <p>Cargando mensajes...</p>}
                 {messages.length === 0 && !loadingMsgs && <p>No hay mensajes aún.</p>}
-                {messages.map((msg, index) => (
-                  <div  
-                    key={msg._id}
-                    ref={index === messages.length - 1 ? lastMessageRef : null}
-                    className={`chat-message ${msg.senderId === selectedConv.adoptanteId?._id ? 'sent' : 'received'}`}
-                  >
+                {messages.map(msg => (
+                  <div key={msg._id} className={`chat-message ${msg.senderId === selectedConv.adoptanteId?._id ? 'sent' : 'received'}`}>
                     <p>{msg.text}</p>
                     <small>{new Date(msg.createdAt).toLocaleString()}</small>
                   </div>
@@ -189,8 +154,29 @@ const ChatModal = ({ token, onClose }) => {
                   e.preventDefault();
                   handleSendMessage();
                 }}
-                style={{ marginTop: 0 }}
+                style={{marginTop: 0}}
               >
+                <div style={{ position: 'relative' }}>
+                  <button
+                    type="button"
+                    onClick={() => setShowEmoji(v => !v)}
+                    className="emoji-btn"
+                    style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}
+                    tabIndex={-1}
+                  >😊</button>
+                  {showEmoji && (
+                    <div style={{ position: 'absolute', bottom: '40px', left: 0, zIndex: 10 }}>
+                      <EmojiPicker
+                        onEmojiClick={emoji => {
+                          setNewMessage(prev => prev + emoji.emoji);
+                          setShowEmoji(false);
+                        }}
+                        height={300}
+                        width={500}
+                      />
+                    </div>
+                  )}
+                </div>
                 <textarea
                   ref={textareaRef}
                   rows={1}
@@ -205,7 +191,9 @@ const ChatModal = ({ token, onClose }) => {
                   }}
                   className="chat-textarea"
                 />
-                <button type="submit">Enviar</button>
+                <button type="submit" style={{ background: 'none', border: 'none', color: '#007bff', fontSize: '1.5rem', padding: '0 10px' }}>
+                  <FaPaperPlane />
+                </button>
               </form>
             </>
           )}
