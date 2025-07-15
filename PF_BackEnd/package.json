@@ -19,6 +19,7 @@
     "mongodb": "^6.16.0",
     "mongoose": "^8.15.0",
     "nodemailer": "^6.10.1",
-    "proyectofinal_unsta": "file:.."
+    "proyectofinal_unsta": "file:..",
+    "socket.io": "^4.8.1"
   }
 }

@@ -1,6 +1,6 @@
-// src/components/ChatModal.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { io } from "socket.io-client"; // SOCKET.IO
 import '../styles/chatModal.css';
 
 const ChatModal = ({ token, onClose }) => {
@@ -13,6 +13,7 @@ const ChatModal = ({ token, onClose }) => {
   const [error, setError] = useState(null);
   const [userRole, setUserRole] = useState(null);
   const textareaRef = useRef(null);
+  const socketRef = useRef(null); // SOCKET.IO
 
   // Decodificar rol del token
   useEffect(() => {
@@ -25,6 +26,25 @@ const ChatModal = ({ token, onClose }) => {
       }
     }
   }, [token]);
+
+  // Conectar socket al montar
+  useEffect(() => {
+    socketRef.current = io("http://localhost:3000");
+    console.log("🔌 Conectado a Socket.IO");
+
+    socketRef.current.on("mensaje_recibido", (data) => {
+      console.log("📨 Nuevo mensaje recibido via socket:", data);
+      // Si corresponde a la conversación actual, lo añadimos
+      if (selectedConv && data.conversationId === selectedConv._id) {
+        setMessages(prev => [...prev, data]);
+      }
+    });
+
+    return () => {
+      socketRef.current.disconnect();
+      console.log("❌ Socket desconectado");
+    };
+  }, [selectedConv]);
 
   // Cargar conversaciones al montar
   useEffect(() => {
@@ -83,31 +103,35 @@ const ChatModal = ({ token, onClose }) => {
         headers: { Authorization: `Bearer ${token}` }
       });
 
+      // Actualizar mensajes locales
       setMessages(prev => [...prev, res.data]);
       setNewMessage('');
+
+      // Emitir por socket
+      socketRef.current.emit("mensaje_nuevo", {
+        ...res.data,
+        conversationId: selectedConv._id
+      });
+
     } catch (err) {
       setError('Error enviando mensaje');
     }
   };
 
-  // Obtener texto dinámico para el título de cada conversación
-const getConversationTitle = (conv) => {
-  if (userRole === 'adoptante') {
-    // Mostrar nombreCompania del refugio para adoptante
-    return `Con Refugio: ${conv.refugioId?.nombreCompania || 'Sin nombre'}`;
-  } else if (userRole === 'refugio') {
-    // Mostrar nombre y apellido del adoptante para refugio
-    const nombreAdoptante = conv.adoptanteId?.nombre || '';
-    const apellidoAdoptante = conv.adoptanteId?.apellido || '';
-    return `Con Adoptante: ${nombreAdoptante} ${apellidoAdoptante}`.trim() || 'Sin nombre';
-  }
-  return 'Conversación';
-};
+  const getConversationTitle = (conv) => {
+    if (userRole === 'adoptante') {
+      return `Con Refugio: ${conv.refugioId?.nombreCompania || 'Sin nombre'}`;
+    } else if (userRole === 'refugio') {
+      const nombreAdoptante = conv.adoptanteId?.nombre || '';
+      const apellidoAdoptante = conv.adoptanteId?.apellido || '';
+      return `Con Adoptante: ${nombreAdoptante} ${apellidoAdoptante}`.trim() || 'Sin nombre';
+    }
+    return 'Conversación';
+  };
 
   return (
     <div className="chat-modal-overlay">
       <div className="chat-modal-container">
-
         <button className="chat-close-btn" onClick={onClose}>×</button>
 
         <div className="chat-sidebar">
@@ -172,7 +196,6 @@ const getConversationTitle = (conv) => {
             </>
           )}
         </div>
-
       </div>
     </div>
   );

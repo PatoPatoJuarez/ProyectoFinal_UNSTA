@@ -3,12 +3,14 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-
+const http = require('http');           // AGREGADO para usar con Socket.IO
+const { Server } = require('socket.io'); // AGREGADO para Socket.IO
 
 // -------------------- CONFIGURACIONES --------------------
 dotenv.config();
 
 const app = express();
+const server = http.createServer(app); // AGREGADO
 
 // -------------------- MIDDLEWARES GLOBALES --------------------
 app.use(cors({
@@ -16,7 +18,7 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   credentials: true
 }));
-app.use(express.json()); // Parsear JSON
+app.use(express.json());
 
 // -------------------- CONEXIÓN A BASE DE DATOS --------------------
 mongoose.connect(process.env.MONGO_URI, {
@@ -34,7 +36,6 @@ const publicacionesRoutes = require('./routers/publicacionRoutes');
 const solicitudesRoutes = require('./routers/solicitudesRoutes');
 const chatRoutes = require('./routers/chatRoutes');
 
-
 // -------------------- RUTAS DE API --------------------
 app.use('/api/auth', authRoutes);
 app.use('/api/adoptantes', adoptanteRoutes);
@@ -48,8 +49,30 @@ app.get('/', (req, res) => {
   res.send('Servidor funcionando y conectado a MongoDB');
 });
 
+// -------------------- SOCKET.IO --------------------
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"]
+  }
+});
+
+io.on('connection', (socket) => {
+  console.log('🔌 Nuevo cliente conectado:', socket.id);
+
+  socket.on('mensaje_nuevo', (data) => {
+    console.log('📨 Mensaje recibido:', data);
+    // reenviar a todos los demás
+    socket.broadcast.emit('mensaje_recibido', data);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('❌ Cliente desconectado:', socket.id);
+  });
+});
+
 // -------------------- INICIAR SERVIDOR --------------------
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+server.listen(PORT, () => {
+  console.log(`🚀 Servidor + Socket.IO corriendo en http://localhost:${PORT}`);
 });
