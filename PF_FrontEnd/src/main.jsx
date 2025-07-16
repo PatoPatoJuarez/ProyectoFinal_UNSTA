@@ -4,6 +4,7 @@ import LoginPage from './Pages/LoginPage';
 import MainPage from './Pages/mainPage';
 import PerfilRefugio from './Pages/perfilRefugio';
 import PerfilAdoptante from './Pages/perfilAdoptante';
+import RegistroAdop from './Pages/RegistroAdoptante';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { SocketProvider } from './contexts/SocketContext';
