@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import "../styles/Registro.css";
 import axios from 'axios';
 
-const RegistroRef = () => {
+export const RegistroRef = ({onRegistroExitoso}) => {
     const [nombre, setNombre] = useState('');
     const [apellido, setApellido] = useState('');
     const [email, setEmail] = useState('');
@@ -128,8 +128,10 @@ const RegistroRef = () => {
         .then(response => {
             setMensajeExito('Registro exitoso. Redirigiendo...');
             setTimeout(() => {
-                window.location.href = '/';
-            }, 3000);
+                if (onRegistroExitoso) {
+                    onRegistroExitoso(email, contrasena);
+                }
+            }, 1500);
         })
         .catch(error => {
             setErrores({ general: 'Hubo un error al registrar' });

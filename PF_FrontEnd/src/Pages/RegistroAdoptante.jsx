@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import "../styles/Registro.css";
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const RegistroAdop = () => {
+export const RegistroAdop = ({onRegistroExitoso}) => {
+
     const [nombre, setNombre] = useState('');
     const [apellido, setApellido] = useState('');
     const [email, setEmail] = useState('');
@@ -33,6 +35,8 @@ const RegistroAdop = () => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return regex.test(email);
     };
+
+    const navigate = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -127,20 +131,23 @@ const RegistroAdop = () => {
         };
 
         axios.post('http://localhost:3000/api/adoptantes', datos)
-        .then(response => {
-            setMensajeExito('Registro exitoso. Redirigiendo...');
-            setTimeout(() => {
-                window.location.href = '/';
-            }, 3000);
-        })
-        .catch(error => {
-            setErrores({ general: 'Hubo un error al registrar' });
-        });
+            .then(response => {
+                setMensajeExito('Registro exitoso. Redirigiendo...');
+                console.log("Redireccionando");
+                setTimeout(() => {
+                    if (onRegistroExitoso) {
+                        onRegistroExitoso(email, contrasena);
+                    }
+                }, 1500)
+            })
+            .catch(error => {
+                setErrores({ general: 'Hubo un error al registrar' });
+            });
     };
 
     const mostrarError = (campo) => {
-            console.log(errores[campo]);
-            return errores[campo] && <div className="text-danger">{errores[campo]}</div>;
+        // console.log(errores[campo]);
+        return errores[campo] && <div className="text-danger">{errores[campo]}</div>;
     };
 
     return (
@@ -253,7 +260,12 @@ const RegistroAdop = () => {
                         <textarea className="form-control" id="cuidadoAlternativo" rows="3" value={cuidadoAlternativo} onChange={(e) => setCuidadoAlternativo(e.target.value)}></textarea>
                         {mostrarError("cuidadoAlternativo")}
                     </div>
-                    <button type="submit" className="btn btn-primary">Registrarse</button>
+                    <button
+                        type="submit"
+                        className="btn btn-primary"
+                    >
+                        Registrarse
+                    </button>
                 </form>
             </div>
         </div>

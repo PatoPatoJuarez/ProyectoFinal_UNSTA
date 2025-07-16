@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import '../styles/Login.css';
 import AuthModal from '../components/AuthModal';
 import logo from '../assets/logoH&P.png';
@@ -8,6 +8,7 @@ import RegistroAdoptante from './RegistroAdoptante';
 import RegistroRefugio from './RegistroRefugio';
 
 export default function LoginPage() {
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [formType, setFormType] = useState(null);
@@ -21,6 +22,13 @@ export default function LoginPage() {
     'https://4kwallpapers.com/images/walls/thumbs_3t/9283.jpg',
   ];
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    if (location.state) {
+      setEmail(location.state.email || '');
+      setContrasena(location.state.contrasena || '');
+    }
+  }, [location.state]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -156,14 +164,26 @@ export default function LoginPage() {
 
       {formType === 'adoptante' && (
         <div className="formulario-container">
-          <RegistroAdoptante />
+          <RegistroAdoptante
+            onRegistroExitoso={(email, contrasena) => {
+              setEmail(email);
+              setPassword(contrasena);
+              setFormType(null); // volver al login
+            }}
+          />
           <button className="btn btn-secondary mt-3 botonVoler" onClick={handleBackToLogin}>Volver</button>
         </div>
       )}
 
       {formType === 'refugio' && (
         <div className="formulario-container">
-          <RegistroRefugio />
+          <RegistroRefugio
+            onRegistroExitoso={(email, contrasena) => {
+              setEmail(email);
+              setPassword(contrasena);
+              setFormType(null); // volver al login
+            }}
+          />
           <button className="btn btn-secondary mt-3 botonVoler" onClick={handleBackToLogin}>Volver</button>
         </div>
       )}
