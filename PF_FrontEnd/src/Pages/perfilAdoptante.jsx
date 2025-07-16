@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import ModalEditarPerfil from '../components/ModalEditarPerfil';
 import { useNavigate } from 'react-router-dom';
 import '../styles/perfilUsuario.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -11,6 +12,7 @@ const PerfilAdoptante = () => {
   const [solicitudes, setSolicitudes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showEdit, setShowEdit] = useState(false);
   const navigate = useNavigate();
 
   const token = localStorage.getItem('token');
@@ -37,6 +39,17 @@ const PerfilAdoptante = () => {
       .catch(() => console.log('Error al cargar solicitudes'))
       .finally(() => setLoading(false));
   }, []);
+
+  const camposAdoptante = [
+    { name: "nombre", label: "Nombre" },
+    { name: "apellido", label: "Apellido" },
+    { name: "email", label: "Email", type: "email" },
+    { name: "telefono", label: "Teléfono" },
+    { name: "localidad", label: "Localidad" },
+    { name: "viveEn", label: "¿Dónde vive?" },
+    { name: "motivoAdopcion", label: "Motivo para adoptar" },
+    // Agrega más campos si lo necesitas
+  ];
 
   const handleEliminarSolicitud = async (idSolicitud) => {
     if (!window.confirm('¿Eliminar esta solicitud?')) return;
@@ -71,9 +84,16 @@ const PerfilAdoptante = () => {
         
         <div className="card mb-4 shadow-sm rounded-4 card-hover">
           <div className="card-body">
-            <h4 className="card-title mb-3">
-              <i className="bi bi-person-fill me-2" /> {adoptante.nombre} {adoptante.apellido}
-            </h4>
+            <div className="d-flex justify-content-between align-items-center mb-3 w-100">
+              <div className="flex-grow-1">
+              <h4 className="card-title mb-0">
+                <i className="bi bi-person-fill me-2" /> {adoptante.nombre} {adoptante.apellido}
+              </h4>
+              </div>
+              <button className="btn-3" onClick={() => setShowEdit(true)}>
+                <i className="bi bi-pencil-square me-1" /> Editar perfil
+              </button>
+            </div>
             <ul className="list-group list-group-flush perfil-lista-datos mb-0">
               <li className="list-group-item">
                 <i className="bi bi-envelope-fill me-2" /><strong>Email:</strong> {adoptante.email}
@@ -156,6 +176,28 @@ const PerfilAdoptante = () => {
         </div>
       </div>
 
+      {showEdit && adoptante && (
+        <ModalEditarPerfil
+          campos={camposAdoptante}
+          valores={adoptante}
+          onClose={() => setShowEdit(false)}
+          onSave={async datosActualizados => {
+            try {
+              const token = localStorage.getItem('token');
+              const res = await axios.patch(
+                'http://localhost:3000/api/adoptantes/me',
+                datosActualizados,
+                { headers: { Authorization: `Bearer ${token}` } }
+              );
+              setAdoptante(res.data); // Actualiza el estado con la respuesta del backend
+              setShowEdit(false);
+            } catch (error) {
+              alert('No se pudo guardar el perfil');
+            }
+          }}
+          titulo="Editar perfil de usuario"
+        />
+      )}
 
       <Footer />
     </div>

@@ -46,6 +46,25 @@
   box-shadow: 0 2px 8px rgba(60,46,40,0.18);
 }
 
+.btn-3 {
+  background-color: rgb(94, 59, 45) !important;
+  color: white !important;
+  border: 2px solid #d8571b !important;
+  border-radius: 0.5rem;
+  white-space: nowrap;
+  font-size: 0.95rem;
+  padding: 0.35rem 0.7rem !important;
+  width: auto !important;
+  flex: 0 0 auto !important;
+}
+
+.btn-3:hover {
+  background-color: rgba(60, 46, 40, 0.88) !important; /* color naranja del fondo */
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(60,46,40,0.18);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
 /* --- Mejoras visuales para cards y listas --- */
 .card-hover {
   transition: transform 0.18s, box-shadow 0.18s;

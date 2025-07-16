@@ -42,4 +42,25 @@ router.get('/me', authMiddleware, async (req, res) => {
   }
 });
 
+// PATCH para actualizar perfil del refugio autenticado
+router.patch('/me', authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.user;
+    // Excluye el campo contrasena si llega en el body
+    if ('contrasena' in req.body) delete req.body.contrasena;
+    const refugioActualizado = await Refugio.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true, runValidators: true }
+    ).select('-contrasena');
+    if (!refugioActualizado) {
+      return res.status(404).json({ message: 'Refugio no encontrado' });
+    }
+    res.json(refugioActualizado);
+  } catch (error) {
+    console.error('Error al actualizar refugio:', error);
+    res.status(500).json({ message: 'Error interno al actualizar perfil' });
+  }
+});
+
 module.exports = router;
