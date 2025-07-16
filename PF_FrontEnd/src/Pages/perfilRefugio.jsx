@@ -50,6 +50,15 @@ const PerfilRefugio = () => {
     cargarSolicitudes();
   }, []);
 
+  const localidades = [
+    'San Miguel de Tucuman',
+    'Yerba Buena',
+    'Concepcion',
+    'Banda del Rio Sali',
+    'Lules',
+    'Tafi del Valle'
+  ];
+
   const camposRefugio = [
     { name: "nombreCompania", label: "Nombre del refugio" },
     { name: "nombre", label: "Nombre responsable" },
@@ -57,12 +66,38 @@ const PerfilRefugio = () => {
     { name: "email", label: "Email", type: "email" },
     { name: "telefono", label: "Teléfono" },
     { name: "direccion", label: "Dirección" },
-    { name: "localidad", label: "Localidad" },
-    { name: "tipoMascota", label: "Tipo de mascota que recibe" },
-    { name: "procesoAdopcion", label: "Proceso de adopcion" },
+    {
+      name: "localidad",
+      label: "Localidad",
+      type: "select",
+      options: [
+        { value: "", label: "Seleccione una localidad" },
+        ...localidades.map(loc => ({ value: loc, label: loc }))
+      ]
+    },
+    {
+      name: "tipoMascota",
+      label: "Tipo de mascota que recibe",
+      type: "multiselect",
+      options: [
+        { value: "perro", label: "Perro" },
+        { value: "gato", label: "Gato" },
+        { value: "ambos", label: "Ambos" }
+      ]
+    },
+    { name: "procesoAdopcion", label: "Proceso de adopción", type: "textarea" },
     { name: "tarifaAdopcion", label: "Tarifa" },
-    { name: "seguimientoAdopcion", label: "Seguimiento posterior" },
-    { name: "necesidadesRefugio", label: "Necesidades" },
+    {
+      name: "seguimientoAdopcion",
+      label: "Seguimiento posterior",
+      type: "select",
+      options: [
+        { value: "", label: "No especificado" },
+        { value: "Sí", label: "Sí" },
+        { value: "No", label: "No" }
+      ]
+    },
+    { name: "necesidadesRefugio", label: "Necesidades", type: "textarea" }
   ];
 
   const cargarPublicaciones = () => {
@@ -181,7 +216,18 @@ const PerfilRefugio = () => {
               </li>
               <li className="list-group-item">
                 <FontAwesomeIcon icon={faPaw} className="me-2" />
-                <strong>Tipo de mascota que recibe:</strong> {refugio.tipoMascota}
+                <strong>Tipo de mascota que recibe:</strong>{" "}
+                {Array.isArray(refugio.tipoMascota) && refugio.tipoMascota.length > 0
+                  ? refugio.tipoMascota
+                      .map(
+                        tm =>
+                          tm && typeof tm === "string"
+                            ? tm.charAt(0).toUpperCase() + tm.slice(1)
+                            : ""
+                      )
+                      .filter(Boolean)
+                      .join(", ")
+                  : "No especificado"}
               </li>
               <li className="list-group-item">
                 <i className="bi bi-journal-check me-2" /><strong>Proceso de adopción:</strong> {refugio.procesoAdopcion}

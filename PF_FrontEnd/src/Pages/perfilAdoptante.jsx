@@ -40,15 +40,71 @@ const PerfilAdoptante = () => {
       .finally(() => setLoading(false));
   }, []);
 
+  const localidades = [
+    'San Miguel de Tucuman',
+    'Yerba Buena',
+    'Concepcion',
+    'Banda del Rio Sali',
+    'Lules',
+    'Tafi del Valle'
+  ];
+
   const camposAdoptante = [
     { name: "nombre", label: "Nombre" },
     { name: "apellido", label: "Apellido" },
     { name: "email", label: "Email", type: "email" },
     { name: "telefono", label: "Teléfono" },
-    { name: "localidad", label: "Localidad" },
-    { name: "viveEn", label: "¿Dónde vive?" },
-    { name: "motivoAdopcion", label: "Motivo para adoptar" },
-    // Agrega más campos si lo necesitas
+    {
+      name: "localidad",
+      label: "Localidad",
+      type: "select",
+      options: [
+        { value: "", label: "Seleccione una localidad" },
+        ...localidades.map(loc => ({ value: loc, label: loc }))
+      ]
+    },
+    {
+      name: "viveEn",
+      label: "¿Dónde vive?",
+      type: "select",
+      options: [
+        { value: "casa", label: "Casa" },
+        { value: "departamento", label: "Departamento" }
+      ]
+    },
+    {
+      name: "tieneMascota",
+      label: "¿Tiene mascota en su hogar?",
+      type: "select",
+      options: [
+        { value: "", label: "No especificado" },
+        { value: true, label: "Sí" },
+        { value: false, label: "No" }
+      ]
+    },
+    {
+      name: "disponeDeHorarios",
+      label: "¿Tiene disponibilidad horaria?",
+      type: "select",
+      options: [
+        { value: "", label: "No especificado" },
+        { value: true, label: "Sí" },
+        { value: false, label: "No" }
+      ]
+    },
+    {
+      name: "tuvoMascota",
+      label: "¿Tuvo mascotas anteriormente?",
+      type: "select",
+      options: [
+        { value: "", label: "No especificado" },
+        { value: true, label: "Sí" },
+        { value: false, label: "No" }
+      ]
+    },
+    { name: "motivoAdopcion", label: "Motivo para adoptar", type: "textarea" },
+    { name: "cuidadosVeterinarios", label: "Cuidados veterinarios", type: "textarea" },
+    { name: "cuidadoAlternativo", label: "Cuidado alternativo", type: "textarea" }
   ];
 
   const handleEliminarSolicitud = async (idSolicitud) => {
@@ -108,7 +164,10 @@ const PerfilAdoptante = () => {
                 <i className="bi bi-house-door-fill me-2" /><strong>¿Tiene mascota en su hogar?:</strong> {adoptante.tieneMascota === true ? 'Sí' : adoptante.tieneMascota === false ? 'No' : 'No especificado'}
               </li>
               <li className="list-group-item">
-                <i className="bi bi-building me-2" /><strong>¿Dónde vive?:</strong> {adoptante.viveEn || 'No especificado'}
+                <i className="bi bi-building me-2" /><strong>¿Dónde vive?:</strong> {" "}
+                {adoptante.viveEn
+                  ? adoptante.viveEn.charAt(0).toUpperCase() + adoptante.viveEn.slice(1)
+                  : 'No especificado'}
               </li>
               <li className="list-group-item">
                 <i className="bi bi-clock-history me-2" /><strong>¿Tiene disponibilidad horaria?:</strong> {adoptante.disponeDeHorarios === true ? 'Sí' : adoptante.disponeDeHorarios === false ? 'No' : 'No especificado'}
