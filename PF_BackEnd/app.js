@@ -35,6 +35,7 @@ const authRoutes = require('./routers/authRoutes');
 const publicacionesRoutes = require('./routers/publicacionRoutes');
 const solicitudesRoutes = require('./routers/solicitudesRoutes');
 const chatRoutes = require('./routers/chatRoutes');
+const notificationsRoutes = require('./routers/notifications');
 
 // -------------------- RUTAS DE API --------------------
 app.use('/api/auth', authRoutes);
@@ -43,6 +44,7 @@ app.use('/api/refugios', refugioRoutes);
 app.use('/api/publicaciones', publicacionesRoutes);
 app.use('/api/solicitudes', solicitudesRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/notifications', notificationsRoutes);
 
 // -------------------- RUTA DE PRUEBA --------------------
 app.get('/', (req, res) => {

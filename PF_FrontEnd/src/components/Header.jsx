@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import NotificationBell from './NotificationBell'; // Ajusta la ruta si hace falta
 import PerfilRefugio from '../Pages/perfilRefugio';
 import PerfilAdoptante from '../Pages/perfilAdoptante';
 import {
@@ -22,6 +23,8 @@ const Header = ({ onConfigClick }) => {
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
 
+  const token = localStorage.getItem('token');
+
   const handleMenuClick = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
 
@@ -40,33 +43,33 @@ const Header = ({ onConfigClick }) => {
     <AppBar position="static" sx={{ backgroundColor: 'rgba(60, 46, 40, 0.88)' }}>
       <Toolbar sx={{ px: 2 }}>
         <img
-        src={logo}
-        alt="Logo"
-        style={{ height: '85px', marginRight: '12px' }}
+          src={logo}
+          alt="Logo"
+          style={{ height: '85px', marginRight: '12px' }}
         />
-        {/* Título a la izquierda con espaciador */}
         <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
           Hands & Paws
         </Typography>
 
-        {/* IconButton chico y pegado a la derecha */}
+        {/* Aquí se muestra el ícono de notificaciones con contador */}
+        <NotificationBell token={token} />
+
+        {/* Botón menú */}
         <IconButton
           color="inherit"
           size="small"
           onClick={handleMenuClick}
           sx={{
             ml: 'auto',
-            p: 0.5,          // padding mínimo
-            minWidth: 0,     // fuerza tamaño mínimo
-            width: '32px',   // ancho fijo chico
-            height: '32px'   // alto fijo chico
+            p: 0.5,
+            minWidth: 0,
+            width: '32px',
+            height: '32px'
           }}
         >
           <MenuIcon fontSize="medium" />
         </IconButton>
 
-
-        {/* Menú desplegable */}
         <Menu
           anchorEl={anchorEl}
           open={open}

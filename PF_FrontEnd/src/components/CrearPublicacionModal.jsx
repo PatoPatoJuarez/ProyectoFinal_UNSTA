@@ -7,7 +7,7 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publica
     descripcion: '',
     tipoMascota: 'perro',
     edad: '',
-    sexo: '',
+    genero: '',
     vacunado: '',
     tamaño: '',
     fotos: ''
@@ -23,7 +23,7 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publica
         descripcion: publicacionEditar.descripcion || '',
         tipoMascota: publicacionEditar.tipoMascota || 'perro',
         edad: publicacionEditar.edad || '',
-        sexo: publicacionEditar.sexo || '',
+        genero: publicacionEditar.genero || '',
         vacunado: publicacionEditar.vacunado || '',
         tamaño: publicacionEditar.tamaño || '',
         fotos: (publicacionEditar.fotos || []).join(', ')
@@ -34,7 +34,7 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publica
         descripcion: '',
         tipoMascota: 'perro',
         edad: '',
-        sexo: '',
+        genero: '',
         vacunado: '',
         tamaño: '',
         fotos: ''
@@ -151,16 +151,16 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publica
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Sexo</label>
+                <label className="form-label">Genero</label>
                 <select
                   name="sexo"
                   className="form-select"
-                  value={formData.sexo}
+                  value={formData.genero}
                   onChange={handleChange}
                   required
                 >
-                  <option value="Hembra">Hembra</option>
-                  <option value="Macho">Macho</option>
+                  <option value="hembra">hembra</option>
+                  <option value="macho">macho</option>
                 </select>
               </div>
 
@@ -173,8 +173,8 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publica
                   onChange={handleChange}
                   required
                 >
-                  <option value="Si">Si</option>
-                  <option value="No">No</option>
+                  <option value="si">si</option>
+                  <option value="no">no</option>
                 </select>
               </div>
 

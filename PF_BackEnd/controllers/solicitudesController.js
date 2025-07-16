@@ -2,6 +2,7 @@ const Solicitud = require('../models/Solicitud');
 const Publicacion = require('../models/Publicacion');
 const Conversation = require('../models/Conversation');
 const Message = require('../models/Message');
+const Notification = require('../models/Notification');
 
 // Crear solicitud + conversación + primer mensaje
 const crearSolicitud = async (req, res) => {
@@ -44,6 +45,7 @@ const crearSolicitud = async (req, res) => {
     const newMessage = new Message({
       conversationId: conversation._id,
       senderId: id,
+      senderRole: 'adoptante', // <----- Esto es obligatorio, lo agregamos aquí
       text: textoMensaje
     });
     await newMessage.save();
@@ -52,11 +54,18 @@ const crearSolicitud = async (req, res) => {
     conversation.updatedAt = new Date();
     await conversation.save();
 
+    await new Notification({
+      userId: pub.refugio, // id del refugio dueño de la publicación
+      type: 'adoption_request',
+      message: `Tienes una nueva solicitud de adopción de un adoptante interesado en ${pub.titulo}`
+    }).save();
+    
     res.status(201).json({
       message: 'Solicitud y mensaje enviados con éxito',
       solicitud: nuevaSolicitud,
       conversationId: conversation._id
     });
+ 
   } catch (error) {
     console.error('Error al crear solicitud:', error);
     res.status(500).json({ message: 'Error al crear solicitud' });
@@ -64,7 +73,7 @@ const crearSolicitud = async (req, res) => {
 };
 
 // =======================
-// REPEGAMOS las funciones anteriores
+// Funciones restantes del controlador
 // =======================
 
 const obtenerSolicitudesRefugio = async (req, res) => {
