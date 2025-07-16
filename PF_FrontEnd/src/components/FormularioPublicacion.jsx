@@ -5,9 +5,9 @@ export default function FormularioPublicacion({ token, onPublicacionCreada }) {
   const [descripcion, setDescripcion] = useState('');
   const [tipoMascota, setTipoMascota] = useState('perro');
   const [edad, setEdad] = useState('');
-  const [sexo, setSexo] = useState('');
+  const [genero, setGenero] = useState('');
   const [vacunado, setVacunado] = useState('');
-  const [tamano, setTamano] = useState('');
+  const [tamaño, setTamano] = useState('');
   const [mensaje, setMensaje] = useState('');
   const [error, setError] = useState('');
 
@@ -31,9 +31,9 @@ export default function FormularioPublicacion({ token, onPublicacionCreada }) {
           descripcion,
           tipoMascota,
           edad,
-          sexo,
+          genero,
           vacunado,
-          tamano
+          tamaño
         })
       });
 
@@ -49,7 +49,7 @@ export default function FormularioPublicacion({ token, onPublicacionCreada }) {
         setDescripcion('');
         setTipoMascota('perro');
         setEdad('');
-        setSexo('');
+        setGenero('');
         setVacunado('');
         setTamano('');
 
@@ -108,14 +108,14 @@ export default function FormularioPublicacion({ token, onPublicacionCreada }) {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">Sexo</label>
+          <label className="form-label">Genero</label>
           <select
             className="form-select"
-            value={sexo}
-            onChange={(e) => setSexo(e.target.value)}
+            value={genero}
+            onChange={(e) => setGenero(e.target.value)}
           >
-            <option value="Hembra">Hembra</option>
-            <option value="Macho">Macho</option>
+            <option value="hembra">hembra</option>
+            <option value="macho">macho</option>
           </select>
         </div>
         <div className="mb-3">
@@ -125,8 +125,8 @@ export default function FormularioPublicacion({ token, onPublicacionCreada }) {
             value={vacunado}
             onChange={(e) => setVacunado(e.target.value)}
           >
-            <option value="Si">Si</option>
-            <option value="No">No</option>
+            <option value="si">si</option>
+            <option value="no">no</option>
           </select>
         </div>
         <div className="mb-3">
@@ -134,7 +134,7 @@ export default function FormularioPublicacion({ token, onPublicacionCreada }) {
           <input
             type="text"
             className="form-control"
-            value={tamano}
+            value={tamaño}
             onChange={(e) => setTamano(e.target.value)}
           />
         </div>

@@ -20,7 +20,7 @@ const MainPage = () => {
   // Filtros
   const [filtroTipo, setFiltroTipo] = useState('todos');
   const [filtroEdad, setFiltroEdad] = useState('');
-  const [filtroSexo, setFiltroSexo] = useState('todos');
+  const [filtroGenero, setFiltroGenero] = useState('todos');
 
 
   const token = localStorage.getItem('token');
@@ -80,12 +80,12 @@ const MainPage = () => {
   // Extraer filtros únicos
   const tiposMascota = [...new Set(publicaciones.map(p => p.tipoMascota).filter(Boolean))];
   const edades = [...new Set(publicaciones.map(p => p.edad).filter(Boolean))];
-  const sexos = [...new Set(publicaciones.map(p => p.sexo).filter(Boolean))];
+  const generos = [...new Set(publicaciones.map(p => p.genero).filter(Boolean))];
 
   // Aplicar filtros
   const publicacionesFiltradas = publicaciones.filter(pub => {
     const tipoCoincide = filtroTipo === 'todos' || pub.tipoMascota === filtroTipo;
-    const sexoCoincide = filtroSexo === 'todos' || pub.sexo === filtroSexo;
+    const generoCoincide = filtroGenero === 'todos' || pub.genero === filtroGenero;
 
     let edadCoincide = true;
     if (filtroEdad.trim() !== '' && filtroEdad !== 'todos') {
@@ -99,7 +99,7 @@ const MainPage = () => {
       }
     }
 
-    return tipoCoincide && edadCoincide && sexoCoincide;
+    return tipoCoincide && edadCoincide && generoCoincide;
   });
 
 
@@ -143,10 +143,10 @@ const MainPage = () => {
               <input type="text" className="form-control" placeholder="Ej: 3 o 2-5" value={filtroEdad} onChange={e => setFiltroEdad(e.target.value)}/>
             </div>
             <div className="mb-3">
-              <label className="form-label">Sexo</label>
-              <select value={filtroSexo} onChange={e => setFiltroSexo(e.target.value)} className="form-select">
-                <option value="todos">Todos los sexos</option>
-                {sexos.map(gen => (
+              <label className="form-label">Genero</label>
+              <select value={filtroGenero} onChange={e => setFiltroGenero(e.target.value)} className="form-select">
+                <option value="todos">Todos los generos</option>
+                {generos.map(gen => (
                   <option key={gen} value={gen}>{gen}</option>
                 ))}
               </select>
@@ -172,10 +172,10 @@ const MainPage = () => {
                       <p className="card-text flex-grow-1">{pub.descripcion || 'Sin descripción.'}</p>
                       <ul className="list-group list-group-flush mb-3">
                         <li className="list-group-item"><strong>Tipo:</strong> {pub.tipoMascota || 'N/A'}</li>
-                        <li className="list-group-item"><strong>Edad:</strong> {pub.edad || 'N/A'}</li>
-                        <li className="list-group-item"><strong>Sexo:</strong> {pub.sexo || 'N/A'}</li>
-                        <li className="list-group-item"><strong>Vacunado:</strong> {pub.vacunado || 'N/A'}</li>
-                        <li className="list-group-item"><strong>Tamaño:</strong> {pub.tamano || 'N/A'}</li>
+                        <li className="list-group-item"><strong>Edad:</strong> {pub.edad || 'N/A'} años</li>
+                        <li className="list-group-item"><strong>Genero:</strong> {pub.genero?.trim() ? pub.genero : 'N/A'}</li>
+                        <li className="list-group-item"><strong>Vacunado:</strong> {pub.vacunado === true ? 'Sí' : pub.vacunado === false ? 'No' : 'N/A'}</li>
+                        <li className="list-group-item"><strong>Tamaño:</strong> {pub.tamaño || 'N/A'}</li>
                       </ul>
                       <button
                         className="btn btn-outline-secondary mt-auto"
