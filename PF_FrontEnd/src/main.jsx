@@ -16,6 +16,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/main" element={<MainPage />} />
         <Route path="/perfilRefugio" element={<PerfilRefugio />} />
         <Route path="/perfilAdoptante" element={<PerfilAdoptante />} />
+        <Route path="/registro" element={<RegistroAdop />} />
       </Routes>
     </BrowserRouter>
   </SocketProvider>
