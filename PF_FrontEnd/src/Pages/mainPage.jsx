@@ -174,6 +174,8 @@ const MainPage = () => {
                         <li className="list-group-item"><strong>Tipo:</strong> {pub.tipoMascota || 'N/A'}</li>
                         <li className="list-group-item"><strong>Edad:</strong> {pub.edad || 'N/A'}</li>
                         <li className="list-group-item"><strong>Sexo:</strong> {pub.sexo || 'N/A'}</li>
+                        <li className="list-group-item"><strong>Vacunado:</strong> {pub.vacunado || 'N/A'}</li>
+                        <li className="list-group-item"><strong>Tamaño:</strong> {pub.tamano || 'N/A'}</li>
                       </ul>
                       <button
                         className="btn btn-outline-secondary mt-auto"
