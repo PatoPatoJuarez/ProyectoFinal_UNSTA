@@ -19,8 +19,6 @@ const DetalleModal = ({ publicacion, onClose, userRole, onSolicitar }) => {
             <p><strong>Descripción:</strong> {publicacion.descripcion || 'Sin descripción.'}</p>
             <p><strong>Tipo:</strong> {publicacion.tipoMascota}</p>
             <p><strong>Edad:</strong> {publicacion.edad}</p>
-            <p><strong>Genero:</strong> {publicacion.genero}</p>
-            <p><strong>Vacunado:</strong> {publicacion.vacunado}</p>
             <p><strong>Tamaño:</strong> {publicacion.tamaño}</p>
             {/* Podés agregar más campos si lo necesitás */}
           </div>

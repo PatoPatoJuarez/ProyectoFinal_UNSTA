@@ -7,8 +7,6 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publica
     descripcion: '',
     tipoMascota: 'perro',
     edad: '',
-    genero: '',
-    vacunado: '',
     tamaño: '',
     fotos: ''
   });
@@ -23,8 +21,6 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publica
         descripcion: publicacionEditar.descripcion || '',
         tipoMascota: publicacionEditar.tipoMascota || 'perro',
         edad: publicacionEditar.edad || '',
-        genero: publicacionEditar.genero || '',
-        vacunado: publicacionEditar.vacunado || '',
         tamaño: publicacionEditar.tamaño || '',
         fotos: (publicacionEditar.fotos || []).join(', ')
       });
@@ -34,8 +30,6 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publica
         descripcion: '',
         tipoMascota: 'perro',
         edad: '',
-        genero: '',
-        vacunado: '',
         tamaño: '',
         fotos: ''
       });
@@ -148,34 +142,6 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publica
                   value={formData.edad}
                   onChange={handleChange}
                 />
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label">Genero</label>
-                <select
-                  name="sexo"
-                  className="form-select"
-                  value={formData.genero}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="hembra">hembra</option>
-                  <option value="macho">macho</option>
-                </select>
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label">Vacunado</label>
-                <select
-                  name="vacunado"
-                  className="form-select"
-                  value={formData.vacunado}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="si">si</option>
-                  <option value="no">no</option>
-                </select>
               </div>
 
               <div className="mb-3">
