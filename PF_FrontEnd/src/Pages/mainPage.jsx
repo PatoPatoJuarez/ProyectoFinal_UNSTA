@@ -16,6 +16,8 @@ const MainPage = () => {
   const [publicacionSeleccionada, setPublicacionSeleccionada] = useState(null);
   const [userRole, setUserRole] = useState(null);
   const [showChat, setShowChat] = useState(false);
+  const [showModalFiltros, setShowModalFiltros] = useState(false);
+
 
   // Filtros
   const [filtroTipo, setFiltroTipo] = useState('todos');
@@ -123,9 +125,9 @@ const MainPage = () => {
             <strong>🐶 Feed de Publicaciones de Refugios 🐱</strong>
           </h1>
         </div>
-        <div className="mainpage-flex">
+        <div className="mainpage-flex d-flex">
           {/* Filtros */}
-          <aside className="mainpage-filtros">
+          <aside className="mainpage-filtros d-none d-md-block">
             <h5 className="mb-3">Filtros</h5>
             <div className="mb-3">
               <label className="form-label">Tipo</label>
@@ -152,11 +154,19 @@ const MainPage = () => {
               </select>
             </div>
           </aside>
+          
           {/* Publicaciones */}
           <section className="mainpage-publicaciones flex-grow-1">
             {loading && <p className="text-center">Cargando publicaciones...</p>}
             {error && <p className="text-center text-danger">{error}</p>}
             {mensaje && <p className="text-center text-success">{mensaje}</p>}
+            {/* BOTÓN solo visible en pantallas pequeñas */}
+          <div className="d-md-none text-center mb-3">
+            <button className="btn btn-secondary" onClick={() => setShowModalFiltros(true)}>
+              Mostrar Filtros
+            </button>
+          </div>
+          
             <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
               {publicacionesFiltradas.map(pub => (
                 <div className="col" key={pub._id}>
@@ -190,6 +200,55 @@ const MainPage = () => {
               ))}
             </div>
           </section>
+          {showModalFiltros && (
+            <div
+              className="modal d-block"
+              tabIndex="-1"
+              role="dialog"
+              style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+              onClick={() => setShowModalFiltros(false)}
+            >
+              <div
+                className="modal-dialog modal-dialog-centered"
+                role="document"
+                onClick={e => e.stopPropagation()}
+              >
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Filtros</h5>
+                    <button type="button" className="btn-close" onClick={() => setShowModalFiltros(false)}></button>
+                  </div>
+                  <div className="modal-body">
+                    {/* Tus filtros reutilizados */}
+                    <div className="mb-3">
+                      <label className="form-label">Tipo</label>
+                      <select value={filtroTipo} onChange={e => setFiltroTipo(e.target.value)} className="form-select">
+                        <option value="todos">Todos los tipos</option>
+                        {tiposMascota.map(tipo => (
+                          <option key={tipo} value={tipo}>
+                            {tipo.charAt(0).toUpperCase() + tipo.slice(1)}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Edad</label>
+                      <input type="text" className="form-control" placeholder="Ej: 3 o 2-5" value={filtroEdad} onChange={e => setFiltroEdad(e.target.value)} />
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Género</label>
+                      <select value={filtroGenero} onChange={e => setFiltroGenero(e.target.value)} className="form-select">
+                        <option value="todos">Todos los géneros</option>
+                        {generos.map(gen => (
+                          <option key={gen} value={gen}>{gen}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </main>
 
