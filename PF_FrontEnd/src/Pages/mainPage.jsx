@@ -153,7 +153,7 @@ const MainPage = () => {
             <div className="mb-3">
               <label className="form-label">Vacunado</label>
               <select value={filtroVacunado} onChange={e => setFiltroVacunado(e.target.value)} className="form-select">
-                <option value="todos">esta vacunado</option>
+                <option value="todos">¿lo está?</option>
                 {vacunados.map(vac => (
                   <option key={vac} value={vac}>
                     {vac.charAt(0).toUpperCase() + vac.slice(1)}
@@ -257,7 +257,7 @@ const MainPage = () => {
                     <div className="mb-3">
                       <label className="form-label">Vacunado</label>
                       <select value={filtroVacunado} onChange={e => setFiltroVacunado(e.target.value)} className="form-select">
-                        <option value="todos">esta vacunado</option>
+                        <option value="todos">¿lo está?</option>
                         {vacunados.map(vac => (
                           <option key={vac} value={vac}>
                             {vac.charAt(0).toUpperCase() + vac.slice(1)}
