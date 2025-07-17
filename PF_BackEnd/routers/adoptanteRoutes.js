@@ -41,4 +41,25 @@ router.get('/me', authMiddleware, async (req, res) => {
   }
 });
 
+// PATCH para actualizar perfil del adoptante autenticado
+router.patch('/me', authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.user;
+    // Excluye el campo password si llega en el body
+    if ('password' in req.body) delete req.body.password;
+    const adoptanteActualizado = await Adoptante.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true, runValidators: true }
+    ).select('-password');
+    if (!adoptanteActualizado) {
+      return res.status(404).json({ message: 'Adoptante no encontrado' });
+    }
+    res.json(adoptanteActualizado);
+  } catch (error) {
+    console.error('Error al actualizar adoptante:', error);
+    res.status(500).json({ message: 'Error interno al actualizar perfil' });
+  }
+});
+
 module.exports = router;

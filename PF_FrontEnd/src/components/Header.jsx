@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import NotificationBell from './NotificationBell'; // Ajusta la ruta si hace falta
 import PerfilRefugio from '../Pages/perfilRefugio';
 import PerfilAdoptante from '../Pages/perfilAdoptante';
 import {
@@ -50,9 +49,6 @@ const Header = ({ onConfigClick }) => {
         <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
           Hands & Paws
         </Typography>
-
-        {/* Aquí se muestra el ícono de notificaciones con contador */}
-        <NotificationBell token={token} />
 
         {/* Botón menú */}
         <IconButton

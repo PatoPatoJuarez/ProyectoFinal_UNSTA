@@ -92,3 +92,7 @@ header, footer, .bg-dark {
   position: relative;
   z-index: 2;
 }
+
+body {
+  padding-right: 0 !important;
+}
