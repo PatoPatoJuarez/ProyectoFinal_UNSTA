@@ -5,7 +5,9 @@ export default function FormularioPublicacion({ token, onPublicacionCreada }) {
   const [descripcion, setDescripcion] = useState('');
   const [tipoMascota, setTipoMascota] = useState('perro');
   const [edad, setEdad] = useState('');
-  const [tamaño, setTamano] = useState('');
+  const [vacunado, setVacunado] = useState('');
+  const [genero, setGenero] = useState('');
+  const [tamanio, setTamanio] = useState('');
   const [mensaje, setMensaje] = useState('');
   const [error, setError] = useState('');
 
@@ -29,7 +31,9 @@ export default function FormularioPublicacion({ token, onPublicacionCreada }) {
           descripcion,
           tipoMascota,
           edad,
-          tamaño
+          vacunado,
+          genero,
+          tamanio
         })
       });
 
@@ -45,7 +49,9 @@ export default function FormularioPublicacion({ token, onPublicacionCreada }) {
         setDescripcion('');
         setTipoMascota('perro');
         setEdad('');
-        setTamano('');
+        setVacunado('');
+        setGenero('');
+        setTamanio('');
 
         // ⚠️ Notifica al padre (MainPage) que se creó una nueva publicación
         if (onPublicacionCreada) onPublicacionCreada();
@@ -101,15 +107,36 @@ export default function FormularioPublicacion({ token, onPublicacionCreada }) {
             onChange={(e) => setEdad(e.target.value)}
           />
         </div>
-        
+        <div className="mb-3">
+          <label className="form-label">Vacunado</label>
+          <select
+            className="form-select"
+            value={vacunado}
+            onChange={(e) => setVacunado(e.target.value)}
+          >
+            <option value="si">si</option>
+            <option value="no">no</option>
+          </select>
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Genero</label>
+          <select
+            className="form-select"
+            value={genero}
+            onChange={(e) => setGenero(e.target.value)}
+          >
+            <option value="macho">macho</option>
+            <option value="hembra">hembra</option>
+          </select>
+        </div>
         
         <div className="mb-3">
           <label className="form-label">Tamaño</label>
           <input
             type="text"
             className="form-control"
-            value={tamaño}
-            onChange={(e) => setTamano(e.target.value)}
+            value={tamanio}
+            onChange={(e) => setTamanio(e.target.value)}
           />
         </div>
         <button type="submit" className="btn btn-primary">Publicar</button>

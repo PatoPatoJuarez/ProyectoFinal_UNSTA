@@ -6,7 +6,9 @@ const publicacionSchema = new mongoose.Schema({
   descripcion: { type: String, required: true },
   tipoMascota: { type: String, enum: ['perro', 'gato'], required: true },
   edad: { type: String },
-  tamaño: { type: String },
+  vacunado: { type: String, enum: ['si', 'no'], required: true },
+  genero: { type: String, enum: ['macho', 'hembra'], required: true },
+  tamanio: { type: String },
   fotos: [{ type: String }], // URL de imágenes
   fecha: { type: Date, default: Date.now },
   refugio: {

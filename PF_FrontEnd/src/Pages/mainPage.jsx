@@ -23,6 +23,8 @@ const MainPage = () => {
   const [filtroTipo, setFiltroTipo] = useState('todos');
   const [filtroEdad, setFiltroEdad] = useState('');
   const [filtroGenero, setFiltroGenero] = useState('todos');
+  const [filtroVacunado, setFiltroVacunado] = useState('todos');
+
 
 
   const token = localStorage.getItem('token');
@@ -83,11 +85,14 @@ const MainPage = () => {
   const tiposMascota = [...new Set(publicaciones.map(p => p.tipoMascota).filter(Boolean))];
   const edades = [...new Set(publicaciones.map(p => p.edad).filter(Boolean))];
   const generos = [...new Set(publicaciones.map(p => p.genero).filter(Boolean))];
+  const vacunados = [...new Set(publicaciones.map(p => p.vacunado).filter(Boolean))];
+
 
   // Aplicar filtros
   const publicacionesFiltradas = publicaciones.filter(pub => {
     const tipoCoincide = filtroTipo === 'todos' || pub.tipoMascota === filtroTipo;
     const generoCoincide = filtroGenero === 'todos' || pub.genero === filtroGenero;
+    const vacunadoCoincide = filtroVacunado === 'todos' || pub.vacunado === filtroVacunado;
 
     let edadCoincide = true;
     if (filtroEdad.trim() !== '' && filtroEdad !== 'todos') {
@@ -101,8 +106,9 @@ const MainPage = () => {
       }
     }
 
-    return tipoCoincide && edadCoincide && generoCoincide;
+    return tipoCoincide && edadCoincide && generoCoincide && vacunadoCoincide;
   });
+
 
 
   return (
@@ -144,6 +150,28 @@ const MainPage = () => {
               <label className="form-label">Edad</label>
               <input type="text" className="form-control" placeholder="Ej: 3 o 2-5" value={filtroEdad} onChange={e => setFiltroEdad(e.target.value)}/>
             </div>
+            <div className="mb-3">
+              <label className="form-label">Vacunado</label>
+              <select value={filtroVacunado} onChange={e => setFiltroVacunado(e.target.value)} className="form-select">
+                <option value="todos">esta vacunado</option>
+                {vacunados.map(vac => (
+                  <option key={vac} value={vac}>
+                    {vac.charAt(0).toUpperCase() + vac.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Genero</label>
+              <select value={filtroGenero} onChange={e => setFiltroGenero(e.target.value)} className="form-select">
+                <option value="todos">todos</option>
+                {generos.map(gen => (
+                  <option key={gen} value={gen}>
+                    {gen.charAt(0).toUpperCase() + gen.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </div>
           </aside>
           
           {/* Publicaciones */}
@@ -152,11 +180,11 @@ const MainPage = () => {
             {error && <p className="text-center text-danger">{error}</p>}
             {mensaje && <p className="text-center text-success">{mensaje}</p>}
             {/* BOTÓN solo visible en pantallas pequeñas */}
-          <div className="d-md-none text-center mb-3">
-            <button className="btn btn-secondary" onClick={() => setShowModalFiltros(true)}>
-              Mostrar Filtros
-            </button>
-          </div>
+            <div className="d-md-none text-center mb-3">
+              <button className="btn btn-secondary" onClick={() => setShowModalFiltros(true)}>
+                Mostrar Filtros
+              </button>
+            </div>
           
             <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
               {publicacionesFiltradas.map(pub => (
@@ -174,7 +202,9 @@ const MainPage = () => {
                       <ul className="list-group list-group-flush mb-3">
                         <li className="list-group-item"><strong>Tipo:</strong> {pub.tipoMascota || 'N/A'}</li>
                         <li className="list-group-item"><strong>Edad:</strong> {pub.edad || 'N/A'}</li>
-                        <li className="list-group-item"><strong>Tamaño:</strong> {pub.tamaño || 'N/A'}</li>
+                        <li className="list-group-item"><strong>Vacunado:</strong> {pub.vacunado || 'N/A'}</li>
+                        <li className="list-group-item"><strong>Genero:</strong> {pub.genero || 'N/A'}</li>
+                        <li className="list-group-item"><strong>Tamaño:</strong> {pub.tamanio || 'N/A'}</li>
                       </ul>
                       <button
                         className="btn btn-outline-secondary mt-auto"
@@ -223,6 +253,17 @@ const MainPage = () => {
                     <div className="mb-3">
                       <label className="form-label">Edad</label>
                       <input type="text" className="form-control" placeholder="Ej: 3 o 2-5" value={filtroEdad} onChange={e => setFiltroEdad(e.target.value)} />
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Vacunado</label>
+                      <select value={filtroVacunado} onChange={e => setFiltroVacunado(e.target.value)} className="form-select">
+                        <option value="todos">esta vacunado</option>
+                        {vacunados.map(vac => (
+                          <option key={vac} value={vac}>
+                            {vac.charAt(0).toUpperCase() + vac.slice(1)}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Género</label>
