@@ -144,15 +144,6 @@ const MainPage = () => {
               <label className="form-label">Edad</label>
               <input type="text" className="form-control" placeholder="Ej: 3 o 2-5" value={filtroEdad} onChange={e => setFiltroEdad(e.target.value)}/>
             </div>
-            <div className="mb-3">
-              <label className="form-label">Genero</label>
-              <select value={filtroGenero} onChange={e => setFiltroGenero(e.target.value)} className="form-select">
-                <option value="todos">Todos los generos</option>
-                {generos.map(gen => (
-                  <option key={gen} value={gen}>{gen}</option>
-                ))}
-              </select>
-            </div>
           </aside>
           
           {/* Publicaciones */}
@@ -182,9 +173,7 @@ const MainPage = () => {
                       <p className="card-text flex-grow-1">{pub.descripcion || 'Sin descripción.'}</p>
                       <ul className="list-group list-group-flush mb-3">
                         <li className="list-group-item"><strong>Tipo:</strong> {pub.tipoMascota || 'N/A'}</li>
-                        <li className="list-group-item"><strong>Edad:</strong> {pub.edad || 'N/A'} años</li>
-                        <li className="list-group-item"><strong>Genero:</strong> {pub.genero?.trim() ? pub.genero : 'N/A'}</li>
-                        <li className="list-group-item"><strong>Vacunado:</strong> {pub.vacunado === true ? 'Sí' : pub.vacunado === false ? 'No' : 'N/A'}</li>
+                        <li className="list-group-item"><strong>Edad:</strong> {pub.edad || 'N/A'}</li>
                         <li className="list-group-item"><strong>Tamaño:</strong> {pub.tamaño || 'N/A'}</li>
                       </ul>
                       <button
