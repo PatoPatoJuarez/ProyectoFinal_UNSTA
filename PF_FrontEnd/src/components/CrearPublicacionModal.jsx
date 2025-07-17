@@ -7,7 +7,9 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publica
     descripcion: '',
     tipoMascota: 'perro',
     edad: '',
-    tamaño: '',
+    vacunado: '',
+    genero: '',
+    tamanio: '',
     fotos: ''
   });
   const [error, setError] = useState(null);
@@ -21,7 +23,9 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publica
         descripcion: publicacionEditar.descripcion || '',
         tipoMascota: publicacionEditar.tipoMascota || 'perro',
         edad: publicacionEditar.edad || '',
-        tamaño: publicacionEditar.tamaño || '',
+        vacunado: publicacionEditar.vacunado || '',
+        genero: publicacionEditar.genero || '',
+        tamanio: publicacionEditar.tamanio || '',
         fotos: (publicacionEditar.fotos || []).join(', ')
       });
     } else {
@@ -30,7 +34,9 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publica
         descripcion: '',
         tipoMascota: 'perro',
         edad: '',
-        tamaño: '',
+        vacunado: '',
+        genero: '',
+        tamanio: '',
         fotos: ''
       });
     }
@@ -143,14 +149,43 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publica
                   onChange={handleChange}
                 />
               </div>
+              <div className="mb-3">
+                <label className="form-label">Vacunado</label>
+                <select
+                  name="vacunado"
+                  className="form-select"
+                  value={formData.vacunado}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Seleccione una opción</option>
+                  <option value="si">si</option>
+                  <option value="no">no</option>
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">Genero</label>
+                <select
+                  name="genero"
+                  className="form-select"
+                  value={formData.genero}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Seleccione una opción</option>
+                  <option value="macho">macho</option>
+                  <option value="hembra">hembra</option>
+                </select>
+              </div>
 
               <div className="mb-3">
                 <label className="form-label">Tamaño</label>
                 <input
                   type="text"
-                  name="tamaño"
+                  name="tamanio"
                   className="form-control"
-                  value={formData.tamaño}
+                  value={formData.tamanio}
                   onChange={handleChange}
                 />
               </div>
