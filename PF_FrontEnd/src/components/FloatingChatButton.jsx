@@ -9,7 +9,7 @@ const FloatingChatButton = ({ onClick }) => {
       className="floating-chat-button"
       title="Centro de mensajes"
     >
-      <img src={logorefugio} alt="icono refugio" style={{ width: '100px', height: '100px', objectFit: 'contain', marginRight: '1px' }} />
+      💬
     </button>
   );
 };
