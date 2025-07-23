@@ -24,6 +24,7 @@ const MainPage = () => {
   const [filtroEdad, setFiltroEdad] = useState('');
   const [filtroGenero, setFiltroGenero] = useState('todos');
   const [filtroVacunado, setFiltroVacunado] = useState('todos');
+  const [filtroTamanio, setFiltroTamanio] = useState('todos');
 
 
 
@@ -86,28 +87,31 @@ const MainPage = () => {
   const edades = [...new Set(publicaciones.map(p => p.edad).filter(Boolean))];
   const generos = [...new Set(publicaciones.map(p => p.genero).filter(Boolean))];
   const vacunados = [...new Set(publicaciones.map(p => p.vacunado).filter(Boolean))];
+  const tamanios = [...new Set(publicaciones.map(p => p.tamanio).filter(Boolean))];
 
 
   // Aplicar filtros
   const publicacionesFiltradas = publicaciones.filter(pub => {
-    const tipoCoincide = filtroTipo === 'todos' || pub.tipoMascota === filtroTipo;
-    const generoCoincide = filtroGenero === 'todos' || pub.genero === filtroGenero;
-    const vacunadoCoincide = filtroVacunado === 'todos' || pub.vacunado === filtroVacunado;
+  const tipoCoincide = filtroTipo === 'todos' || pub.tipoMascota === filtroTipo;
+  const generoCoincide = filtroGenero === 'todos' || pub.genero === filtroGenero;
+  const vacunadoCoincide = filtroVacunado === 'todos' || pub.vacunado === filtroVacunado;
+  const tamanioCoincide = filtroTamanio === 'todos' || pub.tamanio === filtroTamanio; // Se agrega el filtro de tamaño
 
-    let edadCoincide = true;
-    if (filtroEdad.trim() !== '' && filtroEdad !== 'todos') {
-      const edadPub = parseInt(pub.edad, 10);
-      if (filtroEdad.includes('-')) {
-        const [min, max] = filtroEdad.split('-').map(e => parseInt(e.trim(), 10));
-        edadCoincide = !isNaN(min) && !isNaN(max) && edadPub >= min && edadPub <= max;
-      } else {
-        const edadFiltro = parseInt(filtroEdad, 10);
-        edadCoincide = !isNaN(edadFiltro) && edadPub === edadFiltro;
-      }
+  let edadCoincide = true;
+  if (filtroEdad.trim() !== '' && filtroEdad !== 'todos') {
+    const edadPub = parseInt(pub.edad, 10);
+    if (filtroEdad.includes('-')) {
+      const [min, max] = filtroEdad.split('-').map(e => parseInt(e.trim(), 10));
+      edadCoincide = !isNaN(min) && !isNaN(max) && edadPub >= min && edadPub <= max;
+    } else {
+      const edadFiltro = parseInt(filtroEdad, 10);
+      edadCoincide = !isNaN(edadFiltro) && edadPub === edadFiltro;
     }
+  }
 
-    return tipoCoincide && edadCoincide && generoCoincide && vacunadoCoincide;
-  });
+  return tipoCoincide && edadCoincide && generoCoincide && vacunadoCoincide && tamanioCoincide; // Añadido tamanioCoincide
+});
+
 
 
 
@@ -168,6 +172,17 @@ const MainPage = () => {
                 {generos.map(gen => (
                   <option key={gen} value={gen}>
                     {gen.charAt(0).toUpperCase() + gen.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Tamaño</label>
+              <select value={filtroTamanio} onChange={e => setFiltroTamanio(e.target.value)} className="form-select">
+                <option value="todos">todos</option>
+                {tamanios.map(tam => (
+                  <option key={tam} value={tam}>
+                    {tam.charAt(0).toUpperCase() + tam.slice(1)}
                   </option>
                 ))}
               </select>
@@ -271,6 +286,15 @@ const MainPage = () => {
                         <option value="todos">Todos los géneros</option>
                         {generos.map(gen => (
                           <option key={gen} value={gen}>{gen}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Tamaño</label>
+                      <select value={filtroTamanio} onChange={e => setFiltroTamanio(e.target.value)} className="form-select">
+                        <option value="todos">Todos los tamaños</option>
+                        {tamanios.map(tam => (
+                          <option key={tam} value={tam}>{tam}</option>
                         ))}
                       </select>
                     </div>

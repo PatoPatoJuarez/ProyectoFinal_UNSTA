@@ -181,13 +181,18 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publica
 
               <div className="mb-3">
                 <label className="form-label">Tamaño</label>
-                <input
-                  type="text"
+                <select
                   name="tamanio"
-                  className="form-control"
+                  className="form-select"
                   value={formData.tamanio}
                   onChange={handleChange}
-                />
+                  required
+                >
+                  <option value="">Seleccione una opción</option>
+                  <option value="pequenio">pequeño</option>
+                  <option value="mediano">mediano</option>
+                  <option value="grande">grande</option>
+                </select>
               </div>
 
               <div className="mb-3">

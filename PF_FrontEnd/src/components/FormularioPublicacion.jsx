@@ -132,12 +132,15 @@ export default function FormularioPublicacion({ token, onPublicacionCreada }) {
         
         <div className="mb-3">
           <label className="form-label">Tamaño</label>
-          <input
-            type="text"
-            className="form-control"
+          <select
+            className="form-select"
             value={tamanio}
             onChange={(e) => setTamanio(e.target.value)}
-          />
+          >
+            <option value="pequenio">pequeño</option>
+            <option value="mediano">mediano</option>
+            <option value="grande">grande</option>
+          </select>
         </div>
         <button type="submit" className="btn btn-primary">Publicar</button>
       </form>
