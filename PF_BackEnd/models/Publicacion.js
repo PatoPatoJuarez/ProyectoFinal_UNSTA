@@ -8,7 +8,7 @@ const publicacionSchema = new mongoose.Schema({
   edad: { type: String },
   vacunado: { type: String, enum: ['si', 'no'], required: true },
   genero: { type: String, enum: ['macho', 'hembra'], required: true },
-  tamanio: { type: String },
+  tamanio: { type: String, enum: ['pequenio', 'mediano', 'grande'], required: true },
   fotos: [{ type: String }], // URL de imágenes
   fecha: { type: Date, default: Date.now },
   refugio: {
