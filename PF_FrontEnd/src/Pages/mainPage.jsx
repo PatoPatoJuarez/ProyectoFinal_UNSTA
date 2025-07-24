@@ -215,11 +215,12 @@ const MainPage = () => {
                       <h5 className="card-title">{pub.titulo}</h5>
                       <p className="card-text flex-grow-1">{pub.descripcion || 'Sin descripción.'}</p>
                       <ul className="list-group list-group-flush mb-3">
-                        <li className="list-group-item"><strong>Tipo:</strong> {pub.tipoMascota || 'N/A'}</li>
-                        <li className="list-group-item"><strong>Edad:</strong> {pub.edad || 'N/A'}</li>
-                        <li className="list-group-item"><strong>Vacunado:</strong> {pub.vacunado || 'N/A'}</li>
-                        <li className="list-group-item"><strong>Genero:</strong> {pub.genero || 'N/A'}</li>
-                        <li className="list-group-item"><strong>Tamaño:</strong> {pub.tamanio || 'N/A'}</li>
+                        <li className="list-group-item"><strong><b>Refugio: </b></strong> {pub.nombreRefugio || 'N/A'}</li>
+                        <li className="list-group-item"><strong>Tipo: </strong> {pub.tipoMascota || 'N/A'}</li>
+                        <li className="list-group-item"><strong>Edad: </strong> {pub.edad || 'N/A'}</li>
+                        <li className="list-group-item"><strong>Vacunado: </strong> {pub.vacunado || 'N/A'}</li>
+                        <li className="list-group-item"><strong>Genero: </strong> {pub.genero || 'N/A'}</li>
+                        <li className="list-group-item"><strong>Tamaño: </strong> {pub.tamanio || 'N/A'}</li>
                       </ul>
                       <button
                         className="btn btn-outline-secondary mt-auto"

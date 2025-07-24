@@ -11,6 +11,10 @@ const publicacionSchema = new mongoose.Schema({
   tamanio: { type: String, enum: ['pequenio', 'mediano', 'grande'], required: true },
   fotos: [{ type: String }], // URL de imágenes
   fecha: { type: Date, default: Date.now },
+  nombreRefugio: {
+  type: String,
+  required: false
+  },
   refugio: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Refugio',

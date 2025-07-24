@@ -1,6 +1,8 @@
 const Publicacion = require('../models/Publicacion');
 
 // Crear nueva publicación (solo refugio)
+const Refugio = require('../models/Refugio'); // asegurate de importar el modelo arriba
+
 const crearPublicacion = async (req, res) => {
   try {
     const { rol, id } = req.user;
@@ -9,9 +11,15 @@ const crearPublicacion = async (req, res) => {
       return res.status(403).json({ message: 'Solo los refugios pueden crear publicaciones' });
     }
 
+    const refugio = await Refugio.findById(id);
+    if (!refugio) {
+      return res.status(404).json({ message: 'Refugio no encontrado' });
+    }
+
     const nuevaPublicacion = new Publicacion({
       ...req.body,
-      refugio: id
+      refugio: id,
+      nombreRefugio: refugio.nombreCompania // acá accedés al campo correcto del refugio
     });
 
     await nuevaPublicacion.save();
@@ -25,6 +33,7 @@ const crearPublicacion = async (req, res) => {
     res.status(500).json({ message: 'Error al crear publicación' });
   }
 };
+
 
 // Obtener todas las publicaciones (pública)
 const obtenerPublicaciones = async (req, res) => {

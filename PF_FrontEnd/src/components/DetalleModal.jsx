@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const DetalleModal = ({ publicacion, onClose, userRole, onSolicitar }) => {
+const DetalleModal = ({publicacion, onClose, userRole, onSolicitar }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const handleSolicitar = () => {
@@ -38,12 +38,13 @@ const DetalleModal = ({ publicacion, onClose, userRole, onSolicitar }) => {
                 className="img-fluid mb-3"
                 style={{ maxHeight: '300px', objectFit: 'cover', width: '100%' }}
               />
-              <p><strong>Descripción:</strong> {publicacion.descripcion || 'Sin descripción.'}</p>
-              <p><strong>Tipo:</strong> {publicacion.tipoMascota}</p>
-              <p><strong>Edad:</strong> {publicacion.edad}</p>
-              <p><strong>Vacunado:</strong> {publicacion.vacunado}</p>
-              <p><strong>Genero:</strong> {publicacion.genero}</p>
-              <p><strong>Tamaño:</strong> {publicacion.tamanio}</p>
+              <p><strong>Refugio: </strong>{publicacion.nombreRefugio}</p>
+              <p><strong>Descripción: </strong> {publicacion.descripcion || 'Sin descripción.'}</p>
+              <p><strong>Tipo: </strong> {publicacion.tipoMascota}</p>
+              <p><strong>Edad: </strong> {publicacion.edad}</p>
+              <p><strong>Vacunado: </strong> {publicacion.vacunado}</p>
+              <p><strong>Genero: </strong> {publicacion.genero}</p>
+              <p><strong>Tamaño: </strong> {publicacion.tamanio}</p>
             </div>
             <div className="modal-footer">
               {userRole === 'adoptante' && (
