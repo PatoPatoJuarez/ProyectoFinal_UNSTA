@@ -11,7 +11,7 @@ export const SocketProvider = ({ children }) => {
   const [socketConnected, setSocketConnected] = useState(false);
 
   useEffect(() => {
-    socketRef.current = io('http://localhost:3000');
+    socketRef.current = io(import.meta.env.VITE_API_URL || 'http://localhost:3000');
     socketRef.current.on('connect', () => {
       console.log('🔌 Socket conectado globalmente');
       setSocketConnected(true);
@@ -26,6 +26,7 @@ export const SocketProvider = ({ children }) => {
       socketRef.current.disconnect();
     };
   }, []);
+
 
   // Entregamos el socket SOLO cuando está conectado para evitar null en los consumidores
   return (
