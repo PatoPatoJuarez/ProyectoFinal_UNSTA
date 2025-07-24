@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import '../styles/Login.css';
 import AuthModal from '../components/AuthModal';
-import logo from '../assets/logoH&P.png';
+import logo from '../assets/logoHP.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import RegistroAdoptante from './RegistroAdoptante';
 import RegistroRefugio from './RegistroRefugio';
