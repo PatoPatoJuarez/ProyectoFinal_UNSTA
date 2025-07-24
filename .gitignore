@@ -2,3 +2,4 @@
 pf_backend/node_modules/
 pf_backend/.env
 pf_frontend/node_modules/
+pf_frontend/.env
