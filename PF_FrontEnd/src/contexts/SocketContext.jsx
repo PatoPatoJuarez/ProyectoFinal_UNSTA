@@ -11,7 +11,10 @@ export const SocketProvider = ({ children }) => {
   const [socketConnected, setSocketConnected] = useState(false);
 
   useEffect(() => {
-    socketRef.current = io(import.meta.env.VITE_API_URL || 'http://localhost:3000');
+    socketRef.current = io(import.meta.env.VITE_API_URL || 'http://localhost:3000', {
+      transports: ['polling']
+    });
+
     socketRef.current.on('connect', () => {
       console.log('🔌 Socket conectado globalmente');
       setSocketConnected(true);
