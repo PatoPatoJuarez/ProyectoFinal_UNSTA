@@ -65,7 +65,6 @@ const MainPage = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      setMensaje('Solicitud enviada con éxito. ¡Gracias!');
     } catch (error) {
       console.error('Error al enviar solicitud:', error);
       setMensaje('Hubo un error al enviar la solicitud.');
@@ -193,7 +192,6 @@ const MainPage = () => {
           <section className="mainpage-publicaciones flex-grow-1">
             {loading && <p className="text-center">Cargando publicaciones...</p>}
             {error && <p className="text-center text-danger">{error}</p>}
-            {mensaje && <p className="text-center text-success">{mensaje}</p>}
             {/* BOTÓN solo visible en pantallas pequeñas */}
             <div className="d-md-none text-center mb-3">
               <button className="btn btn-secondary" onClick={() => setShowModalFiltros(true)}>
