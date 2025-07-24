@@ -130,7 +130,7 @@ export const RegistroAdop = ({onRegistroExitoso}) => {
             cuidadoAlternativo
         };
 
-        api.post('http://localhost:3000/api/adoptantes', datos)
+        api.post('/adoptantes', datos)
             .then(response => {
                 setMensajeExito('Registro exitoso. Redirigiendo...');
                 console.log("Redireccionando");

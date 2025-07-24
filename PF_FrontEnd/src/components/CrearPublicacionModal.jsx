@@ -66,14 +66,14 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publica
       if (publicacionEditar) {
         // EDITAR
         await api.patch(
-          `http://localhost:3000/api/publicaciones/${publicacionEditar._id}`,
+          `/publicaciones/${publicacionEditar._id}`,
           publicacion,
           { headers: { Authorization: `Bearer ${token}` } }
         );
       } else {
         // CREAR
         await api.post(
-          'http://localhost:3000/api/publicaciones',
+          '/publicaciones',
           publicacion,
           { headers: { Authorization: `Bearer ${token}` } }
         );

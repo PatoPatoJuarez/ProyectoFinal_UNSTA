@@ -31,7 +31,7 @@ const MainPage = () => {
   const token = localStorage.getItem('token');
 
   useEffect(() => {
-    api.get('http://localhost:3000/api/publicaciones')
+    api.get('/publicaciones')
       .then(response => {
         setPublicaciones(response.data);
         setLoading(false);
@@ -59,7 +59,7 @@ const MainPage = () => {
     }
 
     try {
-      await api.post('http://localhost:3000/api/solicitudes', {
+      await api.post('/solicitudes', {
         publicacion: publicacionId
       }, {
         headers: { Authorization: `Bearer ${token}` }

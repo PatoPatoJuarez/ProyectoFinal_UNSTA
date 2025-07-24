@@ -4,12 +4,12 @@ const NotificationBell = ({ token }) => {
   const [notifications, setNotifications] = useState([]);
   const [showList, setShowList] = useState(false);
 
-  const BACKEND_URL = 'http://localhost:3000';
+  const BACKEND_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const res = await fetch(`${BACKEND_URL}/api/notifications`, {
+        const res = await fetch(`${BACKEND_URL}/notifications`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -25,13 +25,13 @@ const NotificationBell = ({ token }) => {
     };
 
     if(token) fetchNotifications();
-  }, [token]);
+  }, [token, BACKEND_URL]);
 
   const handleClick = async () => {
     setShowList(!showList);
     if (!showList && notifications.length > 0) {
       try {
-        const res = await fetch(`${BACKEND_URL}/api/notifications`, {
+        const res = await fetch(`${BACKEND_URL}/notifications`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`

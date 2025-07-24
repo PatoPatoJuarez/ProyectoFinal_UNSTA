@@ -34,7 +34,7 @@ const PerfilRefugio = () => {
     }
 
     // Obtener datos del refugio
-    api.get('http://localhost:3000/api/refugios/me', {
+    api.get('/refugios/me', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(({ data }) => {
@@ -102,7 +102,7 @@ const PerfilRefugio = () => {
 
   const cargarPublicaciones = () => {
     if (!token) return;
-    api.get('http://localhost:3000/api/publicaciones/mias', {
+    api.get('/publicaciones/mias', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(({ data }) => setPublicaciones(data))
@@ -112,7 +112,7 @@ const PerfilRefugio = () => {
   const cargarSolicitudes = () => {
     if (!token) return;
     setLoadingSolicitudes(true);
-    api.get('http://localhost:3000/api/solicitudes/refugio', {
+    api.get('/solicitudes/refugio', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(({ data }) => {
@@ -128,7 +128,7 @@ const PerfilRefugio = () => {
   const handleEliminarPublicacion = async (idPub) => {
     if (!window.confirm('¿Eliminar esta publicación?')) return;
     try {
-      await api.delete(`http://localhost:3000/api/publicaciones/${idPub}`, {
+      await api.delete(`/publicaciones/${idPub}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       cargarPublicaciones();
@@ -141,7 +141,7 @@ const PerfilRefugio = () => {
   // Cambiar estado de la solicitud (aprobar o rechazar)
   const cambiarEstado = async (idSolicitud, nuevoEstado) => {
     try {
-      await api.patch(`http://localhost:3000/api/solicitudes/${idSolicitud}`,
+      await api.patch(`/solicitudes/${idSolicitud}`,
         { estado: nuevoEstado },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -156,7 +156,7 @@ const PerfilRefugio = () => {
   const handleEliminarSolicitud = async (idSolicitud) => {
     if (!window.confirm('¿Eliminar esta solicitud?')) return;
     try {
-      await api.delete(`http://localhost:3000/api/solicitudes/${idSolicitud}`, {
+      await api.delete(`/solicitudes/${idSolicitud}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSolicitudes(prev => prev.filter(s => s._id !== idSolicitud));
@@ -319,7 +319,7 @@ const PerfilRefugio = () => {
               try {
                 const token = localStorage.getItem('token');
                 const res = await api.patch(
-                  'http://localhost:3000/api/refugios/me',
+                  '/refugios/me',
                   datosActualizados,
                   { headers: { Authorization: `Bearer ${token}` } }
                 );

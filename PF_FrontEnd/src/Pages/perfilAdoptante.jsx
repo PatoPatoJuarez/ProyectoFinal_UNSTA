@@ -25,14 +25,14 @@ const PerfilAdoptante = () => {
     }
 
     // Cargar perfil
-    api.get('http://localhost:3000/api/adoptantes/me', {
+    api.get('/adoptantes/me', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setAdoptante(res.data))
       .catch(() => setError('Error al cargar el perfil'));
 
     // Cargar solicitudes
-    api.get('http://localhost:3000/api/solicitudes/mias', {
+    api.get('/mias', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setSolicitudes(res.data))
@@ -110,7 +110,7 @@ const PerfilAdoptante = () => {
   const handleEliminarSolicitud = async (idSolicitud) => {
     if (!window.confirm('¿Eliminar esta solicitud?')) return;
     try {
-      await api.delete(`http://localhost:3000/api/solicitudes/${idSolicitud}`, {
+      await api.delete(`/solicitudes/${idSolicitud}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSolicitudes(prev => prev.filter(s => s._id !== idSolicitud));
@@ -244,7 +244,7 @@ const PerfilAdoptante = () => {
             try {
               const token = localStorage.getItem('token');
               const res = await api.patch(
-                'http://localhost:3000/api/adoptantes/me',
+                '/adoptantes/me',
                 datosActualizados,
                 { headers: { Authorization: `Bearer ${token}` } }
               );

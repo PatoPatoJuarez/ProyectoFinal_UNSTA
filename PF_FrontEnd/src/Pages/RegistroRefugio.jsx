@@ -130,7 +130,7 @@ const RegistroRef = () => {
         necesidadesRefugio
         };
 
-        api.post('http://localhost:3000/api/refugios', datos)
+        api.post('/refugios', datos)
         .then(response => {
             setMensajeExito('Registro exitoso. Redirigiendo...');
             setTimeout(() => {
