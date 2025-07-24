@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import "../styles/Registro.css";
-import axios from 'axios';
+import api from '../axios';
 
 const RegistroRef = () => {
     const [nombre, setNombre] = useState('');
@@ -130,7 +130,7 @@ const RegistroRef = () => {
         necesidadesRefugio
         };
 
-        axios.post('http://localhost:3000/api/refugios', datos)
+        api.post('http://localhost:3000/api/refugios', datos)
         .then(response => {
             setMensajeExito('Registro exitoso. Redirigiendo...');
             setTimeout(() => {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import "../styles/Registro.css";
-import axios from 'axios';
+import api from '../axios';
 import { useNavigate } from 'react-router-dom';
 
 export const RegistroAdop = ({onRegistroExitoso}) => {
@@ -130,7 +130,7 @@ export const RegistroAdop = ({onRegistroExitoso}) => {
             cuidadoAlternativo
         };
 
-        axios.post('http://localhost:3000/api/adoptantes', datos)
+        api.post('http://localhost:3000/api/adoptantes', datos)
             .then(response => {
                 setMensajeExito('Registro exitoso. Redirigiendo...');
                 console.log("Redireccionando");

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../axios';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import DetalleModal from '../components/DetalleModal'; // Modal separado
@@ -31,7 +31,7 @@ const MainPage = () => {
   const token = localStorage.getItem('token');
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/publicaciones')
+    api.get('http://localhost:3000/api/publicaciones')
       .then(response => {
         setPublicaciones(response.data);
         setLoading(false);
@@ -59,7 +59,7 @@ const MainPage = () => {
     }
 
     try {
-      await axios.post('http://localhost:3000/api/solicitudes', {
+      await api.post('http://localhost:3000/api/solicitudes', {
         publicacion: publicacionId
       }, {
         headers: { Authorization: `Bearer ${token}` }

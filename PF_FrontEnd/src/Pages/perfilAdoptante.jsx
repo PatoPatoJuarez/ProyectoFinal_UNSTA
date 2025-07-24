@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../axios';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ModalEditarPerfil from '../components/ModalEditarPerfil';
@@ -25,14 +25,14 @@ const PerfilAdoptante = () => {
     }
 
     // Cargar perfil
-    axios.get('http://localhost:3000/api/adoptantes/me', {
+    api.get('http://localhost:3000/api/adoptantes/me', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setAdoptante(res.data))
       .catch(() => setError('Error al cargar el perfil'));
 
     // Cargar solicitudes
-    axios.get('http://localhost:3000/api/solicitudes/mias', {
+    api.get('http://localhost:3000/api/solicitudes/mias', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setSolicitudes(res.data))
@@ -110,7 +110,7 @@ const PerfilAdoptante = () => {
   const handleEliminarSolicitud = async (idSolicitud) => {
     if (!window.confirm('¿Eliminar esta solicitud?')) return;
     try {
-      await axios.delete(`http://localhost:3000/api/solicitudes/${idSolicitud}`, {
+      await api.delete(`http://localhost:3000/api/solicitudes/${idSolicitud}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSolicitudes(prev => prev.filter(s => s._id !== idSolicitud));
@@ -243,7 +243,7 @@ const PerfilAdoptante = () => {
           onSave={async datosActualizados => {
             try {
               const token = localStorage.getItem('token');
-              const res = await axios.patch(
+              const res = await api.patch(
                 'http://localhost:3000/api/adoptantes/me',
                 datosActualizados,
                 { headers: { Authorization: `Bearer ${token}` } }

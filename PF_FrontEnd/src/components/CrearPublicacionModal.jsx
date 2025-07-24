@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../axios';
 
 const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publicacionEditar }) => {
   const [formData, setFormData] = useState({
@@ -65,14 +65,14 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publica
 
       if (publicacionEditar) {
         // EDITAR
-        await axios.patch(
+        await api.patch(
           `http://localhost:3000/api/publicaciones/${publicacionEditar._id}`,
           publicacion,
           { headers: { Authorization: `Bearer ${token}` } }
         );
       } else {
         // CREAR
-        await axios.post(
+        await api.post(
           'http://localhost:3000/api/publicaciones',
           publicacion,
           { headers: { Authorization: `Bearer ${token}` } }
