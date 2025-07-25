@@ -84,7 +84,6 @@
   margin-bottom: 2.5rem;
   box-shadow: none;
   position: relative;
-  z-index: 2;
 }
 
 header, footer, .bg-dark {

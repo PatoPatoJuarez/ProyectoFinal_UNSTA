@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBell } from '@fortawesome/free-solid-svg-icons';
 
 const NotificationBell = ({ token }) => {
   const [notifications, setNotifications] = useState([]);
@@ -27,50 +29,148 @@ const NotificationBell = ({ token }) => {
     if(token) fetchNotifications();
   }, [token]);
 
-  const handleClick = async () => {
+  useEffect(() => {
+    if (showList) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    // Limpieza al desmontar
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showList]);
+
+  const handleClick = () => {
     setShowList(!showList);
-    if (!showList && notifications.length > 0) {
-      try {
-        const res = await fetch(`${BACKEND_URL}/api/notifications`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        if (!res.ok) {
-          throw new Error('Error al borrar notificaciones');
+  };
+
+  const handleDeleteOne = async (id) => {
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/notifications/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
         }
-        setNotifications([]);
-      } catch (err) {
-        console.error(err.message);
+      });
+      if (!res.ok) {
+        throw new Error('Error al borrar la notificación');
       }
+      setNotifications(notifications.filter(n => n._id !== id));
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  const handleDeleteAll = async () => {
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/notifications`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!res.ok) {
+        throw new Error('Error al borrar todas las notificaciones');
+      }
+      setNotifications([]);
+    } catch (err) {
+      console.error(err.message);
     }
   };
 
   return (
-    <div style={{ position: 'relative' }}>
-      <button onClick={handleClick} style={{ cursor: 'pointer' }}>
-        🔔 {notifications.length > 0 && <span>({notifications.length})</span>}
+    <div style={{ position: 'relative', display: 'inline-block', marginBottom: '15px' }}>
+      <button
+        onClick={handleClick}
+        style={{
+          cursor: 'pointer',
+          background: 'none',
+          border: 'none',
+          color: 'white',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+          padding: 0,
+          minWidth: '32px',
+          minHeight: '32px'
+        }}
+        title="Notificaciones"
+      >
+        {/* Contador a la izquierda */}
+        {notifications.length > 0 && (
+          <span
+            style={{
+              background: '#dc3545',
+              color: 'white',
+              borderRadius: '50%',
+              padding: '2px 7px',
+              fontSize: '0.9rem',
+              fontWeight: 'bold',
+              lineHeight: 1,
+              minWidth: '24px',
+              textAlign: 'center',
+              marginRight: '6px',
+              position: 'static'
+            }}
+          >
+            {notifications.length}
+          </span>
+        )}
+        <FontAwesomeIcon icon={faBell} style={{ fontSize: '1.3rem' }} />
       </button>
 
       {showList && (
         <div style={{
+          position: 'fixed',
+          top: '80px',
+          right: '40px',
           border: '1px solid gray',
+          borderRadius: '8px',
           padding: '1rem',
-          position: 'absolute',
-          right: 0,
           background: 'white',
-          zIndex: 1000,
-          width: '250px',
-          maxHeight: '300px',
-          overflowY: 'auto'
+          zIndex: 2147483647,
+          width: '350px',
+          maxHeight: '400px',
+          overflowY: 'auto',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
         }}>
           {notifications.length === 0 ? (
-            <p>No tienes notificaciones</p>
+            <p style={{ color: 'black', margin: 0 }}>No tienes notificaciones</p>
           ) : (
-            notifications.map((n, idx) => (
-              <p key={idx} style={{ margin: '0.5rem 0' }}>{n.message}</p>
-            ))
+            <>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                {notifications.map((n, idx) => (
+                  <li
+                    key={n._id || idx}
+                    style={{
+                      padding: '10px 0',
+                      borderBottom: idx !== notifications.length - 1 ? '1px solid #ddd' : 'none',
+                      color: 'black'
+                    }}
+                  >
+                    {n.message}
+                  </li>
+                ))}
+              </ul>
+              <button
+                onClick={handleDeleteAll}
+                style={{
+                  marginTop: '10px',
+                  width: '100%',
+                  background: '#dc3545',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  padding: '8px 0',
+                  fontWeight: 'bold',
+                  cursor: 'pointer'
+                }}
+              >
+                Borrar todas las notificaciones
+              </button>
+            </>
           )}
         </div>
       )}

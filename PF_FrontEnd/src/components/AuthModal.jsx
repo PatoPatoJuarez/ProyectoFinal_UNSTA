@@ -21,4 +21,3 @@ export default function AuthModal({ onSelect, onClose }) {
     </div>
   );
 }
-

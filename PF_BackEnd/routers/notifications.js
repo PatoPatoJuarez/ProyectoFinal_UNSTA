@@ -16,9 +16,9 @@ router.get('/', authMiddleware, async (req, res) => {
 router.delete('/', authMiddleware, async (req, res) => {
   try {
     await Notification.deleteMany({ userId: req.user.id });
-    res.json({ message: 'Notificaciones eliminadas' });
+    res.json({ message: 'Todas las notificaciones eliminadas' });
   } catch (err) {
-    res.status(500).json({ message: 'Error al eliminar notificaciones' });
+    res.status(500).json({ message: 'Error al eliminar las notificaciones' });
   }
 });
 
