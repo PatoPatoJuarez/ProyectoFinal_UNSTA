@@ -112,7 +112,7 @@ const ChatModal = ({ token, onClose }) => {
     if (newMessage.trim() === '' || !selectedConv) return;
 
     try {
-      const res = await api.post('/api/chat/messages', {
+      const res = await api.post('/chat/messages', {
         conversationId: selectedConv._id,
         text: newMessage.trim()
       }, {
