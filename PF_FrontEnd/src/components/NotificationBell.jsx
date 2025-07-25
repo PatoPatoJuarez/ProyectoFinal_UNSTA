@@ -1,41 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
+import api from '../axios'; // usa tu cliente axios
 
 const NotificationBell = ({ token }) => {
   const [notifications, setNotifications] = useState([]);
   const [showList, setShowList] = useState(false);
 
-  const BACKEND_URL = 'http://localhost:3000';
-
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const res = await fetch(`${BACKEND_URL}/api/notifications`, {
+        const res = await api.get('/notifications', {
           headers: {
-            'Authorization': `Bearer ${token}`
+            Authorization: `Bearer ${token}`
           }
         });
-        if (!res.ok) {
-          throw new Error('Error al traer notificaciones');
-        }
-        const data = await res.json();
-        setNotifications(data);
+        setNotifications(res.data);
       } catch (err) {
-        console.error(err.message);
+        console.error('Error al traer notificaciones:', err);
       }
     };
 
-    if(token) fetchNotifications();
+    if (token) fetchNotifications();
   }, [token]);
 
   useEffect(() => {
-    if (showList) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    // Limpieza al desmontar
+    document.body.style.overflow = showList ? 'hidden' : '';
     return () => {
       document.body.style.overflow = '';
     };
@@ -47,35 +37,27 @@ const NotificationBell = ({ token }) => {
 
   const handleDeleteOne = async (id) => {
     try {
-      const res = await fetch(`${BACKEND_URL}/api/notifications/${id}`, {
-        method: 'DELETE',
+      await api.delete(`/notifications/${id}`, {
         headers: {
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         }
       });
-      if (!res.ok) {
-        throw new Error('Error al borrar la notificación');
-      }
       setNotifications(notifications.filter(n => n._id !== id));
     } catch (err) {
-      console.error(err.message);
+      console.error('Error al borrar la notificación:', err);
     }
   };
 
   const handleDeleteAll = async () => {
     try {
-      const res = await fetch(`${BACKEND_URL}/api/notifications`, {
-        method: 'DELETE',
+      await api.delete('/notifications', {
         headers: {
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         }
       });
-      if (!res.ok) {
-        throw new Error('Error al borrar todas las notificaciones');
-      }
       setNotifications([]);
     } catch (err) {
-      console.error(err.message);
+      console.error('Error al borrar todas las notificaciones:', err);
     }
   };
 
@@ -98,7 +80,6 @@ const NotificationBell = ({ token }) => {
         }}
         title="Notificaciones"
       >
-        {/* Contador a la izquierda */}
         {notifications.length > 0 && (
           <span
             style={{
@@ -111,8 +92,7 @@ const NotificationBell = ({ token }) => {
               lineHeight: 1,
               minWidth: '24px',
               textAlign: 'center',
-              marginRight: '6px',
-              position: 'static'
+              marginRight: '6px'
             }}
           >
             {notifications.length}
@@ -151,6 +131,18 @@ const NotificationBell = ({ token }) => {
                     }}
                   >
                     {n.message}
+                    <button
+                      onClick={() => handleDeleteOne(n._id)}
+                      style={{
+                        marginLeft: '10px',
+                        background: 'transparent',
+                        border: 'none',
+                        color: '#dc3545',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      ✕
+                    </button>
                   </li>
                 ))}
               </ul>
