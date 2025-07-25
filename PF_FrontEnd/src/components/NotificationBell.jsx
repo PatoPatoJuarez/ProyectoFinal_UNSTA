@@ -10,7 +10,7 @@ const NotificationBell = ({ token }) => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const res = await api.get('/notifications', {
+        const res = await api.get(`${import.meta.env.VITE_API_URL}/notifications`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -37,7 +37,7 @@ const NotificationBell = ({ token }) => {
 
   const handleDeleteOne = async (id) => {
     try {
-      await api.delete(`/notifications/${id}`, {
+      await api.delete(`${import.meta.env.VITE_API_URL}/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -50,7 +50,7 @@ const NotificationBell = ({ token }) => {
 
   const handleDeleteAll = async () => {
     try {
-      await api.delete('/notifications', {
+      await api.delete(`${import.meta.env.VITE_API_URL}/notifications`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
