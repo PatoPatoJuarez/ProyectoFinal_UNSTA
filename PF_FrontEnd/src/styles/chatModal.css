@@ -1,8 +1,9 @@
 .chat-modal-overlay {
   position: fixed;
-  bottom: 60px; /* Por encima del botón flotante */
+  bottom: 60px;
   right: 20px;
-  width: 800px;
+  width: 800px; /* ← este valor causa overflow en móviles */
+  max-width: 100vw;  /* ← añade esta línea */
   height: 600px;
   background: white;
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
@@ -10,7 +11,25 @@
   display: flex;
   z-index: 1050;
   font-family: Arial, sans-serif;
+  overflow: hidden; /* ← previene scroll interno no deseado */
 }
+
+.volver-btn {
+  text-decoration: none !important;  /* Quita el subrayado */
+  color: rgb(43, 34, 19);                    /* Cambiá por cualquier color */
+  font-weight: 500;
+  background-color: rgb(255, 255, 255);
+  width: auto;
+  margin-top: 0;
+  margin-left: 0;
+}
+
+.volver-btn:hover {
+  color: rgb(154, 111, 30);                    /* Color al hacer hover */
+  text-decoration: underline;        /* O mantenelo sin subrayado si preferís */
+  background-color: rgb(99, 43, 43);
+}
+
 
 .chat-modal-container {
   display: flex;
@@ -174,4 +193,29 @@
   padding: 4px !important;     /* Espacio interno de cada emoji */
   border-radius: 8px !important; /* Opcional: bordes más suaves */
   gap: 15px !important;
+}
+
+@media (max-width: 768px) {
+  .chat-modal-overlay {
+    width: 100vw;
+    height: 100vh;
+    bottom: 0;
+    right: 0;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;  /* ← importante */
+  }
+
+  .chat-modal-container {
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+  }
+
+  .chat-sidebar,
+  .chat-content {
+    width: 100%;
+    max-width: 100vw;
+  }
 }
