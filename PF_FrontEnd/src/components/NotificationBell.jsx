@@ -1,31 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
-import api from '../axios'; // usa tu cliente axios
 
 const NotificationBell = ({ token }) => {
   const [notifications, setNotifications] = useState([]);
   const [showList, setShowList] = useState(false);
 
+  const BACKEND_URL = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const res = await api.get(`${import.meta.env.VITE_API_URL}/notifications`, {
+        const res = await fetch(`${BACKEND_URL}/notifications`, {
           headers: {
-            Authorization: `Bearer ${token}`
+            'Authorization': `Bearer ${token}`
           }
         });
-        setNotifications(res.data);
+        if (!res.ok) {
+          throw new Error('Error al traer notificaciones');
+        }
+        const data = await res.json();
+        setNotifications(data);
       } catch (err) {
-        console.error('Error al traer notificaciones:', err);
+        console.error(err.message);
       }
     };
 
-    if (token) fetchNotifications();
+    if(token) fetchNotifications();
   }, [token]);
 
   useEffect(() => {
-    document.body.style.overflow = showList ? 'hidden' : '';
+    if (showList) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    // Limpieza al desmontar
     return () => {
       document.body.style.overflow = '';
     };
@@ -37,27 +47,35 @@ const NotificationBell = ({ token }) => {
 
   const handleDeleteOne = async (id) => {
     try {
-      await api.delete(`${import.meta.env.VITE_API_URL}/${id}`, {
+      const res = await fetch(`${BACKEND_URL}/notifications/${id}`, {
+        method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${token}`
+          'Authorization': `Bearer ${token}`
         }
       });
+      if (!res.ok) {
+        throw new Error('Error al borrar la notificación');
+      }
       setNotifications(notifications.filter(n => n._id !== id));
     } catch (err) {
-      console.error('Error al borrar la notificación:', err);
+      console.error(err.message);
     }
   };
 
   const handleDeleteAll = async () => {
     try {
-      await api.delete(`${import.meta.env.VITE_API_URL}/notifications`, {
+      const res = await fetch(`${BACKEND_URL}/notifications`, {
+        method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${token}`
+          'Authorization': `Bearer ${token}`
         }
       });
+      if (!res.ok) {
+        throw new Error('Error al borrar todas las notificaciones');
+      }
       setNotifications([]);
     } catch (err) {
-      console.error('Error al borrar todas las notificaciones:', err);
+      console.error(err.message);
     }
   };
 
@@ -80,6 +98,7 @@ const NotificationBell = ({ token }) => {
         }}
         title="Notificaciones"
       >
+        {/* Contador a la izquierda */}
         {notifications.length > 0 && (
           <span
             style={{
@@ -92,7 +111,8 @@ const NotificationBell = ({ token }) => {
               lineHeight: 1,
               minWidth: '24px',
               textAlign: 'center',
-              marginRight: '6px'
+              marginRight: '6px',
+              position: 'static'
             }}
           >
             {notifications.length}
@@ -131,18 +151,6 @@ const NotificationBell = ({ token }) => {
                     }}
                   >
                     {n.message}
-                    <button
-                      onClick={() => handleDeleteOne(n._id)}
-                      style={{
-                        marginLeft: '10px',
-                        background: 'transparent',
-                        border: 'none',
-                        color: '#dc3545',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      ✕
-                    </button>
                   </li>
                 ))}
               </ul>
