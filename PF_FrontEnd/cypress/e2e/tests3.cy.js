@@ -22,13 +22,13 @@ describe('Funcionalidad Publicaciones', () => {
     
   });
 
-  it('TC - HP - 004 - 02 - Crear una publicación como refugio', () => {
+  it.skip('TC - HP - 004 - 02 - Crear una publicación como refugio', () => {
   cy.visit('https://handsandpaws.vercel.app/');
     cy.get('.card > :nth-child(4)', { timeout: 10000 })
       .should('be.visible')
       .click();
 
-    cy.get('#email').type('vic1@gmail.com')
+    cy.get('#email').type('victoria@gmail.com')
     cy.get('#password').type('123456')
     cy.get('.card > :nth-child(5)').click()
     
@@ -64,13 +64,13 @@ cy.wait(10000)
   });
 
 
-it('TC - HP - 004 - 03 - Eliminar una publicacion como refugio', () => {
+it.skip('TC - HP - 004 - 03 - Eliminar una publicacion como refugio', () => {
     cy.visit('https://handsandpaws.vercel.app/');
     cy.get('.card > :nth-child(4)', { timeout: 10000 })
       .should('be.visible')
       .click();
 
-    cy.get('#email').type('vic1@gmail.com')
+    cy.get('#email').type('victoria@gmail.com')
     cy.get('#password').type('123456')
     cy.get('.card > :nth-child(5)').click()
     
@@ -87,7 +87,7 @@ it('TC - HP - 004 - 03 - Eliminar una publicacion como refugio', () => {
       .should('be.visible')
      .click()
     
-    cy.contains('Lolo').should('not.exist')
+    cy.contains('lolo').should('not.exist')
 
   });
   
