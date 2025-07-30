@@ -22,8 +22,8 @@ describe('Funcionalidad Publicaciones', () => {
     
   });
 
-  it('TC - HP - 004 - 02 - Crear una publicacion como refugio', () => {
-    cy.visit('https://handsandpaws.vercel.app/');
+  it('TC - HP - 004 - 02 - Crear una publicación como refugio', () => {
+  cy.visit('https://handsandpaws.vercel.app/');
     cy.get('.card > :nth-child(4)', { timeout: 10000 })
       .should('be.visible')
       .click();
@@ -47,7 +47,7 @@ describe('Funcionalidad Publicaciones', () => {
     cy.get(':nth-child(1) > .form-control').type('Lolo')
 cy.get(':nth-child(2) > .form-control').type('Es muy amable y cariñoso')
 cy.get(':nth-child(3) > .form-select').select('Perro')
-cy.get(':nth-child(4) > .form-control').type(7)
+cy.get(':nth-child(4) > .form-control').type('7')
 cy.get(':nth-child(5) > .form-select').select('si')
 cy.get(':nth-child(6) > .form-select').select('macho')
 cy.get(':nth-child(7) > .form-select').select('pequeño')
@@ -60,10 +60,11 @@ cy.get(':nth-child(8) > .form-control').type('https://thumbs.dreamstime.com/z/pe
 cy.wait(10000)
     cy.contains('lolo')
     .should('be.visible')
+    
   });
 
 
-it.skip('TC - HP - 004 - 03 - Eliminar una publicacion como refugio', () => {
+it('TC - HP - 004 - 03 - Eliminar una publicacion como refugio', () => {
     cy.visit('https://handsandpaws.vercel.app/');
     cy.get('.card > :nth-child(4)', { timeout: 10000 })
       .should('be.visible')
@@ -82,12 +83,13 @@ it.skip('TC - HP - 004 - 03 - Eliminar una publicacion como refugio', () => {
       cy.contains('Mis publicaciones')
   .scrollIntoView()
   .should('be.visible');
-  cy.get('.card-body > .btn')
+  cy.get(':nth-child(1) > .card > .card-body > .d-flex > .btn-danger')
       .should('be.visible')
      .click()
     
-    cy.contains('Bruno').should('not.exist')
+    cy.contains('Lolo').should('not.exist')
 
   });
+  
 
   });
