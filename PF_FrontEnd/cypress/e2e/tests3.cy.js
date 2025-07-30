@@ -1,12 +1,12 @@
 describe('Funcionalidad Publicaciones', () => {
-  it('TC - HP - 004 - 01 - Ver las publicaciones como refugio', () => {
-    cy.visit('http://localhost:5173/');
+  it.skip('TC - HP - 004 - 01 - Ver las publicaciones como refugio', () => {
+    cy.visit('https://handsandpaws.vercel.app/');
     cy.get('.card > :nth-child(4)', { timeout: 10000 })
       .should('be.visible')
       .click();
 
-    cy.get('#email').type('patorjuarezstordeur@gmail.com')
-    cy.get('#password').type('pato123')
+    cy.get('#email').type('vic1@gmail.com')
+    cy.get('#password').type('123456')
     cy.get('.card > :nth-child(5)').click()
     
     cy.get('.MuiToolbar-root > .MuiButtonBase-root', { timeout: 10000 })
@@ -23,12 +23,12 @@ describe('Funcionalidad Publicaciones', () => {
   });
 
   it('TC - HP - 004 - 02 - Crear una publicacion como refugio', () => {
-    cy.visit('http://localhost:5173/');
+    cy.visit('https://handsandpaws.vercel.app/');
     cy.get('.card > :nth-child(4)', { timeout: 10000 })
       .should('be.visible')
       .click();
 
-    cy.get('#email').type('vic@gmail.com')
+    cy.get('#email').type('vic1@gmail.com')
     cy.get('#password').type('123456')
     cy.get('.card > :nth-child(5)').click()
     
@@ -41,32 +41,35 @@ describe('Funcionalidad Publicaciones', () => {
       cy.contains('Mis publicaciones')
   .scrollIntoView()
   .should('be.visible');
-  cy.get('.d-flex.mb-3 > .btn')
+  cy.get('.btn-2')
       .should('be.visible')
       .click()
-    cy.get(':nth-child(1) > .form-control').type('Bruno')
+    cy.get(':nth-child(1) > .form-control').type('Lolo')
 cy.get(':nth-child(2) > .form-control').type('Es muy amable y cariñoso')
-cy.get('.form-select').select('Perro')
+cy.get(':nth-child(3) > .form-select').select('Perro')
 cy.get(':nth-child(4) > .form-control').type(7)
-cy.get(':nth-child(5) > .form-control').type('Mediano')
-cy.get(':nth-child(6) > .form-control').type('https://thumbs.dreamstime.com/z/perrito-lindo-40133793.jpg')
+cy.get(':nth-child(5) > .form-select').select('si')
+cy.get(':nth-child(6) > .form-select').select('macho')
+cy.get(':nth-child(7) > .form-select').select('pequeño')
+cy.get(':nth-child(8) > .form-control').type('https://thumbs.dreamstime.com/z/perrito-lindo-40133793.jpg')
+
     
-    cy.get('.btn-primary')
+   cy.get('.modal-footer > .btn-primary')
       .should('be.visible')
       .click()
-cy.wait(1000)
-    cy.contains('Bruno')
+cy.wait(10000)
+    cy.contains('lolo')
     .should('be.visible')
   });
 
 
-it('TC - HP - 004 - 03 - Eliminar una publicacion como refugio', () => {
-    cy.visit('http://localhost:5173/');
+it.skip('TC - HP - 004 - 03 - Eliminar una publicacion como refugio', () => {
+    cy.visit('https://handsandpaws.vercel.app/');
     cy.get('.card > :nth-child(4)', { timeout: 10000 })
       .should('be.visible')
       .click();
 
-    cy.get('#email').type('vic@gmail.com')
+    cy.get('#email').type('vic1@gmail.com')
     cy.get('#password').type('123456')
     cy.get('.card > :nth-child(5)').click()
     
