@@ -32,7 +32,7 @@ const PerfilAdoptante = () => {
       .catch(() => setError('Error al cargar el perfil'));
 
     // Cargar solicitudes
-    api.get('/mias', {
+    api.get('/api/solicitudes/mias', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setSolicitudes(res.data))
