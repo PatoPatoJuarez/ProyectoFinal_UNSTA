@@ -131,7 +131,7 @@ const MainPage = () => {
               letterSpacing: '1px'
             }}
           >
-            <strong> Animalitos que buscan un hogar 🏡 </strong>
+            <strong> Mascotas que buscan un hogar 🏡 </strong>
           </h1>
         </div>
         <div className="mainpage-flex d-flex">
