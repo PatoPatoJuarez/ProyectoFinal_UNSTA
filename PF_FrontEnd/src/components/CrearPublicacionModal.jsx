@@ -189,7 +189,7 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publica
                   required
                 >
                   <option value="">Seleccione una opción</option>
-                  <option value="pequenio">pequeño</option>
+                  <option value="pequeño">pequeño</option>
                   <option value="mediano">mediano</option>
                   <option value="grande">grande</option>
                 </select>
