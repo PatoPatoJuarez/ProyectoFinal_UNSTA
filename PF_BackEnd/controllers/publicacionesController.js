@@ -18,9 +18,8 @@ const crearPublicacion = async (req, res) => {
 
     const nuevaPublicacion = new Publicacion({
       ...req.body,
-      fotos: Array.isArray(req.body.fotos) ? req.body.fotos : [req.body.fotos], // 🛠️ Esto soluciona el error
       refugio: id,
-      nombreRefugio: refugio.nombreCompania
+      nombreRefugio: refugio.nombreCompania // acá accedés al campo correcto del refugio
     });
 
     await nuevaPublicacion.save();
