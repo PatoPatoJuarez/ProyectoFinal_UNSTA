@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../axios';
 
 const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publicacionEditar }) => {
   const [formData, setFormData] = useState({
@@ -65,15 +65,15 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publica
 
       if (publicacionEditar) {
         // EDITAR
-        await axios.patch(
-          `http://localhost:3000/api/publicaciones/${publicacionEditar._id}`,
+        await api.patch(
+          `/publicaciones/${publicacionEditar._id}`,
           publicacion,
           { headers: { Authorization: `Bearer ${token}` } }
         );
       } else {
         // CREAR
-        await axios.post(
-          'http://localhost:3000/api/publicaciones',
+        await api.post(
+          '/publicaciones',
           publicacion,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -189,7 +189,7 @@ const CrearPublicacionModal = ({ show, handleClose, onPublicacionCreada, publica
                   required
                 >
                   <option value="">Seleccione una opción</option>
-                  <option value="pequenio">pequeño</option>
+                  <option value="pequeño">pequeño</option>
                   <option value="mediano">mediano</option>
                   <option value="grande">grande</option>
                 </select>

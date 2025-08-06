@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../axios';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import DetalleModal from '../components/DetalleModal'; // Modal separado
@@ -31,7 +31,7 @@ const MainPage = () => {
   const token = localStorage.getItem('token');
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/publicaciones')
+    api.get('/publicaciones')
       .then(response => {
         setPublicaciones(response.data);
         setLoading(false);
@@ -59,7 +59,7 @@ const MainPage = () => {
     }
 
     try {
-      await axios.post('http://localhost:3000/api/solicitudes', {
+      await api.post('/solicitudes', {
         publicacion: publicacionId
       }, {
         headers: { Authorization: `Bearer ${token}` }
@@ -131,7 +131,7 @@ const MainPage = () => {
               letterSpacing: '1px'
             }}
           >
-            <strong>🐶 Feed de Publicaciones de Refugios 🐱</strong>
+            <strong> Mascotas que buscan un hogar 🏡 </strong>
           </h1>
         </div>
         <div className="mainpage-flex d-flex">
@@ -156,7 +156,7 @@ const MainPage = () => {
             <div className="mb-3">
               <label className="form-label">Vacunado</label>
               <select value={filtroVacunado} onChange={e => setFiltroVacunado(e.target.value)} className="form-select">
-                <option value="todos">esta vacunado</option>
+                <option value="todos">Todos</option>
                 {vacunados.map(vac => (
                   <option key={vac} value={vac}>
                     {vac.charAt(0).toUpperCase() + vac.slice(1)}

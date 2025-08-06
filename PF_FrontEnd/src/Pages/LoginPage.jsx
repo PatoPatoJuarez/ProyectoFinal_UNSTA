@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import '../styles/Login.css';
 import AuthModal from '../components/AuthModal';
-import logo from '../assets/logoH&P.png';
+import logo from '../assets/LogoHP.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import RegistroAdoptante from './RegistroAdoptante';
 import RegistroRefugio from './RegistroRefugio';
@@ -70,7 +70,7 @@ export default function LoginPage() {
   setError('');
 
   try {
-    const response = await fetch('http://localhost:3000/api/auth/login', {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, contrasena: password }), // IMPORTANTE: contrasena

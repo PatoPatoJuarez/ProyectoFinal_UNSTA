@@ -10,8 +10,14 @@ export const SocketProvider = ({ children }) => {
   const socketRef = useRef(null);
   const [socketConnected, setSocketConnected] = useState(false);
 
+  // Definimos la URL base para Socket.IO sacando el '/api' si está
+  const SOCKET_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace('/api', '');
+
   useEffect(() => {
-    socketRef.current = io('http://localhost:3000');
+    socketRef.current = io(SOCKET_URL, {
+      transports: ['websocket', 'polling'],
+    });
+
     socketRef.current.on('connect', () => {
       console.log('🔌 Socket conectado globalmente');
       setSocketConnected(true);
@@ -25,9 +31,9 @@ export const SocketProvider = ({ children }) => {
     return () => {
       socketRef.current.disconnect();
     };
-  }, []);
+  }, [SOCKET_URL]);
 
-  // Entregamos el socket SOLO cuando está conectado para evitar null en los consumidores
+  // Solo entregamos el socket cuando está conectado para evitar null
   return (
     <SocketContext.Provider value={socketConnected ? socketRef.current : null}>
       {children}

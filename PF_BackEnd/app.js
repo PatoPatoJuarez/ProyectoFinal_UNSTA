@@ -3,21 +3,26 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const http = require('http');           // AGREGADO para usar con Socket.IO
-const { Server } = require('socket.io'); // AGREGADO para Socket.IO
+const http = require('http');
+const { Server } = require('socket.io');
 
 // -------------------- CONFIGURACIONES --------------------
 dotenv.config();
 
 const app = express();
-const server = http.createServer(app); // AGREGADO
+const server = http.createServer(app);
 
-// -------------------- MIDDLEWARES GLOBALES --------------------
+// -------------------- CORS CONFIG --------------------
+const allowedOrigins = [
+  process.env.FRONTEND_URL || 'http://localhost:5173'
+];
+
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: allowedOrigins,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   credentials: true
 }));
+
 app.use(express.json());
 
 // -------------------- CONEXIÓN A BASE DE DATOS --------------------
@@ -54,11 +59,10 @@ app.get('/', (req, res) => {
 // -------------------- SOCKET.IO --------------------
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
     methods: ["GET", "POST"]
   }
 });
-
 io.on('connection', (socket) => {
   console.log('🔌 Nuevo cliente conectado:', socket.id);
 
@@ -75,5 +79,5 @@ io.on('connection', (socket) => {
 // -------------------- INICIAR SERVIDOR --------------------
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`🚀 Servidor + Socket.IO corriendo en http://localhost:${PORT}`);
+  console.log(`🚀 Servidor + Socket.IO corriendo en el puerto ${PORT}`);
 });

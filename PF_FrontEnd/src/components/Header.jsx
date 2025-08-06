@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import PerfilRefugio from '../Pages/perfilRefugio';
-import PerfilAdoptante from '../Pages/perfilAdoptante';
+import NotificationBell from './NotificationBell';
 import {
   AppBar,
   Toolbar,
@@ -49,6 +48,12 @@ const Header = ({ onConfigClick }) => {
         <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
           Hands & Paws
         </Typography>
+
+        {/* Notificaciones */}
+        <NotificationBell token={token} />
+
+        {/* Separador */}
+        <Box sx={{ width: 40 }} />
 
         {/* Botón menú */}
         <IconButton

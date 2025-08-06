@@ -20,7 +20,7 @@ export default function FormularioPublicacion({ token, onPublicacionCreada }) {
     }
 
     try {
-      const response = await fetch('http://localhost:3000/api/publicaciones', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/publicaciones`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

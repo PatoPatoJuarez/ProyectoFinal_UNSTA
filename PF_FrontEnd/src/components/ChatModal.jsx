@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import api from '../axios';
 import '../styles/chatModal.css';
 import EmojiPicker from 'emoji-picker-react';
 import { FaPaperPlane } from 'react-icons/fa';
@@ -41,7 +41,7 @@ const ChatModal = ({ token, onClose }) => {
   useEffect(() => {
     const fetchConversations = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/api/chat/conversations', {
+        const res = await api.get('/chat/conversations', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setConversations(res.data);
@@ -61,7 +61,7 @@ const ChatModal = ({ token, onClose }) => {
     const fetchMessages = async () => {
       setLoadingMsgs(true);
       try {
-        const res = await axios.get(`http://localhost:3000/api/chat/messages/${selectedConv._id}`, {
+        const res = await api.get(`/chat/messages/${selectedConv._id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setMessages(res.data);
@@ -112,7 +112,7 @@ const ChatModal = ({ token, onClose }) => {
     if (newMessage.trim() === '' || !selectedConv) return;
 
     try {
-      const res = await axios.post('http://localhost:3000/api/chat/messages', {
+      const res = await api.post('/chat/messages', {
         conversationId: selectedConv._id,
         text: newMessage.trim()
       }, {

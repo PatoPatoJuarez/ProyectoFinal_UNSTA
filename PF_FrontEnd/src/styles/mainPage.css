@@ -38,7 +38,6 @@
   min-height: 100vh;
   position: relative;
   background: linear-gradient(135deg, #ffe5d0 0%, #ffd6a5 100%);
-  z-index: 1;
   overflow-x: hidden;
 }
 
@@ -70,7 +69,6 @@
   padding: 1.5rem 1rem;
   position: sticky;
   top: 2rem;
-  z-index: 2;
 }
 
 .mainpage-publicaciones {
@@ -84,13 +82,11 @@
   margin-bottom: 2.5rem;
   box-shadow: none;
   position: relative;
-  z-index: 2;
 }
 
 header, footer, .bg-dark {
   background-color: #3c2e28 !important;
   position: relative;
-  z-index: 2;
 }
 
 body {
